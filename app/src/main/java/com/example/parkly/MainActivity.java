@@ -26,7 +26,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        checkCarRegistration();
+    }
 
+    public void checkCarRegistration(){
+        int cars = 0;
+        if(cars == 0){
+            startActivity(new Intent(MainActivity.this, addCar.class));
+        }
     }
 
 
