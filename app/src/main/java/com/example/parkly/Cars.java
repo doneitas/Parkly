@@ -33,8 +33,6 @@ public class Cars extends AppCompatActivity {
     EditText txt_plate;
     Button btn_confirm;
 
-    private ListView lst_Car;
-
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
     ArrayAdapter<LicensePlate> adapter;
@@ -58,32 +56,6 @@ public class Cars extends AppCompatActivity {
                 startActivity(new Intent(Cars.this, addCar.class));
             }
         });
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cars);
-
-        //Init
-        compositeDisposable = new CompositeDisposable();
-
-        //init View
-
-
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, licensePlateList);
-        lst_Car = findViewById(R.id.lst_Cars);
-        registerForContextMenu(lst_Car);
-        lst_Car.setAdapter(adapter);
-
-        //Database
-        LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
-        licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
-
-        loadData();
-
-        init();
-
 
         //Event
         btn_confirm = findViewById(R.id.btn_confirm);
@@ -130,6 +102,29 @@ public class Cars extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_cars);
+
+        //Init
+        compositeDisposable = new CompositeDisposable();
+
+        //init View
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, licensePlateList);
+        ListView lst_Car = findViewById(R.id.lst_Cars);
+        registerForContextMenu(lst_Car);
+        lst_Car.setAdapter(adapter);
+
+        //Database
+        LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
+        licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+
+        loadData();
+
+        init();
 
     }
 
@@ -163,9 +158,4 @@ public class Cars extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    public void AddLicensePlate(LicensePlate licensePlate)
-    {
-        licensePlateList.add(licensePlate);
-        licensePlateRepository.insertAll(licensePlate);
-    }
 }
