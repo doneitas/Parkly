@@ -129,9 +129,6 @@ public class Cars extends AppCompatActivity {
 
     }
 
-
-
-
     private void loadData()
     {
         Disposable disposable = licensePlateRepository.getAll()
