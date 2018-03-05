@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,8 +26,6 @@ public class Cars extends AppCompatActivity {
 
     Button btn_home;
     Button btn_add;
-    EditText txt_plate;
-    Button btn_confirm;
 
     private ListView lst_Car;
 
@@ -81,17 +78,7 @@ public class Cars extends AppCompatActivity {
 
         init();
 
-        btn_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text = txt_plate.getText().toString();
-                if (text != null) {
-                    LicensePlate licensePlate = new LicensePlate();
-                    licensePlate.setNumber(text);
-                    AddLicensePlate(licensePlate);
-                }
-            }
-        });
+
 
     }
 
