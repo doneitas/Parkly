@@ -1,8 +1,10 @@
 package com.example.parkly;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -35,13 +37,10 @@ public class addCar extends Activity {
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = txt_plate.getText().toString();
-                if (text != null) {
-                    LicensePlate licensePlate = new LicensePlate();
-                    licensePlate.setNumber(text);
-                    AddLicensePlate(licensePlate);
-                    startActivity(new Intent(addCar.this, Cars.class));
-                }
+                String value = txt_plate.getText().toString();
+                Intent myIntent = new Intent(getBaseContext(),Cars.class);
+                myIntent.putExtra("number",value);
+                startActivity(myIntent);
             }
         });
     }
