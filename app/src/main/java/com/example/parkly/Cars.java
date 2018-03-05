@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.parkly.DataBase.LicensePlate;
+import com.example.parkly.DataBase.LicensePlateAdapter;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
@@ -33,7 +33,7 @@ public class Cars extends AppCompatActivity {
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
-    ArrayAdapter<LicensePlate> adapter;
+    LicensePlateAdapter adapter;
 
     //Database
     private CompositeDisposable compositeDisposable;
@@ -107,7 +107,7 @@ public class Cars extends AppCompatActivity {
         compositeDisposable = new CompositeDisposable();
 
         //init View
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, licensePlateList);
+        adapter = new LicensePlateAdapter(this, licensePlateList);
         ListView lst_Car = findViewById(R.id.lst_Cars);
         registerForContextMenu(lst_Car);
         lst_Car.setAdapter(adapter);

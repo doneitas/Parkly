@@ -32,3 +32,4 @@ import android.arch.persistence.room.PrimaryKey;
         this.id = id;
     }
 }
+
