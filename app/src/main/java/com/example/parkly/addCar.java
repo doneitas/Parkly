@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -17,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Marius on 2018-03-04.
@@ -26,6 +29,13 @@ public class addCar extends Activity {
 
     public static EditText et;
     Button btn_confirm;
+
+    public static boolean isNumberCorrect(String number) {
+        String expression = "[a-zA-Z]{3}+[0-9]{3}";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(number);
+        return matcher.matches();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +62,23 @@ public class addCar extends Activity {
             @Override
             public void onClick(View v) {
                 et = (EditText) findViewById(R.id.txtb_plate);
-                try {
-                    FileOutputStream fileOutputStream = openFileOutput("LicensePlateNumbers.txt", MODE_APPEND);
-                    fileOutputStream.write(et.getText().toString().getBytes());
-                    fileOutputStream.write("\n".getBytes());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                String value = et.getText().toString();
+                if(isNumberCorrect(value)) {
+                    try {
+                        FileOutputStream fileOutputStream = openFileOutput("LicensePlateNumbers.txt", MODE_APPEND);
+                        fileOutputStream.write(value.getBytes());
+                        fileOutputStream.write("\n".getBytes());
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    startActivity(new Intent(addCar.this, Cars.class));
+                    et.setText(null);
                 }
-                startActivity(new Intent(addCar.this, Cars.class));
-                et.setText(null);
+                else {
+                    Toast.makeText(getApplicationContext(), "Wrong format", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

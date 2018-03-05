@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.widget.*;
 import android.view.View;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
-    public static ArrayList<String> arrayList;
-    public static ArrayAdapter<String> adapter;
 
     Button btn_Cars;
 
@@ -30,19 +32,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        declaration();
         init();
-        //checkCarRegistration();
+        checkCarRegistration();
     }
 
-    public void declaration(){
-        arrayList = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(MainActivity.this,  android.R.layout.simple_list_item_1, arrayList);
-    }
-
-    /*public void checkCarRegistration(){
-        if(arrayList.size() == 0){
+    public void checkCarRegistration(){
+        if (!getFileStreamPath("LicensePlateNumbers.txt").exists()){
             startActivity(new Intent(MainActivity.this, addCar.class));
         }
-    }*/
+    }
 }

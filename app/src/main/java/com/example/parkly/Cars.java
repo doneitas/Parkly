@@ -23,6 +23,7 @@ public class Cars extends AppCompatActivity {
     ArrayAdapter<String> adapter;
     Button btn_home;
     Button btn_add;
+    Button btn_remove;
 
     public void init(){
         Button btn_home = (Button)findViewById(R.id.btn_home);
@@ -32,11 +33,24 @@ public class Cars extends AppCompatActivity {
                 startActivity(new Intent(Cars.this, MainActivity.class));
             }
         });
+
         Button btn_add = (Button)findViewById(R.id.btn_add);
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Cars.this, addCar.class));
+            }
+        });
+
+        Button btn_remove = (Button)findViewById(R.id.btn_remove);
+        btn_remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getFileStreamPath("LicensePlateNumbers.txt").exists()){
+                    getFileStreamPath("LicensePlateNumbers.txt").delete();
+                    arrayList.clear();
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -62,6 +76,7 @@ public class Cars extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
