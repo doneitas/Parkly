@@ -37,17 +37,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkCarRegistration(){
-        try {
-            FileInputStream fileInputStream = openFileInput("LicensePlateNumbers.txt");
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            if(bufferedReader.readLine() == null){
-                startActivity(new Intent(MainActivity.this, addCar.class));
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!getFileStreamPath("LicensePlateNumbers.txt").exists()){
+            startActivity(new Intent(MainActivity.this, addCar.class));
         }
     }
 }
