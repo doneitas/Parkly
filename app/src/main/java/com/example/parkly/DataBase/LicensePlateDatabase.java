@@ -2,7 +2,10 @@ package com.example.parkly.DataBase;
 
 import android.arch.persistence.room.*;
 import android.content.Context;
+
 import java.util.List;
+
+import io.reactivex.Flowable;
 
 import static com.example.parkly.DataBase.LicensePlateDatabase.DATABASE_VERSION;
 
@@ -71,10 +74,10 @@ public abstract class LicensePlateDatabase extends RoomDatabase {
 @Dao
 interface LicensePlateDao {
     @Query("SELECT * FROM LicensePlates")
-    List<LicensePlate> getAll();
+    Flowable<List<LicensePlate>> getAll();
 
     @Query("SELECT * FROM LicensePlates WHERE id IN (:licensePlateIds)")
-    List<LicensePlate> loadAllByIds(int[] licensePlateIds);
+    Flowable<LicensePlate> loadAllByIds(int[] licensePlateIds);
 
     //@Query("SELECT * FROM LicensePlates WHERE number LIMIT 1")
     //LicensePlate findByNumber(String number);
@@ -85,29 +88,6 @@ interface LicensePlateDao {
     @Delete
     void delete(LicensePlate number);
 
-}
-
-@Entity(tableName = "LicensePlates")
-class LicensePlate {
-    @PrimaryKey
-    @ColumnInfo(name = "id")
-    private int id;
-
-    @ColumnInfo(name = "number")
-    private String number;
-
-    public LicensePlate(int id, String number) {
-        this.id = id;
-        this.number = number;
-    }
-
-    String getNumber() {
-        return number;
-    }
-
-    public int getId() {
-        return id;
-    }
 }
 
 
