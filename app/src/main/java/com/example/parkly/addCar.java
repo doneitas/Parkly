@@ -1,8 +1,10 @@
 package com.example.parkly;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -29,8 +31,8 @@ public class addCar extends Activity {
         getWindow().setLayout((int) (width * .8), (int) (height * .6));
 
 
-        btn_confirm = (Button) findViewById(R.id.btn_confirm);
-        txt_plate = (EditText) findViewById(R.id.txt_plate);
+        btn_confirm = findViewById(R.id.btn_confirm);
+        txt_plate = findViewById(R.id.txt_plate);
 
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override

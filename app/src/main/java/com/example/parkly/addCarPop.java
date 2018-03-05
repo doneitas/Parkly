@@ -32,7 +32,7 @@ public class addCarPop extends Activity {
     }
 
     public void init(){
-        Button btn_home = (Button) findViewById(R.id.btn_addFirstCar);
+        Button btn_home = findViewById(R.id.btn_addFirstCar);
         btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -7,16 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.example.parkly.DataBase.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateAdapter;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -67,8 +64,6 @@ public class Cars extends AppCompatActivity {
                     licensePlateRepository.insertAll(licensePlate);
                     e.onComplete();
                 }
-
-
             })
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -92,10 +87,6 @@ public class Cars extends AppCompatActivity {
 
                     );
         }
-
-
-
-
     }
 
     @Override
