@@ -4,25 +4,37 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import com.example.parkly.DataBase.LicensePlate;
+import com.example.parkly.DataBase.LicensePlateDatabase;
+import com.example.parkly.DataBase.LicensePlateRepository;
+import com.example.parkly.DataBase.LocalUserDataSource;
+
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class Cars extends AppCompatActivity {
 
-    ListView listView;
-    ArrayList<String> arrayList;
-    ArrayAdapter<String> adapter;
     Button btn_home;
     Button btn_add;
+
+    private ListView lst_Cars;
+
+    //Adapter
+    List<LicensePlate> licensePlateList;
+    ArrayAdapter adapter;
+
+    //Database
+    private CompositeDisposable compositeDisposable;
+    private LicensePlateRepository licensePlateRepository;
 
     public void init(){
         Button btn_home = (Button)findViewById(R.id.btn_home);
@@ -39,35 +51,60 @@ public class Cars extends AppCompatActivity {
                 startActivity(new Intent(Cars.this, addCar.class));
             }
         });
-    }
 
-    public void readLicencePlates(){
-        listView =(ListView) findViewById(R.id.lst_Cars);
-        arrayList = new ArrayList<String>();
-        adapter = new ArrayAdapter<String>(Cars.this, android.R.layout.simple_list_item_1, arrayList);
-        listView.setAdapter(adapter);
 
-        try {
-            String item;
-            FileInputStream fileInputStream = openFileInput("LicensePlateNumbers.txt");
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            while((item = bufferedReader.readLine()) != null){
-                arrayList.add(item);
-            }
-            adapter.notifyDataSetChanged();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cars);
+
+        //Init
+        compositeDisposable = new CompositeDisposable();
+
+        //init View
+        lst_Cars =(ListView)findViewById(R.id.lst_Cars);
+
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, licensePlateList);
+        registerForContextMenu(lst_Cars);
+        lst_Cars.setAdapter(adapter);
+
+        //Database
+        LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
+        licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+
+        loadData();
+
         init();
-        readLicencePlates();
+
+
+    }
+
+    private void loadData()
+    {
+        Disposable disposable = licensePlateRepository.getAll()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<LicensePlate>>() {
+                    @Override
+                    public void accept(List<LicensePlate> licensePlates) throws Exception {
+                        onGetAllLicensePlateSuccess(licensePlates);
+                    }
+
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(Cars.this, ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    private void onGetAllLicensePlateSuccess(List<LicensePlate> licensePlates)
+    {
+        licensePlateList.clear();
+        licensePlateList.addAll(licensePlates);
+        adapter.notifyDataSetChanged();
     }
 }

@@ -2,6 +2,8 @@ package com.example.parkly.DataBase;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+
 /**
  * Created by Giedrius on 2018-03-05.
  */
@@ -17,7 +19,7 @@ public class LicensePlateRepository implements LicensePlateDao{
         this.mLicensePlateDao = mLicensePlateDao;
     }
 
-    public static LicensePlateRepository getmInstance(LicensePlateDao mLicensePlateDao)
+    public static LicensePlateRepository getInstance(LicensePlateDao mLicensePlateDao)
     {
         if (mInstance == null)
         {
@@ -27,12 +29,12 @@ public class LicensePlateRepository implements LicensePlateDao{
     }
 
     @Override
-    public List<LicensePlate> getAll() {
+    public Flowable<List<LicensePlate>> getAll() {
         return mLicensePlateDao.getAll();
     }
 
     @Override
-    public List<LicensePlate> loadAllByIds(int[] licensePlateIds) {
+    public Flowable<LicensePlate> loadAllByIds(int[] licensePlateIds) {
         return mLicensePlateDao.loadAllByIds(licensePlateIds);
     }
 
