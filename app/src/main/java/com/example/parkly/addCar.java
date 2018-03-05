@@ -29,7 +29,9 @@ public class addCar extends Activity {
         getWindow().setLayout((int) (width * .8), (int) (height * .6));
 
 
-        Button btn_confirm = findViewById(R.id.btn_confirm);
+        btn_confirm = (Button) findViewById(R.id.btn_confirm);
+        txt_plate = (EditText) findViewById(R.id.txt_plate);
+
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

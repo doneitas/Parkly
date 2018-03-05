@@ -74,6 +74,13 @@ public class Cars extends AppCompatActivity {
         LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
         licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
 
+        String text = addCar.txt_plate.getText().toString();
+        if (text != null) {
+            LicensePlate licensePlate = new LicensePlate();
+            licensePlate.setNumber(text);
+            AddLicensePlate(licensePlate);
+        }
+
         loadData();
 
         init();
