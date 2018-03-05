@@ -10,14 +10,15 @@ import android.widget.EditText;
 
 import com.example.parkly.DataBase.LicensePlate;
 
-import static com.example.parkly.Cars.AddLicensePlate;
+//import static com.example.parkly.Cars.AddLicensePlate;
 
 /**
  * Created by Marius on 2018-03-04.
  */
 
 public class addCar extends Activity {
-    EditText txt_plate;
+
+    public static EditText txt_plate;
     Button btn_confirm;
 
     @Override
@@ -35,17 +36,13 @@ public class addCar extends Activity {
         getWindow().setLayout((int) (width * .8), (int) (height * .6));
 
 
-        Button btn_confirm = findViewById(R.id.btn_confirm);
+        btn_confirm = (Button) findViewById(R.id.btn_confirm);
+        txt_plate = (EditText) findViewById(R.id.txt_plate);
+
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = txt_plate.getText().toString();
-                if (text != null) {
-                    LicensePlate licensePlate = new LicensePlate();
-                    licensePlate.setNumber(text);
-                    AddLicensePlate(licensePlate);
-                    startActivity(new Intent(addCar.this, Cars.class));
-                }
+                startActivity(new Intent(addCar.this, Cars.class));
             }
         });
     }
