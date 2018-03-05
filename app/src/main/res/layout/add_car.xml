@@ -16,7 +16,7 @@
         android:layout_alignParentRight="false" />
 
     <EditText
-        android:id="@+id/txtb_plate"
+        android:id="@+id/txt_plate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView"
@@ -32,7 +32,7 @@
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/txtb_plate"
+        android:layout_below="@+id/txt_plate"
         android:layout_marginTop="28dp"
         android:text="Confirm" />
 </RelativeLayout>
