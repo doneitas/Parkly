@@ -30,45 +30,6 @@ public abstract class LicensePlateDatabase extends RoomDatabase {
         }
         return mLPDataBase;
     }
-/*
-    @Before
-    public void initDb() throws Exception {
-        database = Room.inMemoryDatabaseBuilder(
-                InstrumentationRegistry.getContext(),
-                UsersDatabase.class)
-                .build();
-    }
-
-    public LicensePlateDatabase getDatabase() {
-        return database;
-    }
-
-    @After
-    public void closeDb() throws Exception {
-        mDatabase.close();
-    }
-
-    @Test
-    public void insertAndGetUser() {
-        // When inserting a new user in the data source
-        mDatabase.userDao().insertUser(USER);
-
-        //The user can be retrieved
-        List<User> users = mDatabase.userDao().getUsers();
-        assertThat(users.size(), is(1));
-        User dbUser = users.get(0);
-        assertEquals(dbUser.getId(), USER.getId());
-        assertEquals(dbUser.getUserName(), USER.getUserName());
-    }
-
-        static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-        @Override
-        public void migrate(SupportSQLiteDatabasese dataBase) {
-// Since we didn't alter the table, there's nothing else to do here.
-        }
-    };
-
-    */
 }
 
 @Dao
@@ -87,6 +48,9 @@ interface LicensePlateDao {
 
     @Delete
     void delete(LicensePlate number);
+
+    @Query("DELETE FROM LicensePlates")
+    void clear();
 
 }
 

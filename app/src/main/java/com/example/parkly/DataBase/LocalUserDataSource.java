@@ -46,4 +46,9 @@ public class LocalUserDataSource implements LicensePlateDao{
     public void delete(LicensePlate number) {
         licensePlateDao.delete(number);
     }
+
+    @Override
+    public void clear() {
+        licensePlateDao.clear();
+    }
 }

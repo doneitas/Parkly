@@ -47,4 +47,9 @@ public class LicensePlateRepository implements LicensePlateDao{
     public void delete(LicensePlate number) {
         mLicensePlateDao.delete(number);
     }
+
+    @Override
+    public void clear() {
+        mLicensePlateDao.clear();
+    }
 }

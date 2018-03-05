@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
  */
 
 public class addCar extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +22,9 @@ public class addCar extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int) (width*.8), (int) (height*.6));
+        getWindow().setLayout((int) (width * .8), (int) (height * .6));
+
+
+
     }
 }

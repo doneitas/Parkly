@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,34 +28,34 @@ public class Cars extends AppCompatActivity {
 
     Button btn_home;
     Button btn_add;
+    EditText txt_plate;
+    Button btn_confirm;
 
-    private ListView lst_Cars;
+    private ListView lst_Car;
 
     //Adapter
-    List<LicensePlate> licensePlateList;
-    ArrayAdapter adapter;
+    List<LicensePlate> licensePlateList = new ArrayList<>();
+    ArrayAdapter<LicensePlate> adapter;
 
     //Database
     private CompositeDisposable compositeDisposable;
-    private LicensePlateRepository licensePlateRepository;
+    public LicensePlateRepository licensePlateRepository;
 
     public void init(){
-        Button btn_home = (Button)findViewById(R.id.btn_home);
+        btn_home = findViewById(R.id.btn_home);
         btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Cars.this, MainActivity.class));
             }
         });
-        Button btn_add = (Button)findViewById(R.id.btn_add);
+        btn_add = findViewById(R.id.btn_add);
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Cars.this, addCar.class));
             }
         });
-
-
     }
 
     @Override
@@ -65,11 +67,12 @@ public class Cars extends AppCompatActivity {
         compositeDisposable = new CompositeDisposable();
 
         //init View
-        lst_Cars =(ListView)findViewById(R.id.lst_Cars);
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, licensePlateList);
-        registerForContextMenu(lst_Cars);
-        lst_Cars.setAdapter(adapter);
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, licensePlateList);
+        lst_Car = findViewById(R.id.lst_Cars);
+        registerForContextMenu(lst_Car);
+        lst_Car.setAdapter(adapter);
 
         //Database
         LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
@@ -79,6 +82,17 @@ public class Cars extends AppCompatActivity {
 
         init();
 
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = txt_plate.getText().toString();
+                if (text != null) {
+                    LicensePlate licensePlate = new LicensePlate();
+                    licensePlate.setNumber(text);
+                    AddLicensePlate(licensePlate);
+                }
+            }
+        });
 
     }
 
@@ -107,5 +121,11 @@ public class Cars extends AppCompatActivity {
         licensePlateList.clear();
         licensePlateList.addAll(licensePlates);
         adapter.notifyDataSetChanged();
+    }
+
+    public void AddLicensePlate(LicensePlate licensePlate)
+    {
+        licensePlateList.add(licensePlate);
+        licensePlateRepository.insertAll(licensePlate);
     }
 }
