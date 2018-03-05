@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,8 +30,6 @@ public class Cars extends AppCompatActivity {
 
     Button btn_home;
     Button btn_add;
-    EditText txt_plate;
-    Button btn_confirm;
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
@@ -59,50 +56,46 @@ public class Cars extends AppCompatActivity {
         });
 
         //Event
-        btn_confirm = findViewById(R.id.btn_confirm);
-        txt_plate = findViewById(R.id.txt_plate);
-        btn_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Object> e) throws Exception {
-
-                        String text = txt_plate.getText().toString();
-                        if (text != null) {
-                            LicensePlate licensePlate = new LicensePlate();
-                            licensePlate.setNumber(text);
-                            licensePlateRepository.insertAll(licensePlate);
-                            e.onComplete();
-                        }
-                    }
+        String text = getIntent().getStringExtra("number");
+        if (text != null)
+        {
+            Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+                @Override
+                public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                    LicensePlate licensePlate = new LicensePlate();
+                    licensePlate.setNumber(getIntent().getStringExtra("number"));
+                    licensePlateRepository.insertAll(licensePlate);
+                    e.onComplete();
+                }
 
 
-                })
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new Consumer<Object>() {
-                                       @Override
-                                       public void accept(Object o) throws Exception {
-                                           Toast.makeText(Cars.this, "License Plate added !", Toast.LENGTH_SHORT).show();
-                                       }
-                                   }, new Consumer<Throwable>() {
-                                       @Override
-                                       public void accept(Throwable throwable) throws Exception {
-                                           Toast.makeText(Cars.this, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                       }
-                                   },
-                                new Action() {
-                                    @Override
-                                    public void run() throws Exception {
-                                        loadData(); // Refresh data
-                                    }
+            })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Consumer<Object>() {
+                                   @Override
+                                   public void accept(Object o) throws Exception {
+                                       Toast.makeText(Cars.this, "License Plate added !", Toast.LENGTH_SHORT).show();
+                                   }
+                               }, new Consumer<Throwable>() {
+                                   @Override
+                                   public void accept(Throwable throwable) throws Exception {
+                                       Toast.makeText(Cars.this, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                   }
+                               },
+                            new Action() {
+                                @Override
+                                public void run() throws Exception {
+                                    loadData(); // Refresh data
                                 }
+                            }
 
-                        );
+                    );
+        }
 
-            }
-        });
+
+
+
     }
 
     @Override
