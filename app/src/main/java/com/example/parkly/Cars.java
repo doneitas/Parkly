@@ -86,6 +86,7 @@ public class Cars extends AppCompatActivity {
                             }
 
                     );
+            compositeDisposable.add(disposable);
         }
     }
 
