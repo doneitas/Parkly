@@ -33,7 +33,7 @@ public class addCar extends Activity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int) (width * .8), (int) (height * .6));
-
+        //Cars.licensePlateRepository.clear();
 
         btn_confirm = findViewById(R.id.btn_confirm);
         txt_plate = findViewById(R.id.txt_plate);

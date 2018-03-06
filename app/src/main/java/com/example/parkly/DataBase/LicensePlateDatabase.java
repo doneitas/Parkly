@@ -26,7 +26,6 @@ public abstract class LicensePlateDatabase extends RoomDatabase {
         if (mLPDataBase == null) {
             mLPDataBase = Room.databaseBuilder(context, LicensePlateDatabase.class, DATABASE_NAME)
             .fallbackToDestructiveMigration().build();
-            //mLPDataBase = Room.databaseBuilder(context, LicensePlateDatabase.class, "Sample.db").addMigrations(MIGRATION_1_2).build();
         }
         return mLPDataBase;
     }

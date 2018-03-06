@@ -27,6 +27,7 @@ public class Cars extends AppCompatActivity {
 
     Button btn_home;
     Button btn_add;
+    Button btn_remove;
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
@@ -49,6 +50,14 @@ public class Cars extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Cars.this, addCar.class));
+            }
+        });
+
+        btn_remove = findViewById(R.id.btn_remove);
+        btn_remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                licensePlateRepository.clear();
             }
         });
 
@@ -88,6 +97,7 @@ public class Cars extends AppCompatActivity {
                     );
             compositeDisposable.add(disposable);
         }
+
     }
 
     @Override
