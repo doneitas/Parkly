@@ -18,7 +18,7 @@ import android.arch.persistence.room.PrimaryKey;
         this.number = number;
     }
 */
-    String getNumber() {
+    public String getNumber() {
         return number;
     }
 

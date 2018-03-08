@@ -17,17 +17,24 @@ import static com.example.parkly.DataBase.LicensePlateDatabase.DATABASE_VERSION;
 public abstract class LicensePlateDatabase extends RoomDatabase {
 
     static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "LicensePlateDataBase";
+    private static final String DATABASE_NAME = "Database";
     public abstract LicensePlateDao licensePlateDao();
-    private static LicensePlateDatabase mLPDataBase;
+    private static LicensePlateDatabase mInstance;
+
+
 
     public static LicensePlateDatabase getInstance(Context context)
     {
-        if (mLPDataBase == null) {
-            mLPDataBase = Room.databaseBuilder(context, LicensePlateDatabase.class, DATABASE_NAME)
+        if (mInstance == null) {
+            mInstance = Room.databaseBuilder(context, LicensePlateDatabase.class, DATABASE_NAME)
             .fallbackToDestructiveMigration().build();
         }
-        return mLPDataBase;
+        return mInstance;
+    }
+
+    public static void clear()
+    {
+        mInstance.clearAllTables();
     }
 }
 
@@ -50,7 +57,6 @@ interface LicensePlateDao {
 
     @Query("DELETE FROM LicensePlates")
     void clear();
-
 }
 
 

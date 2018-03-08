@@ -1,19 +1,28 @@
 package com.example.parkly;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.example.parkly.DataBase.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateAdapter;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -35,7 +44,8 @@ public class Cars extends AppCompatActivity {
 
     //Database
     private CompositeDisposable compositeDisposable;
-    public LicensePlateRepository licensePlateRepository;
+    public static LicensePlateRepository licensePlateRepository;
+    LicensePlateDatabase licensePlateDatabase;
 
     public void init(){
         btn_home = findViewById(R.id.btn_home);
@@ -52,52 +62,14 @@ public class Cars extends AppCompatActivity {
                 startActivity(new Intent(Cars.this, addCar.class));
             }
         });
-
+/*
         btn_remove = findViewById(R.id.btn_remove);
         btn_remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                licensePlateRepository.clear();
+                licensePlateDatabase.clearAllTables();
             }
-        });
-
-        //Event
-        String text = getIntent().getStringExtra("number");
-        if (text != null)
-        {
-            Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
-                @Override
-                public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                    LicensePlate licensePlate = new LicensePlate();
-                    licensePlate.setNumber(getIntent().getStringExtra("number"));
-                    licensePlateRepository.insertAll(licensePlate);
-                    e.onComplete();
-                }
-            })
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new Consumer<Object>() {
-                                   @Override
-                                   public void accept(Object o) throws Exception {
-                                       Toast.makeText(Cars.this, "License Plate added !", Toast.LENGTH_SHORT).show();
-                                   }
-                               }, new Consumer<Throwable>() {
-                                   @Override
-                                   public void accept(Throwable throwable) throws Exception {
-                                       Toast.makeText(Cars.this, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                   }
-                               },
-                            new Action() {
-                                @Override
-                                public void run() throws Exception {
-                                    loadData(); // Refresh data
-                                }
-                            }
-
-                    );
-            compositeDisposable.add(disposable);
-        }
-
+        });*/
     }
 
     @Override
@@ -114,8 +86,7 @@ public class Cars extends AppCompatActivity {
         registerForContextMenu(lst_Car);
         lst_Car.setAdapter(adapter);
 
-        //Database
-        LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
+        licensePlateDatabase = LicensePlateDatabase.getInstance(this);
         licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
 
         loadData();
@@ -151,4 +122,100 @@ public class Cars extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return  super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        menu.setHeaderTitle("Select action:");
+        menu.add(Menu.NONE, 0, Menu.NONE, "DELETE");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item)
+    {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        final LicensePlate licensePlate = licensePlateList.get(info.position);
+        new AlertDialog.Builder(Cars.this)
+                .setMessage("Do you want to delete "+licensePlate.getNumber())
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteLicensePlate(licensePlate);
+                    }
+                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
+
+        return true;
+    }
+
+    private void deleteLicensePlate(final LicensePlate licensePlate) {
+
+        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                licensePlateRepository.delete(licensePlate);
+                e.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+
+                    }
+
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(Cars.this, ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                    new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            loadData();
+                        }
+                    });
+        compositeDisposable.add(disposable);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
