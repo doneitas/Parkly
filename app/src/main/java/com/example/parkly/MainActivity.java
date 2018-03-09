@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public void checkCarRegistration(){
         if (!getFileStreamPath("LicensePlateNumbers.txt").exists()){
             startActivity(new Intent(MainActivity.this, addCar.class));
+            String nenaudosim = "kazkas";
         }
     }
 }
