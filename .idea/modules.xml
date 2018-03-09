@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Parkly.iml" filepath="$PROJECT_DIR$/Parkly.iml" />
+      <module fileurl="file://C:\Users\Martynas\OneDrive - Kaunas University of Technology\Universitetas\Antras kursas II sem\Semestro Projektas\Parkly\Parkly.iml" filepath="C:\Users\Martynas\OneDrive - Kaunas University of Technology\Universitetas\Antras kursas II sem\Semestro Projektas\Parkly\Parkly.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\Martynas\OneDrive - Kaunas University of Technology\Universitetas\Antras kursas II sem\Semestro Projektas\Parkly\app\app.iml" filepath="C:\Users\Martynas\OneDrive - Kaunas University of Technology\Universitetas\Antras kursas II sem\Semestro Projektas\Parkly\app\app.iml" />
     </modules>
   </component>
 </project>
