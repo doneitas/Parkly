@@ -72,7 +72,6 @@ public class addCar extends Activity {
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Database
                 final String value = txt_plate.getText().toString();
                 if(isNumberCorrect(value)) {
                     Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
@@ -81,8 +80,6 @@ public class addCar extends Activity {
                             LicensePlate licensePlate = new LicensePlate();
                             licensePlate.setNumber(value);
                             licensePlateRepository.insertAll(licensePlate);
-                            startActivity(new Intent(addCar.this, Cars.class));
-                            finish();
                             e.onComplete();
                         }
                     })
@@ -99,11 +96,9 @@ public class addCar extends Activity {
                                                Toast.makeText(getApplicationContext(), "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                                            }
                                        }
-
-
                             );
                     compositeDisposable.add(disposable);
-
+                    finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Wrong format", Toast.LENGTH_LONG).show();
