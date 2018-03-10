@@ -13,7 +13,7 @@ public class LocalUserDataSource implements LicensePlateDao{
     private LicensePlateDao licensePlateDao;
     private static LocalUserDataSource mInstance;
 
-    public LocalUserDataSource(LicensePlateDao licensePlateDao)
+    private LocalUserDataSource(LicensePlateDao licensePlateDao)
     {
         this.licensePlateDao = licensePlateDao;
     }
