@@ -36,7 +36,6 @@ public class Cars extends AppCompatActivity {
 
     Button btn_home;
     Button btn_add;
-    Button btn_remove;
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
@@ -44,7 +43,7 @@ public class Cars extends AppCompatActivity {
 
     //Database
     private CompositeDisposable compositeDisposable;
-    public static LicensePlateRepository licensePlateRepository;
+    private LicensePlateRepository licensePlateRepository;
     LicensePlateDatabase licensePlateDatabase;
 
     public void init(){
@@ -53,6 +52,7 @@ public class Cars extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Cars.this, MainActivity.class));
+                finish();
             }
         });
         btn_add = findViewById(R.id.btn_add);
@@ -62,14 +62,6 @@ public class Cars extends AppCompatActivity {
                 startActivity(new Intent(Cars.this, addCar.class));
             }
         });
-/*
-        btn_remove = findViewById(R.id.btn_remove);
-        btn_remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                licensePlateDatabase.clearAllTables();
-            }
-        });*/
     }
 
     @Override
@@ -173,17 +165,13 @@ public class Cars extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer() {
                     @Override
-                    public void accept(Object o) throws Exception {
-
-                    }
-
+                    public void accept(Object o) throws Exception {}
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Toast.makeText(Cars.this, ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                },
-                    new Action() {
+                }, new Action() {
                         @Override
                         public void run() throws Exception {
                             loadData();

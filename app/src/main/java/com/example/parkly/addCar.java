@@ -1,7 +1,6 @@
 package com.example.parkly;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -72,7 +71,6 @@ public class addCar extends Activity {
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Database
                 final String value = txt_plate.getText().toString();
                 if(isNumberCorrect(value)) {
                     Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
@@ -89,7 +87,7 @@ public class addCar extends Activity {
                             .subscribe(new Consumer<Object>() {
                                            @Override
                                            public void accept(Object o) throws Exception {
-                                               Toast.makeText(getApplicationContext(), "Car is added !", Toast.LENGTH_SHORT).show();
+                                               Toast.makeText(getApplicationContext(), "License Plate added !", Toast.LENGTH_SHORT).show();
                                            }
                                        }, new Consumer<Throwable>() {
                                            @Override
@@ -97,11 +95,9 @@ public class addCar extends Activity {
                                                Toast.makeText(getApplicationContext(), "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                                            }
                                        }
-
-
                             );
                     compositeDisposable.add(disposable);
-                    startActivity(new Intent(addCar.this, Cars.class));
+                    finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Wrong format", Toast.LENGTH_LONG).show();

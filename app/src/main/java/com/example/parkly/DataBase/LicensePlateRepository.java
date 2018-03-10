@@ -14,7 +14,7 @@ public class LicensePlateRepository implements LicensePlateDao{
 
     private static LicensePlateRepository mInstance;
 
-    public LicensePlateRepository(LicensePlateDao mLicensePlateDao)
+    private LicensePlateRepository(LicensePlateDao mLicensePlateDao)
     {
         this.mLicensePlateDao = mLicensePlateDao;
     }
