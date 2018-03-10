@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         init();
-        checkCarRegistration();
     }
 
     @Override
@@ -104,11 +103,5 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(MainActivity.this, Cars.class));
             }
         });
-    }
-
-    public void checkCarRegistration(){
-        if (!getFileStreamPath("LicensePlateNumbers.txt").exists()){
-            startActivity(new Intent(MainActivity.this, addCar.class));
-        }
     }
 }
