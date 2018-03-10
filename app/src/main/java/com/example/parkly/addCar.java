@@ -81,8 +81,6 @@ public class addCar extends Activity {
                             LicensePlate licensePlate = new LicensePlate();
                             licensePlate.setNumber(value);
                             licensePlateRepository.insertAll(licensePlate);
-                            startActivity(new Intent(addCar.this, Cars.class));
-                            finish();
                             e.onComplete();
                         }
                     })
@@ -91,7 +89,7 @@ public class addCar extends Activity {
                             .subscribe(new Consumer<Object>() {
                                            @Override
                                            public void accept(Object o) throws Exception {
-                                               Toast.makeText(getApplicationContext(), "License Plate added !", Toast.LENGTH_SHORT).show();
+                                               Toast.makeText(getApplicationContext(), "Car is added !", Toast.LENGTH_SHORT).show();
                                            }
                                        }, new Consumer<Throwable>() {
                                            @Override
@@ -103,7 +101,7 @@ public class addCar extends Activity {
 
                             );
                     compositeDisposable.add(disposable);
-
+                    startActivity(new Intent(addCar.this, Cars.class));
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Wrong format", Toast.LENGTH_LONG).show();
