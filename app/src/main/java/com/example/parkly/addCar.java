@@ -1,41 +1,39 @@
 package com.example.parkly;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import com.example.parkly.DataBase.LicensePlate;
+import com.example.parkly.DataBase.LicensePlateDatabase;
+import com.example.parkly.DataBase.LicensePlateRepository;
+import com.example.parkly.DataBase.LocalUserDataSource;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Marius on 2018-03-04.
  */
 
 public class addCar extends Activity {
-
-    public static EditText et;
+    EditText txt_plate;
     Button btn_confirm;
-
-    public static boolean isNumberCorrect(String number) {
-        String expression = "[a-zA-Z]{3}+[0-9]{3}";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(number);
-        return matcher.matches();
-    }
+    //Database
+    private CompositeDisposable compositeDisposable;
+    public LicensePlateRepository licensePlateRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,32 +47,57 @@ public class addCar extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int) (width*.8), (int) (height*.6));
+        getWindow().setLayout((int) (width * .8), (int) (height * .6));
+
+        btn_confirm = findViewById(R.id.btn_confirm);
+        txt_plate = findViewById(R.id.txt_plate);
 
         init();
-
-
     }
 
-    public void init(){
-        btn_confirm = (Button) findViewById(R.id.btn_confirm);
+    public static boolean isNumberCorrect(String number) {
+        String expression = "[a-zA-Z]{3}+[0-9]{3}";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(number);
+        return matcher.matches();
+    }
+
+    public void init() {
+        //Init
+        compositeDisposable = new CompositeDisposable();
+        LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
+        licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                et = (EditText) findViewById(R.id.txtb_plate);
-                String value = et.getText().toString();
+                final String value = txt_plate.getText().toString();
                 if(isNumberCorrect(value)) {
-                    try {
-                        FileOutputStream fileOutputStream = openFileOutput("LicensePlateNumbers.txt", MODE_APPEND);
-                        fileOutputStream.write(value.getBytes());
-                        fileOutputStream.write("\n".getBytes());
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    startActivity(new Intent(addCar.this, Cars.class));
-                    et.setText(null);
+                    Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+                        @Override
+                        public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                            LicensePlate licensePlate = new LicensePlate();
+                            licensePlate.setNumber(value);
+                            licensePlateRepository.insertAll(licensePlate);
+                            e.onComplete();
+                        }
+                    })
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(new Consumer<Object>() {
+                                           @Override
+                                           public void accept(Object o) throws Exception {
+                                               Toast.makeText(getApplicationContext(), "License Plate added !", Toast.LENGTH_SHORT).show();
+                                           }
+                                       }, new Consumer<Throwable>() {
+                                           @Override
+                                           public void accept(Throwable throwable) throws Exception {
+                                               Toast.makeText(getApplicationContext(), "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                           }
+                                       }
+                            );
+                    compositeDisposable.add(disposable);
+                    finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Wrong format", Toast.LENGTH_LONG).show();
