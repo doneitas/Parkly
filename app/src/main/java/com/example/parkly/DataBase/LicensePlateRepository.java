@@ -52,4 +52,6 @@ public class LicensePlateRepository implements LicensePlateDao{
     public void clear() {
         mLicensePlateDao.clear();
     }
+
+
 }
