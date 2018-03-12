@@ -1,6 +1,5 @@
 package com.example.parkly.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,26 +11,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-import com.example.parkly.DataBase.LicensePlate;
-import com.example.parkly.DataBase.LicensePlateDatabase;
-import com.example.parkly.DataBase.LicensePlateRepository;
-import com.example.parkly.DataBase.LocalUserDataSource;
 import com.example.parkly.Fragment.CarsFragment;
 import com.example.parkly.Fragment.HomeFragment;
 import com.example.parkly.R;
-
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
