@@ -42,6 +42,11 @@ public class addCarActivity extends Activity {
 
         setContentView(R.layout.add_car);
 
+        setPopUpDimensions();
+        init();
+    }
+
+    public void setPopUpDimensions(){
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -49,11 +54,6 @@ public class addCarActivity extends Activity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int) (width * .8), (int) (height * .6));
-
-        btn_confirm = findViewById(R.id.btn_confirm);
-        txt_plate = findViewById(R.id.txt_plate);
-
-        init();
     }
 
     public static boolean isNumberCorrect(String number) {
@@ -68,6 +68,9 @@ public class addCarActivity extends Activity {
         compositeDisposable = new CompositeDisposable();
         LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
         licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+
+        btn_confirm = findViewById(R.id.btn_confirm);
+        txt_plate = findViewById(R.id.txt_plate);
 
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,5 +108,13 @@ public class addCarActivity extends Activity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (MainActivity.isCurrentFragmentIsHomeFragment){
+            //do nothing.
+        }
+        else super.onBackPressed();
     }
 }

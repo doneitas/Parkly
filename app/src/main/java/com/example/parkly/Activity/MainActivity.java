@@ -36,12 +36,28 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
+    public static boolean isCurrentFragmentIsHomeFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadFragment(new HomeFragment(), "HOME_FRAGMENT");
         navigation();
+    }
+
+    public void loadFragment(Fragment loadingFragment, String loadingFragmentTag){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+
+        ft.replace(R.id.frame, loadingFragment, loadingFragmentTag);
+
+        ft.commit();
+
+        if (loadingFragmentTag == "HOME_FRAGMENT"){
+            isCurrentFragmentIsHomeFragment = true;
+        }
     }
 
     public void navigation(){
@@ -63,9 +79,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        } else if(getSupportFragmentManager().findFragmentByTag("HOME_FRAGMENT") == null) {
+                loadFragment(new HomeFragment(), "HOME_FRAGMENT");
         }
+        else super.onBackPressed();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -74,14 +91,15 @@ public class MainActivity extends AppCompatActivity
 
         Fragment selectedFragment = null;
         String fragmentTag = null;
+        isCurrentFragmentIsHomeFragment = false;
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
             selectedFragment = new HomeFragment();
             fragmentTag = "HOME_FRAGMENT";
+            isCurrentFragmentIsHomeFragment = true;
         } else if (id == R.id.nav_cars) {
             selectedFragment = new CarsFragment();
             fragmentTag = "CARS_FRAGMENT";
@@ -96,12 +114,7 @@ public class MainActivity extends AppCompatActivity
         Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
 
         if (selectedFragment != null && currentFragment == null){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-
-            ft.replace(R.id.frame, selectedFragment, fragmentTag);
-
-            ft.commit();
+            loadFragment(selectedFragment, fragmentTag);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

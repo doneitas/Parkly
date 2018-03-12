@@ -16,12 +16,12 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
     <Button
-        android:id="@+id/btn_remove"
+        android:id="@+id/btn_removeAll"
         android:layout_width="106dp"
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:text="Remove Car"
+        android:text="Remove All"
         app:layout_constraintBottom_toTopOf="@+id/lst_Cars"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginRight="8dp" />

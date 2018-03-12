@@ -59,8 +59,6 @@ public class CarsFragment extends Fragment {
 
     }
 
-    Button btn_add;
-
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
     LicensePlateAdapter adapter;
@@ -72,11 +70,19 @@ public class CarsFragment extends Fragment {
 
     public void init(View view){
 
-        btn_add = view.findViewById(R.id.btn_add);
+        Button btn_add = view.findViewById(R.id.btn_add);
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), addCarActivity.class));
+            }
+        });
+
+        Button btn_removeAll = view.findViewById(R.id.btn_removeAll);
+        btn_removeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteAllLicensesPlates();
             }
         });
     }
@@ -159,6 +165,34 @@ public class CarsFragment extends Fragment {
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
                 licensePlateRepository.delete(licensePlate);
+                e.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer() {
+                    @Override
+                    public void accept(Object o) throws Exception {}
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        loadData();
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    private void deleteAllLicensesPlates() {
+
+        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                licensePlateRepository.clear();
                 e.onComplete();
             }
         })
