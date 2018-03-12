@@ -1,8 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
+    <ListView
+        android:id="@+id/list_zones"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/txt_price"
+        app:layout_constraintEnd_toStartOf="@+id/list_time"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_time"
+        android:layout_marginLeft="16dp" />
+
+    <ListView
+        android:id="@+id/list_time"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/txt_parkingEnds"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/list_zones"
+        app:layout_constraintTop_toBottomOf="@+id/txt_location"
+        android:layout_marginRight="16dp" />
+
+    <Button
+        android:id="@+id/btn_homeConfirm"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/confirm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_time"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/parking_zone"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/list_zones"
+        app:layout_constraintEnd_toStartOf="@+id/txt_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="16dp" />
+
+    <TextView
+        android:id="@+id/txt_location"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/parking_duration"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/list_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_time"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="16dp" />
+
+    <TextView
+        android:id="@+id/txt_price"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:text="@string/price"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_outputPrice"
+        app:layout_constraintEnd_toStartOf="@+id/txt_parkingEnds"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_zones"
+        android:layout_marginLeft="16dp" />
+
+    <TextView
+        android:id="@+id/txt_parkingEnds"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:text="@string/parking_ends"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_outputTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_price"
+        app:layout_constraintTop_toBottomOf="@+id/list_time"
+        android:layout_marginRight="16dp" />
+
+    <TextView
+        android:id="@+id/txt_outputPrice"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:text="..."
+        app:layout_constraintBottom_toTopOf="@+id/btn_homeConfirm"
+        app:layout_constraintEnd_toStartOf="@+id/txt_outputTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_price"
+        android:layout_marginLeft="16dp" />
+
+    <TextView
+        android:id="@+id/txt_outputTime"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:text="..."
+        app:layout_constraintBottom_toTopOf="@+id/btn_homeConfirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt_outputPrice"
+        app:layout_constraintTop_toBottomOf="@+id/txt_parkingEnds"
+        android:layout_marginRight="16dp" />
 
 </android.support.constraint.ConstraintLayout>
