@@ -1,4 +1,4 @@
-package com.example.parkly;
+package com.example.parkly.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import com.example.parkly.DataBase.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
+import com.example.parkly.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,7 +29,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Marius on 2018-03-04.
  */
 
-public class addCar extends Activity {
+public class addCarActivity extends Activity {
     EditText txt_plate;
     Button btn_confirm;
     //Database
