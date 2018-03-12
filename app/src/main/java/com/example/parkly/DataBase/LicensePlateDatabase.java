@@ -3,6 +3,8 @@ package com.example.parkly.DataBase;
 import android.arch.persistence.room.*;
 import android.content.Context;
 
+import com.example.parkly.DataBase.Tables.LicensePlate;
+
 import java.util.List;
 
 import io.reactivex.Flowable;

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.R;
 
 import java.util.List;
