@@ -1,24 +1,29 @@
-package com.example.parkly;
+package com.example.parkly.Fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.parkly.Activity.addCarActivity;
 import com.example.parkly.DataBase.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateAdapter;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
+import com.example.parkly.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +37,27 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class Cars extends AppCompatActivity {
+/**
+ * Created by donvel on 2018-03-12.
+ */
 
-    Button btn_home;
-    Button btn_add;
+public class CarsFragment extends Fragment {
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.cars_fragment, null);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        database(view);
+        loadData();
+        init(view);
+
+    }
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
@@ -46,45 +68,37 @@ public class Cars extends AppCompatActivity {
     private LicensePlateRepository licensePlateRepository;
     LicensePlateDatabase licensePlateDatabase;
 
-    public void init(){
-        btn_home = findViewById(R.id.btn_home);
-        btn_home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Cars.this, MainActivity.class));
-                finish();
-            }
-        });
-        btn_add = findViewById(R.id.btn_add);
+    public void init(View view){
+
+        Button btn_add = view.findViewById(R.id.btn_add);
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Cars.this, addCar.class));
+                startActivity(new Intent(getActivity(), addCarActivity.class));
+            }
+        });
+
+        Button btn_removeAll = view.findViewById(R.id.btn_removeAll);
+        btn_removeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteAllLicensesPlates();
             }
         });
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cars);
-
+    public void database(View view){
         //Init
         compositeDisposable = new CompositeDisposable();
 
         //init View
-        adapter = new LicensePlateAdapter(this, licensePlateList);
-        ListView lst_Car = findViewById(R.id.lst_Cars);
+        adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
+        ListView lst_Car = view.findViewById(R.id.lst_Cars);
         registerForContextMenu(lst_Car);
         lst_Car.setAdapter(adapter);
 
-        licensePlateDatabase = LicensePlateDatabase.getInstance(this);
+        licensePlateDatabase = LicensePlateDatabase.getInstance(getActivity());
         licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
-
-        loadData();
-
-        init();
-
     }
 
     private void loadData()
@@ -101,7 +115,7 @@ public class Cars extends AppCompatActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(Cars.this, ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
         compositeDisposable.add(disposable);
@@ -112,13 +126,6 @@ public class Cars extends AppCompatActivity {
         licensePlateList.clear();
         licensePlateList.addAll(licensePlates);
         adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.menu,menu);
-        return  super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -135,7 +142,7 @@ public class Cars extends AppCompatActivity {
     {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         final LicensePlate licensePlate = licensePlateList.get(info.position);
-        new AlertDialog.Builder(Cars.this)
+        new AlertDialog.Builder(getActivity())
                 .setMessage("Do you want to delete "+licensePlate.getNumber())
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -169,41 +176,42 @@ public class Cars extends AppCompatActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(Cars.this, ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }, new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            loadData();
-                        }
-                    });
+                    @Override
+                    public void run() throws Exception {
+                        loadData();
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    private void deleteAllLicensesPlates() {
+
+        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                licensePlateRepository.clear();
+                e.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer() {
+                    @Override
+                    public void accept(Object o) throws Exception {}
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        loadData();
+                    }
+                });
         compositeDisposable.add(disposable);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

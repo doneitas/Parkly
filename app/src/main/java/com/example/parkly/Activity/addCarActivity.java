@@ -1,4 +1,4 @@
-package com.example.parkly;
+package com.example.parkly.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import com.example.parkly.DataBase.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
+import com.example.parkly.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,7 +29,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Marius on 2018-03-04.
  */
 
-public class addCar extends Activity {
+public class addCarActivity extends Activity {
     EditText txt_plate;
     Button btn_confirm;
     //Database
@@ -41,6 +42,11 @@ public class addCar extends Activity {
 
         setContentView(R.layout.add_car);
 
+        setPopUpDimensions();
+        init();
+    }
+
+    public void setPopUpDimensions(){
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -48,11 +54,6 @@ public class addCar extends Activity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int) (width * .8), (int) (height * .6));
-
-        btn_confirm = findViewById(R.id.btn_confirm);
-        txt_plate = findViewById(R.id.txt_plate);
-
-        init();
     }
 
     public static boolean isNumberCorrect(String number) {
@@ -67,6 +68,9 @@ public class addCar extends Activity {
         compositeDisposable = new CompositeDisposable();
         LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
         licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+
+        btn_confirm = findViewById(R.id.btn_confirm);
+        txt_plate = findViewById(R.id.txt_plate);
 
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,5 +108,13 @@ public class addCar extends Activity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (MainActivity.isCurrentFragmentIsHomeFragment){
+            //do nothing.
+        }
+        else super.onBackPressed();
     }
 }
