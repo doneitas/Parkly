@@ -1,4 +1,4 @@
-package com.example.parkly.DataBase;
+package com.example.parkly.DataBase.Tables;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -12,24 +12,30 @@ import android.arch.persistence.room.PrimaryKey;
 
     @ColumnInfo(name = "number")
     private String number;
-/*
-    public LicensePlate(int id, String number) {
-        this.id = id;
-        this.number = number;
+
+    @ColumnInfo(name = "current")
+    private boolean current = false;
+
+    public int getId() {
+        return id;
     }
-*/
+
+    public void setId(int id) {this.id = id;}
+
     public String getNumber() {
         return number;
     }
 
     public void setNumber(String number) {this.number = number;}
 
-    public int getId() {
-        return id;
+    public void setCurrent(boolean state)
+    {
+        this.current = state;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public boolean getCurrent()
+    {
+        return current;
     }
 }
 

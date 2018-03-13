@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.parkly.Activity.addCarActivity;
-import com.example.parkly.DataBase.LicensePlate;
+import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateAdapter;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;

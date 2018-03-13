@@ -3,6 +3,8 @@ package com.example.parkly.DataBase;
 import android.arch.persistence.room.*;
 import android.content.Context;
 
+import com.example.parkly.DataBase.Tables.LicensePlate;
+
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -16,7 +18,7 @@ import static com.example.parkly.DataBase.LicensePlateDatabase.DATABASE_VERSION;
 @Database(entities = LicensePlate.class, version = DATABASE_VERSION)
 public abstract class LicensePlateDatabase extends RoomDatabase {
 
-    static final int DATABASE_VERSION = 1;
+    static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "Database";
     public abstract LicensePlateDao licensePlateDao();
     private static LicensePlateDatabase mInstance;
