@@ -43,7 +43,27 @@ public class HomeFragment extends Fragment {
 
         checkCarRegistration();
     }
+    //Database
+    public LicensePlateRepository licensePlateRepository;
 
+    private void checkCarRegistration() {
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(getActivity());
+        licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+        final HomeFragment homeFragment = (HomeFragment) getFragmentManager().findFragmentByTag("HOME_FRAGMENT");
+
+        final Disposable disposable = licensePlateRepository.getAll()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<LicensePlate>>() {
+                    @Override
+                    public void accept(List<LicensePlate> licensePlates) throws Exception {
+                        if (licensePlates.isEmpty() && homeFragment != null && homeFragment.isVisible())
+                            startActivity(new Intent(getActivity(), addCarActivity.class));
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
     //Color - pasirinkta spalva, chosenHour - pasirinktos valandos[gali buti ir 0], chosenMinute - pasirinktos minutes[gali buti ir 0]
     private void estimatedPriceAndTime(String Color, int chosenHour, int chosenMinute)
     {
@@ -88,26 +108,5 @@ public class HomeFragment extends Fragment {
             }
 
         }
-    }
-    //Database
-    public LicensePlateRepository licensePlateRepository;
-
-    private void checkCarRegistration() {
-        CompositeDisposable compositeDisposable = new CompositeDisposable();
-        LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(getActivity());
-        licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
-        final HomeFragment homeFragment = (HomeFragment) getFragmentManager().findFragmentByTag("HOME_FRAGMENT");
-
-        final Disposable disposable = licensePlateRepository.getAll()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<List<LicensePlate>>() {
-                    @Override
-                    public void accept(List<LicensePlate> licensePlates) throws Exception {
-                        if (licensePlates.isEmpty() && homeFragment != null && homeFragment.isVisible())
-                            startActivity(new Intent(getActivity(), addCarActivity.class));
-                    }
-                });
-        compositeDisposable.add(disposable);
     }
 }
