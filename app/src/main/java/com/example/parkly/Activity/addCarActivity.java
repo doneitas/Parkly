@@ -8,10 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
+import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.R;
 
 import java.util.regex.Matcher;
@@ -82,6 +82,10 @@ public class addCarActivity extends Activity {
                         public void subscribe(ObservableEmitter<Object> e) throws Exception {
                             LicensePlate licensePlate = new LicensePlate();
                             licensePlate.setNumber(value);
+                            if(licensePlateRepository.findDefault() == null)
+                            {
+                                licensePlate.setCurrent(true);
+                            }
                             licensePlateRepository.insertAll(licensePlate);
                             e.onComplete();
                         }

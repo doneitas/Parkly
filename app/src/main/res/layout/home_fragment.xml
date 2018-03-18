@@ -13,11 +13,11 @@
         android:layout_marginStart="16dp"
         android:choiceMode="singleChoice"
         android:listSelector="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/txt_price"
+        app:layout_constraintBottom_toTopOf="@+id/txt_noChange4"
         app:layout_constraintEnd_toStartOf="@+id/list_time"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_time"
+        app:layout_constraintTop_toBottomOf="@+id/txt_noChange2"
         android:layout_marginLeft="16dp" />
 
     <ListView
@@ -27,10 +27,10 @@
         android:layout_marginEnd="16dp"
         android:choiceMode="singleChoice"
         android:listSelector="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/txt_parkingEnds"
+        app:layout_constraintBottom_toTopOf="@+id/txt.noChange5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/list_zones"
-        app:layout_constraintTop_toBottomOf="@+id/txt_location"
+        app:layout_constraintTop_toBottomOf="@+id/txt_noChange3"
         android:layout_marginRight="16dp" />
 
     <Button
@@ -46,7 +46,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/txt_time"
+        android:id="@+id/txt_noChange2"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginStart="16dp"
@@ -55,13 +55,13 @@
         android:text="@string/parking_zone"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/list_zones"
-        app:layout_constraintEnd_toStartOf="@+id/txt_location"
+        app:layout_constraintEnd_toStartOf="@+id/txt_noChange3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="16dp" />
 
     <TextView
-        android:id="@+id/txt_location"
+        android:id="@+id/txt_noChange3"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginEnd="16dp"
@@ -71,12 +71,12 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/list_time"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_time"
+        app:layout_constraintStart_toEndOf="@+id/txt_noChange2"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginRight="16dp" />
 
     <TextView
-        android:id="@+id/txt_price"
+        android:id="@+id/txt_noChange4"
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginStart="16dp"
@@ -84,13 +84,13 @@
         android:text="@string/price"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_outputPrice"
-        app:layout_constraintEnd_toStartOf="@+id/txt_parkingEnds"
+        app:layout_constraintEnd_toStartOf="@+id/txt.noChange5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/list_zones"
         android:layout_marginLeft="16dp" />
 
     <TextView
-        android:id="@+id/txt_parkingEnds"
+        android:id="@+id/txt.noChange5"
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginEnd="16dp"
@@ -99,7 +99,7 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_outputTime"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_price"
+        app:layout_constraintStart_toEndOf="@+id/txt_noChange4"
         app:layout_constraintTop_toBottomOf="@+id/list_time"
         android:layout_marginRight="16dp" />
 
@@ -113,7 +113,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_homeConfirm"
         app:layout_constraintEnd_toStartOf="@+id/txt_outputTime"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_price"
+        app:layout_constraintTop_toBottomOf="@+id/txt_noChange4"
         android:layout_marginLeft="16dp" />
 
     <TextView
@@ -126,7 +126,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_homeConfirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt_outputPrice"
-        app:layout_constraintTop_toBottomOf="@+id/txt_parkingEnds"
+        app:layout_constraintTop_toBottomOf="@+id/txt.noChange5"
         android:layout_marginRight="16dp" />
 
 </android.support.constraint.ConstraintLayout>

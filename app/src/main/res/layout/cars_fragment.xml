@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Button
         android:id="@+id/btn_add"
-        android:layout_width="106dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Add Car"
         app:layout_constraintBottom_toTopOf="@+id/lst_Cars"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt.noChange"
+        android:layout_marginLeft="8dp" />
 
     <Button
         android:id="@+id/btn_removeAll"
-        android:layout_width="106dp"
+        android:layout_width="110dp"
         android:layout_height="60dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:text="Remove All"
         app:layout_constraintBottom_toTopOf="@+id/lst_Cars"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_defaultCar"
         android:layout_marginRight="8dp" />
 
     <ListView
@@ -32,16 +37,42 @@
         android:layout_height="0dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="130dp"
+        android:layout_weight="2"
+        android:background="@drawable/listview_borders"
+        android:divider="#D8D8D8"
+        android:dividerHeight="3dp"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.627"
-        android:divider="#D8D8D8"
-        android:dividerHeight="3dp"
-        android:layout_weight="2"
-        android:padding="5dp"
-        android:background="@drawable/listview_borders"/>
+        app:layout_constraintTop_toBottomOf="@+id/btn_add" />
+
+    <TextView
+        android:id="@+id/txt.noChange"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="left|center"
+        android:text="Default car:"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toStartOf="@+id/txt_defaultCar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txt_defaultCar"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="left|center"
+        android:text="..."
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt.noChange"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -40,8 +40,18 @@ public class LocalUserDataSource implements LicensePlateDao{
     }
 
     @Override
+    public LicensePlate findDefault() {
+        return licensePlateDao.findDefault();
+    }
+
+    @Override
     public void insertAll(LicensePlate... numbers) {
         licensePlateDao.insertAll(numbers);
+    }
+
+    @Override
+    public void updateLicensePlate(LicensePlate... numbers) {
+        licensePlateDao.updateLicensePlate(numbers);
     }
 
     @Override
