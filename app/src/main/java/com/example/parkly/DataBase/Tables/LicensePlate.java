@@ -16,26 +16,16 @@ import android.arch.persistence.room.PrimaryKey;
     @ColumnInfo(name = "current")
     private boolean current = false;
 
-    public int getId() {
-        return id;
-    }
+    public int getId() {return id;}
 
     public void setId(int id) {this.id = id;}
 
-    public String getNumber() {
-        return number;
-    }
+    public String getNumber() {return number;}
 
     public void setNumber(String number) {this.number = number;}
 
-    public void setCurrent(boolean state)
-    {
-        this.current = state;
-    }
+    public void setCurrent(boolean state) {this.current = state;}
 
-    public boolean getCurrent()
-    {
-        return current;
-    }
+    public boolean getCurrent() {return current;}
 }
 

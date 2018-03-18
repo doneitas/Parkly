@@ -33,11 +33,6 @@ public abstract class LicensePlateDatabase extends RoomDatabase {
         }
         return mInstance;
     }
-
-    public static void clear()
-    {
-        mInstance.clearAllTables();
-    }
 }
 
 @Dao
@@ -48,11 +43,14 @@ interface LicensePlateDao {
     @Query("SELECT * FROM LicensePlates WHERE id IN (:licensePlateIds)")
     Flowable<LicensePlate> loadAllByIds(int[] licensePlateIds);
 
-    //@Query("SELECT * FROM LicensePlates WHERE number LIMIT 1")
-    //LicensePlate findByNumber(String number);
+    @Query("SELECT * FROM LicensePlates WHERE current ")
+    LicensePlate findDefault();
 
     @Insert
     void insertAll(LicensePlate... numbers);
+
+    @Update
+    void updateLicensePlate(LicensePlate... numbers);
 
     @Delete
     void delete(LicensePlate number);

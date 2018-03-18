@@ -41,8 +41,18 @@ public class LicensePlateRepository implements LicensePlateDao{
     }
 
     @Override
+    public LicensePlate findDefault() {
+        return mLicensePlateDao.findDefault();
+    }
+
+    @Override
     public void insertAll(LicensePlate... numbers) {
         mLicensePlateDao.insertAll(numbers);
+    }
+
+    @Override
+    public void updateLicensePlate(LicensePlate... numbers) {
+        mLicensePlateDao.updateLicensePlate(numbers);
     }
 
     @Override
