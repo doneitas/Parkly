@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.example.parkly.Activity.addCarActivity;
 import com.example.parkly.DataBase.Tables.LicensePlate;
@@ -15,6 +17,7 @@ import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
 import com.example.parkly.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -63,4 +66,27 @@ public class HomeFragment extends Fragment {
                 });
         compositeDisposable.add(disposable);
     }
+
+    private void createTimeZoneLists()
+    {
+        ListView listZones;
+        ListView listTime;
+        List<String> zones = new ArrayList<String>();
+        zones.add("Orange zone");
+        zones.add("Yellow zone");
+        zones.add("Red zone");
+        List<Integer> time = new ArrayList<Integer>();
+        time.add(15);
+        time.add(30);
+        time.add(45);
+        time.add(60);
+        time.add(75);
+        time.add(90);
+
+        listZones = (ListView)getView().findViewById(R.id.list_zones);
+        listTime = (ListView)getView().findViewById(R.id.list_time);
+        ArrayAdapter<String> zonesAdapter = new ArrayAdapter<String>(getActivity(), zones);
+        ArrayAdapter<String> timeAdapter = new ArrayAdapter<String>(getActivity(), time);
+    }
+
 }
