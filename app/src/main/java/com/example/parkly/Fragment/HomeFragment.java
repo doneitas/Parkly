@@ -117,27 +117,27 @@ public class HomeFragment extends Fragment {
         double price = 0;
         switch(color)
         {
-            case "Oranzine":
+            case "Orange":
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
             }
-            case "Geltona":
+            case "Yellow":
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
             }
-            case "Melyna":
+            case "Blue":
             {
                 price = 0.6 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
             }
-            case "Raudona":
+            case "Red":
             {
                 price = 1.2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
             }
-            case "Zalia":
+            case "Green":
             {
                 price = 0.3 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
