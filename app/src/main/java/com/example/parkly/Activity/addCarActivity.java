@@ -113,12 +113,4 @@ public class addCarActivity extends Activity {
             }
         });
     }
-
-    @Override
-    public void onBackPressed() {
-        if (MainActivity.isCurrentFragmentIsHomeFragment){
-            //do nothing.
-        }
-        else super.onBackPressed();
-    }
 }
