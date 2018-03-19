@@ -40,6 +40,9 @@ import io.reactivex.schedulers.Schedulers;
 public class HomeFragment extends Fragment {
 
     public TextView temp;
+    public int chosenMinutes = 0;
+    public String chosenZone = null;
+    public String finalPrice = "";
 
     @Nullable
     @Override
@@ -118,10 +121,29 @@ public class HomeFragment extends Fragment {
         listZones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView outputPrice = (TextView)view.findViewById(R.id.txt_outputPrice);
-                temp.setText(((TextView) view).getText());
+                chosenZone = ((TextView) view).getText().toString();
+                finalPrice = estimatedPrice("Green", 0, 15);
+                if (chosenMinutes != 0){
+                    //finalPrice = estimatedPrice(chosenZone, chosenMinutes/60, chosenMinutes%60);
+                }
+                temp.setText(finalPrice);
             }
         });
+
+        listTime.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String tempChosenZone = ((TextView) view).getText().toString();
+                chosenMinutes = Integer.parseInt(tempChosenZone);
+                finalPrice = estimatedPrice("Yellow", 1, 15);
+                if (chosenZone != ""){
+                    //finalPrice = estimatedPrice(chosenZone, chosenMinutes/60, chosenMinutes%60);
+                }
+                temp.setText(finalPrice);
+            }
+        });
+
+
     }
 
     private String estimatedPrice(String color, int chosenHour, int chosenMinute)
