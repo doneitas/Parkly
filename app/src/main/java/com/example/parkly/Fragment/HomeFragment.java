@@ -23,6 +23,8 @@ import com.example.parkly.R;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -52,7 +54,6 @@ public class HomeFragment extends Fragment {
         createTimeZoneLists(view);
         checkCarRegistration();
     }
-
     //Database
     public LicensePlateRepository licensePlateRepository;
 
@@ -121,5 +122,104 @@ public class HomeFragment extends Fragment {
                 temp.setText(((TextView) view).getText());
             }
         });
+    }
+
+//    Color - pasirinkta spalva, chosenHour - pasirinktos valandos[gali buti ir 0], chosenMinute - pasirinktos minutes[gali buti ir 0]
+//    private void estimatedPriceAndTime(String Color, int chosenHour, int chosenMinute)
+//    {
+//        minutine kaine
+//        double price;
+//        galutine
+//        double total;
+//        numatoma parkavimosi pabaiga
+//        Calendar currentTime = Calendar.getInstance();
+//        nustatomas esamas laikas
+//        currentTime.setTime(new Date());
+//        currentTime.add(Calendar.HOUR_OF_DAY, chosenHour);
+//        currentTime.add(Calendar.MINUTE, chosenMinute);
+//        currentTime.getTime();
+//
+//        switch(Color)
+//        {
+//            case "Oranzine":
+//            {
+//                price = 2 / 60;
+//                total = ((chosenHour*60) + chosenMinute) * price;
+//            }
+//            case "Geltona":
+//            {
+//                price = 2 / 60;
+//                total = ((chosenHour*60) + chosenMinute) * price;
+//            }
+//            case "Melyna":
+//            {
+//                price = 0.6 / 60;
+//                total = ((chosenHour*60) + chosenMinute) * price;
+//            }
+//            case "Raudona":
+//            {
+//                price = 1.2 / 60;
+//                total = ((chosenHour*60) + chosenMinute) * price;
+//            }
+//            case "Zalia":
+//            {
+//                price = 0.3 / 60;
+//                total = ((chosenHour*60) + chosenMinute) * price;
+//            }
+//
+//        }
+//    }
+//    Color - pasirinkta spalva, chosenHour - pasirinktos valandos[gali buti ir 0], chosenMinute - pasirinktos minutes[gali buti ir 0]
+    private String estimatedPrice(String color, int chosenHour, int chosenMinute)
+    {
+        double total;
+        double price = 0;
+        switch(color)
+        {
+            case "Orange":
+            {
+                price = 2 / 60d;
+                total = ((chosenHour*60) + chosenMinute) * price;
+            }
+            case "Yellow":
+            {
+                price = 2 / 60d;
+                total = ((chosenHour*60) + chosenMinute) * price;
+            }
+            case "Blue":
+            {
+                price = 0.6 / 60d;
+                total = ((chosenHour*60) + chosenMinute) * price;
+            }
+            case "Red":
+            {
+                price = 1.2 / 60d;
+                total = ((chosenHour*60) + chosenMinute) * price;
+            }
+            case "Green":
+            {
+                price = 0.3 / 60d;
+                total = ((chosenHour*60) + chosenMinute) * price;
+            }
+            default:
+            {
+                total = 0;
+            }
+        }
+        String totalString = String.valueOf(total);
+        return totalString;
+    }
+
+    private String estimatedTime(int chosenHour, int chosenMinute)
+    {
+        //numatoma parkavimosi pabaiga
+        Calendar currentTime = Calendar.getInstance();
+        //nustatomas esamas laikas
+        currentTime.setTime(new Date());
+        currentTime.add(Calendar.HOUR_OF_DAY, chosenHour);
+        currentTime.add(Calendar.MINUTE, chosenMinute);
+        currentTime.getTime();
+
+        return currentTime.toString();
     }
 }
