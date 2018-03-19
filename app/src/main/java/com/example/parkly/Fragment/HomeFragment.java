@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,7 +46,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         createTimeZoneLists(view);
         checkCarRegistration();
@@ -74,7 +75,7 @@ public class HomeFragment extends Fragment {
 
     private void createTimeZoneLists(View view)
     {
-        ListView listZones;
+        final ListView listZones;
         ListView listTime;
         ArrayList<String> zones = new ArrayList<String>();
         zones.add("Green");
@@ -107,8 +108,14 @@ public class HomeFragment extends Fragment {
         listZones.setAdapter(zonesAdapter);
         listTime.setAdapter(timeAdapter);
 
-        TextView outputPrice = (TextView)view.findViewById(R.id.txt_outputPrice);
-        outputPrice.setText(listZones.getSelectedItem().toString());
+
+        listZones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView outputPrice = (TextView)view.findViewById(R.id.txt_outputPrice);
+                outputPrice.setText(adapterView.getItemAtPosition(i).toString());
+            }
+        });
     }
 
 }
