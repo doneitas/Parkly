@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment {
 //    Color - pasirinkta spalva, chosenHour - pasirinktos valandos[gali buti ir 0], chosenMinute - pasirinktos minutes[gali buti ir 0]
     private String estimatedPrice(String color, int chosenHour, int chosenMinute)
     {
-        String total;
+        double total;
         double price = 0;
         switch(color)
         {
@@ -144,10 +144,10 @@ public class HomeFragment extends Fragment {
             }
             default:
             {
-                total = "Error";
+                total = 0;
             }
         }
-        return total;
+        return total.toString();
     }
 
     private String estimatedTime(int chosenHour, int chosenMinute)
