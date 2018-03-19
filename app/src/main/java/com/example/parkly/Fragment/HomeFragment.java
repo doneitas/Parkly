@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.parkly.Activity.addCarActivity;
 import com.example.parkly.DataBase.Tables.LicensePlate;
@@ -36,6 +37,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
 
+    public TextView temp;
 
     @Nullable
     @Override
@@ -109,13 +111,15 @@ public class HomeFragment extends Fragment {
         listTime.setAdapter(timeAdapter);
 
 
+        TextView outputPrice = (TextView)view.findViewById(R.id.txt_outputPrice);
+        temp = outputPrice;
+
         listZones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView outputPrice = (TextView)view.findViewById(R.id.txt_outputPrice);
-                outputPrice.setText(adapterView.getItemAtPosition(i).toString());
+                temp.setText(((TextView) view).getText());
             }
         });
     }
-
 }
