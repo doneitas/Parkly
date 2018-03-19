@@ -119,27 +119,27 @@ public class HomeFragment extends Fragment {
         {
             case "Oranzine":
             {
-                price = 2 / 60;
+                price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
             }
             case "Geltona":
             {
-                price = 2 / 60;
+                price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
             }
             case "Melyna":
             {
-                price = 0.6 / 60;
+                price = 0.6 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
             }
             case "Raudona":
             {
-                price = 1.2 / 60;
+                price = 1.2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
             }
             case "Zalia":
             {
-                price = 0.3 / 60;
+                price = 0.3 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
             }
             default:
