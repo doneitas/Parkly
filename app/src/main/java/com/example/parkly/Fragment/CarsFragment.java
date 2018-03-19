@@ -125,7 +125,11 @@ public class CarsFragment extends Fragment {
                     @Override
                     public void accept(List<LicensePlate> licensePlates) throws Exception {
                         onGetAllLicensePlateSuccess(licensePlates);
-                        refreshDefault();
+                        if (licensePlates.size()==1 && licensePlates.get(0).getCurrent() == false)
+                        {
+                            setDefault(licensePlates.get(0));
+                        }
+                        else refreshDefault();
                     }
 
                 }, new Consumer<Throwable>() {
@@ -206,8 +210,11 @@ public class CarsFragment extends Fragment {
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
                 LicensePlate oldLicensePlate = licensePlateRepository.findDefault();
-                oldLicensePlate.setCurrent(false);
-                licensePlateRepository.updateLicensePlate(oldLicensePlate);
+                if (oldLicensePlate != null)
+                {
+                    oldLicensePlate.setCurrent(false);
+                    licensePlateRepository.updateLicensePlate(oldLicensePlate);
+                }
                 licensePlate.setCurrent(true);
                 licensePlateRepository.updateLicensePlate(licensePlate);
                 refreshDefault();
