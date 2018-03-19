@@ -124,52 +124,6 @@ public class HomeFragment extends Fragment {
         });
     }
 
-//    Color - pasirinkta spalva, chosenHour - pasirinktos valandos[gali buti ir 0], chosenMinute - pasirinktos minutes[gali buti ir 0]
-//    private void estimatedPriceAndTime(String Color, int chosenHour, int chosenMinute)
-//    {
-//        minutine kaine
-//        double price;
-//        galutine
-//        double total;
-//        numatoma parkavimosi pabaiga
-//        Calendar currentTime = Calendar.getInstance();
-//        nustatomas esamas laikas
-//        currentTime.setTime(new Date());
-//        currentTime.add(Calendar.HOUR_OF_DAY, chosenHour);
-//        currentTime.add(Calendar.MINUTE, chosenMinute);
-//        currentTime.getTime();
-//
-//        switch(Color)
-//        {
-//            case "Oranzine":
-//            {
-//                price = 2 / 60;
-//                total = ((chosenHour*60) + chosenMinute) * price;
-//            }
-//            case "Geltona":
-//            {
-//                price = 2 / 60;
-//                total = ((chosenHour*60) + chosenMinute) * price;
-//            }
-//            case "Melyna":
-//            {
-//                price = 0.6 / 60;
-//                total = ((chosenHour*60) + chosenMinute) * price;
-//            }
-//            case "Raudona":
-//            {
-//                price = 1.2 / 60;
-//                total = ((chosenHour*60) + chosenMinute) * price;
-//            }
-//            case "Zalia":
-//            {
-//                price = 0.3 / 60;
-//                total = ((chosenHour*60) + chosenMinute) * price;
-//            }
-//
-//        }
-//    }
-//    Color - pasirinkta spalva, chosenHour - pasirinktos valandos[gali buti ir 0], chosenMinute - pasirinktos minutes[gali buti ir 0]
     private String estimatedPrice(String color, int chosenHour, int chosenMinute)
     {
         double total;
