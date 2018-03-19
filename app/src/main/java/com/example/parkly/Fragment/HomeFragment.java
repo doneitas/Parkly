@@ -67,15 +67,15 @@ public class HomeFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
-    private void createTimeZoneLists()
+    private void createTimeZoneLists(View view)
     {
         ListView listZones;
         ListView listTime;
-        List<String> zones = new ArrayList<String>();
+        ArrayList<String> zones = new ArrayList<String>();
         zones.add("Orange zone");
         zones.add("Yellow zone");
         zones.add("Red zone");
-        List<Integer> time = new ArrayList<Integer>();
+        ArrayList<Integer> time = new ArrayList<Integer>();
         time.add(15);
         time.add(30);
         time.add(45);
@@ -85,8 +85,8 @@ public class HomeFragment extends Fragment {
 
         listZones = (ListView)getView().findViewById(R.id.list_zones);
         listTime = (ListView)getView().findViewById(R.id.list_time);
-        ArrayAdapter<String> zonesAdapter = new ArrayAdapter<String>(getActivity(), zones);
-        ArrayAdapter<String> timeAdapter = new ArrayAdapter<String>(getActivity(), time);
+        ArrayAdapter<String> zonesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, zones);
+        ArrayAdapter<Integer> timeAdapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_list_item_1, time);
     }
 
 }
