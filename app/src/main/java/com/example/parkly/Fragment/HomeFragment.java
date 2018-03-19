@@ -42,6 +42,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        createTimeZoneLists(view);
         checkCarRegistration();
     }
 
@@ -72,9 +74,11 @@ public class HomeFragment extends Fragment {
         ListView listZones;
         ListView listTime;
         ArrayList<String> zones = new ArrayList<String>();
-        zones.add("Orange zone");
-        zones.add("Yellow zone");
-        zones.add("Red zone");
+        zones.add("Green");
+        zones.add("Blue");
+        zones.add("Red");
+        zones.add("Yellow");
+        zones.add("Orange");
         ArrayList<Integer> time = new ArrayList<Integer>();
         time.add(15);
         time.add(30);
@@ -82,11 +86,23 @@ public class HomeFragment extends Fragment {
         time.add(60);
         time.add(75);
         time.add(90);
+        time.add(120);
+        time.add(180);
+        time.add(240);
+        time.add(300);
+        time.add(360);
+        time.add(420);
+        time.add(480);
+        time.add(540);
+        time.add(600);
+
 
         listZones = (ListView)getView().findViewById(R.id.list_zones);
         listTime = (ListView)getView().findViewById(R.id.list_time);
         ArrayAdapter<String> zonesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, zones);
         ArrayAdapter<Integer> timeAdapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_list_item_1, time);
+        listZones.setAdapter(zonesAdapter);
+        listTime.setAdapter(timeAdapter);
     }
 
 }
