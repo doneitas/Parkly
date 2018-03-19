@@ -147,7 +147,8 @@ public class HomeFragment extends Fragment {
                 total = 0;
             }
         }
-        return total.toString();
+        String totalString = String.valueOf(total);
+        return totalString;
     }
 
     private String estimatedTime(int chosenHour, int chosenMinute)
