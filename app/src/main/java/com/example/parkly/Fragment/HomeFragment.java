@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.parkly.Activity.addCarActivity;
 import com.example.parkly.DataBase.Tables.LicensePlate;
@@ -16,6 +17,8 @@ import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
 import com.example.parkly.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,12 +100,15 @@ public class HomeFragment extends Fragment {
         time.add(600);
 
 
-        listZones = (ListView)getView().findViewById(R.id.list_zones);
-        listTime = (ListView)getView().findViewById(R.id.list_time);
+        listZones = (ListView)view.findViewById(R.id.list_zones);
+        listTime = (ListView)view.findViewById(R.id.list_time);
         ArrayAdapter<String> zonesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, zones);
         ArrayAdapter<Integer> timeAdapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_list_item_1, time);
         listZones.setAdapter(zonesAdapter);
         listTime.setAdapter(timeAdapter);
+
+        TextView outputPrice = (TextView)view.findViewById(R.id.txt_outputPrice);
+        outputPrice.setText(listZones.getSelectedItem().toString());
     }
 
 }
