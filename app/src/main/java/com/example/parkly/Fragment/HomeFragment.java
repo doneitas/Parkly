@@ -25,6 +25,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -39,10 +40,12 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
 
-    public TextView temp;
+    public TextView tempPrice;
+    public TextView tempTime;
     public int chosenMinutes = 0;
     public String chosenZone = null;
     public String finalPrice = "";
+    public String parkingEnds = "";
 
     @Nullable
     @Override
@@ -116,17 +119,21 @@ public class HomeFragment extends Fragment {
 
 
         TextView outputPrice = (TextView)view.findViewById(R.id.txt_outputPrice);
-        temp = outputPrice;
+        tempPrice = outputPrice;
+        TextView outputTime = (TextView)view.findViewById(R.id.txt_outputTime);
+        tempTime = outputTime;
+
 
         listZones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 chosenZone = ((TextView) view).getText().toString();
-                finalPrice = estimatedPrice("Green", 0, 15);
                 if (chosenMinutes != 0){
-                    //finalPrice = estimatedPrice(chosenZone, chosenMinutes/60, chosenMinutes%60);
+                    parkingEnds = estimatedTime(chosenMinutes/60, chosenMinutes%60);
+                    finalPrice = estimatedPrice(chosenZone, chosenMinutes/60, chosenMinutes%60);
                 }
-                temp.setText(finalPrice);
+                tempPrice.setText(finalPrice);
+                tempTime.setText(parkingEnds);
             }
         });
 
@@ -135,11 +142,12 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String tempChosenZone = ((TextView) view).getText().toString();
                 chosenMinutes = Integer.parseInt(tempChosenZone);
-                finalPrice = estimatedPrice("Yellow", 1, 15);
-                if (chosenZone != ""){
-                    //finalPrice = estimatedPrice(chosenZone, chosenMinutes/60, chosenMinutes%60);
+                if (chosenZone != null){
+                    parkingEnds = estimatedTime(chosenMinutes/60, chosenMinutes%60);
+                    finalPrice = estimatedPrice(chosenZone, chosenMinutes/60, chosenMinutes%60);
                 }
-                temp.setText(finalPrice);
+                tempPrice.setText(finalPrice);
+                tempTime.setText(parkingEnds);
             }
         });
 
@@ -156,32 +164,39 @@ public class HomeFragment extends Fragment {
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
+                break;
             }
             case "Yellow":
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
+                break;
             }
             case "Blue":
             {
                 price = 0.6 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
+                break;
             }
             case "Red":
             {
                 price = 1.2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
+                break;
             }
             case "Green":
             {
                 price = 0.3 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
+                break;
             }
             default:
             {
                 total = 0;
+                break;
             }
         }
+
         String totalString = String.valueOf(total);
         return totalString;
     }
@@ -189,13 +204,14 @@ public class HomeFragment extends Fragment {
     private String estimatedTime(int chosenHour, int chosenMinute)
     {
         //numatoma parkavimosi pabaiga
-        Calendar currentTime = Calendar.getInstance();
+        Calendar currentTime = GregorianCalendar.getInstance();
         //nustatomas esamas laikas
         currentTime.setTime(new Date());
         currentTime.add(Calendar.HOUR_OF_DAY, chosenHour);
         currentTime.add(Calendar.MINUTE, chosenMinute);
-        currentTime.getTime();
 
-        return currentTime.toString();
+        String totalTime = currentTime.get(Calendar.HOUR_OF_DAY) + " " + currentTime.get(Calendar.MINUTE);
+
+        return totalTime;
     }
 }
