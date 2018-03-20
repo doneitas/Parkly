@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Scanner;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -40,12 +41,15 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
 
+
     public TextView tempPrice;
     public TextView tempTime;
-    public int chosenMinutes = 0;
-    public String chosenZone = null;
-    public String finalPrice = "";
-    public String parkingEnds = "";
+    public ListView listZones;
+    public ListView listTime;
+    public int chosenMinutes = -1;
+    public String chosenZone = "";
+    public String finalPrice;
+    public String parkingEnds;
 
     @Nullable
     @Override
@@ -57,7 +61,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        createTimeZoneLists(view);
+        showPriceAndParkingEnding(view);
         checkCarRegistration();
     }
     //Database
@@ -82,38 +86,21 @@ public class HomeFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
-    private void createTimeZoneLists(View view)
+    private void showPriceAndParkingEnding(View view)
     {
-        final ListView listZones;
-        ListView listTime;
-        ArrayList<String> zones = new ArrayList<String>();
+        final ArrayList<String> zones = new ArrayList<String>();
         zones.add("Green");
         zones.add("Blue");
         zones.add("Red");
         zones.add("Yellow");
         zones.add("Orange");
-        ArrayList<Integer> time = new ArrayList<Integer>();
-        time.add(15);
-        time.add(30);
-        time.add(45);
-        time.add(60);
-        time.add(75);
-        time.add(90);
-        time.add(120);
-        time.add(180);
-        time.add(240);
-        time.add(300);
-        time.add(360);
-        time.add(420);
-        time.add(480);
-        time.add(540);
-        time.add(600);
+        final ArrayList<String> time = new ArrayList<String>();
 
 
         listZones = (ListView)view.findViewById(R.id.list_zones);
         listTime = (ListView)view.findViewById(R.id.list_time);
-        ArrayAdapter<String> zonesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, zones);
-        ArrayAdapter<Integer> timeAdapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_list_item_1, time);
+        final ArrayAdapter<String> zonesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, zones);
+        final ArrayAdapter<String> timeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, time);
         listZones.setAdapter(zonesAdapter);
         listTime.setAdapter(timeAdapter);
 
@@ -127,11 +114,82 @@ public class HomeFragment extends Fragment {
         listZones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                finalPrice = "...";
+                parkingEnds = "...";
+
+                String previousZone = chosenZone;
                 chosenZone = ((TextView) view).getText().toString();
-                if (chosenMinutes != 0){
-                    parkingEnds = estimatedTime(chosenMinutes/60, chosenMinutes%60);
-                    finalPrice = estimatedPrice(chosenZone, chosenMinutes/60, chosenMinutes%60);
+
+                if(previousZone == chosenZone){
+                    listZones.setItemChecked(listZones.getCheckedItemPosition(), false);
+                    chosenZone = "";
                 }
+
+                listTime.clearChoices();
+
+
+                switch (chosenZone){
+                    case "Green":{
+                        time.removeAll(time);
+                        time.add("1  h  0 min");
+                        time.add("2  h  0 min");
+                        time.add("3  h  0 min");
+                        time.add("4  h  0 min");
+                        time.add("5  h  0 min");
+                        time.add("6  h  0 min");
+                        time.add("7  h  0 min");
+                        time.add("8  h  0 min");
+                        time.add("9  h  0 min");
+                        time.add("10 h  0 min");
+                        chosenMinutes = -1;
+                        break;
+                    }
+                    case "Blue":{
+                        time.removeAll(time);
+                        time.add("0  h 30 min");
+                        time.add("1  h  0 min");
+                        time.add("1  h 30 min");
+                        time.add("2  h  0 min");
+                        time.add("3  h  0 min");
+                        time.add("4  h  0 min");
+                        time.add("5  h  0 min");
+                        time.add("6  h  0 min");
+                        time.add("7  h  0 min");
+                        time.add("8  h  0 min");
+                        time.add("9  h  0 min");
+                        time.add("10 h  0 min");
+                        chosenMinutes = -1;
+                        break;
+                    }
+                    default:
+                    {
+                        time.removeAll(time);
+                        time.add("0  h 15 min");
+                        time.add("0  h 30 min");
+                        time.add("0  h 45 min");
+                        time.add("1  h  0 min");
+                        time.add("1  h 15 min");
+                        time.add("1  h 30 min");
+                        time.add("2  h  0 min");
+                        time.add("3  h  0 min");
+                        time.add("4  h  0 min");
+                        time.add("5  h  0 min");
+                        time.add("6  h  0 min");
+                        time.add("7  h  0 min");
+                        time.add("8  h  0 min");
+                        time.add("9  h  0 min");
+                        time.add("10 h  0 min");
+                        chosenMinutes = -1;
+                        break;
+                    }
+                    case "": {
+                        time.removeAll(time);
+                    }
+                }
+
+                timeAdapter.notifyDataSetChanged();
+
                 tempPrice.setText(finalPrice);
                 tempTime.setText(parkingEnds);
             }
@@ -140,11 +198,29 @@ public class HomeFragment extends Fragment {
         listTime.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String tempChosenZone = ((TextView) view).getText().toString();
-                chosenMinutes = Integer.parseInt(tempChosenZone);
-                if (chosenZone != null){
-                    parkingEnds = estimatedTime(chosenMinutes/60, chosenMinutes%60);
-                    finalPrice = estimatedPrice(chosenZone, chosenMinutes/60, chosenMinutes%60);
+
+
+                finalPrice = "...";
+                parkingEnds = "...";
+
+                String tempChosenMinutes = ((TextView) view).getText().toString();
+
+                Scanner scan = new Scanner(tempChosenMinutes).useDelimiter("\\s+");
+                int hour = scan.nextInt();
+                scan.next();
+                int minute = scan.nextInt();
+                scan.close();
+
+                int previousMinutes = chosenMinutes;
+                chosenMinutes = (hour*60)+minute;
+
+                if (previousMinutes == chosenMinutes){
+                    listTime.setItemChecked(listTime.getCheckedItemPosition(), false);
+                    chosenMinutes = -1;
+                }
+                else if (chosenZone != ""){
+                    parkingEnds = estimatedTime(hour, minute);
+                    finalPrice = estimatedPrice(chosenZone, hour, minute);
                 }
                 tempPrice.setText(finalPrice);
                 tempTime.setText(parkingEnds);
@@ -197,7 +273,7 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        String totalString = String.valueOf(total);
+        String totalString = String.valueOf(total) + "0" + " \u20ac";
         return totalString;
     }
 
@@ -210,7 +286,7 @@ public class HomeFragment extends Fragment {
         currentTime.add(Calendar.HOUR_OF_DAY, chosenHour);
         currentTime.add(Calendar.MINUTE, chosenMinute);
 
-        String totalTime = currentTime.get(Calendar.HOUR_OF_DAY) + " " + currentTime.get(Calendar.MINUTE);
+        String totalTime = (currentTime.get(Calendar.HOUR_OF_DAY) < 10? ("0"+currentTime.get(Calendar.HOUR_OF_DAY)) : currentTime.get(Calendar.HOUR_OF_DAY)) + ":" + (currentTime.get(Calendar.MINUTE) < 10? ("0"+currentTime.get(Calendar.MINUTE)) : currentTime.get(Calendar.MINUTE));
 
         return totalTime;
     }
