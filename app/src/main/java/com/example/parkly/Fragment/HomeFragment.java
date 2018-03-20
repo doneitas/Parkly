@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
-    private void showPriceAndParkingEnding(View view)
+    public void showPriceAndParkingEnding(View view)
     {
         final ArrayList<String> zones = new ArrayList<String>();
         zones.add("Green");
@@ -230,7 +230,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private String estimatedPrice(String color, int chosenHour, int chosenMinute)
+    public String estimatedPrice(String color, int chosenHour, int chosenMinute)
     {
         double total;
         double price = 0;
@@ -277,7 +277,7 @@ public class HomeFragment extends Fragment {
         return totalString;
     }
 
-    private String estimatedTime(int chosenHour, int chosenMinute)
+    public String estimatedTime(int chosenHour, int chosenMinute)
     {
         //numatoma parkavimosi pabaiga
         Calendar currentTime = GregorianCalendar.getInstance();
