@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parkly.Activity.addCarActivity;
@@ -56,8 +57,9 @@ public class CarsFragment extends Fragment {
         database(view);
         loadData();
         init(view);
-
     }
+
+    TextView txt_defaultCar;
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
@@ -82,7 +84,19 @@ public class CarsFragment extends Fragment {
         btn_removeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteAllLicensesPlates();
+                new AlertDialog.Builder(getActivity())
+                        .setMessage("Do you want to delete all license plates?")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteAllLicensesPlates();
+                            }
+                        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
             }
         });
     }
@@ -96,6 +110,7 @@ public class CarsFragment extends Fragment {
         ListView lst_Car = view.findViewById(R.id.lst_Cars);
         registerForContextMenu(lst_Car);
         lst_Car.setAdapter(adapter);
+        txt_defaultCar = view.findViewById(R.id.txt_defaultCar);
 
         licensePlateDatabase = LicensePlateDatabase.getInstance(getActivity());
         licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
@@ -110,6 +125,11 @@ public class CarsFragment extends Fragment {
                     @Override
                     public void accept(List<LicensePlate> licensePlates) throws Exception {
                         onGetAllLicensePlateSuccess(licensePlates);
+                        if (licensePlates.size()==1 && licensePlates.get(0).getCurrent() == false)
+                        {
+                            setDefault(licensePlates.get(0));
+                        }
+                        else refreshDefault();
                     }
 
                 }, new Consumer<Throwable>() {
@@ -134,7 +154,9 @@ public class CarsFragment extends Fragment {
         super.onCreateContextMenu(menu, v, menuInfo);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
         menu.setHeaderTitle("Select action:");
-        menu.add(Menu.NONE, 0, Menu.NONE, "DELETE");
+        menu.add(Menu.NONE, 0, Menu.NONE, "Mark as default");
+        menu.add(Menu.NONE, 1, Menu.NONE, "Delete");
+        //menu.add(Menu.NONE, 0, Menu.NONE, "DELETE");
     }
 
     @Override
@@ -142,21 +164,108 @@ public class CarsFragment extends Fragment {
     {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         final LicensePlate licensePlate = licensePlateList.get(info.position);
-        new AlertDialog.Builder(getActivity())
-                .setMessage("Do you want to delete "+licensePlate.getNumber())
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+        switch (item.getItemId())
+        {
+            case 0:
+            {
+                new AlertDialog.Builder(getActivity())
+                        .setMessage("Do you want to set "+licensePlate.getNumber() + " as default car?")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                setDefault(licensePlate);
+                            }
+                        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteLicensePlate(licensePlate);
+                        dialog.dismiss();
                     }
-                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                }).create().show();
             }
-        }).create().show();
+            break;
+            case 1:
+            {
+                new AlertDialog.Builder(getActivity())
+                        .setMessage("Do you want to delete "+licensePlate.getNumber()+" ?")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteLicensePlate(licensePlate);
+                            }
+                        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
+            }
+            break;
+        }
 
         return true;
+    }
+
+    private void setDefault(final LicensePlate licensePlate) {
+        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                LicensePlate oldLicensePlate = licensePlateRepository.findDefault();
+                if (oldLicensePlate != null)
+                {
+                    oldLicensePlate.setCurrent(false);
+                    licensePlateRepository.updateLicensePlate(oldLicensePlate);
+                }
+                licensePlate.setCurrent(true);
+                licensePlateRepository.updateLicensePlate(licensePlate);
+                refreshDefault();
+                e.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer() {
+                    @Override
+                    public void accept(Object o) throws Exception {}
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        loadData();
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    private void refreshDefault()
+    {
+        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                LicensePlate licensePlate = licensePlateRepository.findDefault();
+                if (licensePlate != null)
+                {
+                    txt_defaultCar.setText(licensePlate.getNumber());
+                }
+                else txt_defaultCar.setText("...");
+
+                e.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer() {
+                    @Override
+                    public void accept(Object o) throws Exception {}
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                    }
+                });
+        compositeDisposable.add(disposable);
     }
 
     private void deleteLicensePlate(final LicensePlate licensePlate) {

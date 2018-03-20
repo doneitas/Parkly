@@ -12,12 +12,11 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:choiceMode="singleChoice"
-        android:listSelector="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/txt_price"
+        app:layout_constraintBottom_toTopOf="@+id/txt_noChange4"
         app:layout_constraintEnd_toStartOf="@+id/list_time"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_time"
+        app:layout_constraintTop_toBottomOf="@+id/txt_noChange2"
         android:layout_marginLeft="16dp" />
 
     <ListView
@@ -26,11 +25,10 @@
         android:layout_height="0dp"
         android:layout_marginEnd="16dp"
         android:choiceMode="singleChoice"
-        android:listSelector="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/txt_parkingEnds"
+        app:layout_constraintBottom_toTopOf="@+id/txt.noChange5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/list_zones"
-        app:layout_constraintTop_toBottomOf="@+id/txt_location"
+        app:layout_constraintTop_toBottomOf="@+id/txt_noChange3"
         android:layout_marginRight="16dp" />
 
     <Button
@@ -46,37 +44,37 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/txt_time"
+        android:id="@+id/txt_noChange2"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="65dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/parking_zone"
-        android:textSize="30sp"
+        android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@+id/list_zones"
-        app:layout_constraintEnd_toStartOf="@+id/txt_location"
+        app:layout_constraintEnd_toStartOf="@+id/txt_noChange3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
         android:layout_marginLeft="16dp" />
 
     <TextView
-        android:id="@+id/txt_location"
+        android:id="@+id/txt_noChange3"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="65dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/parking_duration"
-        android:textSize="30sp"
+        android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@+id/list_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt_time"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spin_cars"
         android:layout_marginRight="16dp" />
 
     <TextView
-        android:id="@+id/txt_price"
+        android:id="@+id/txt_noChange4"
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginStart="16dp"
@@ -85,12 +83,13 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_outputPrice"
         app:layout_constraintEnd_toStartOf="@+id/txt_parkingEnds"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/list_zones"
         android:layout_marginLeft="16dp" />
 
     <TextView
-        android:id="@+id/txt_parkingEnds"
+        android:id="@+id/txt.noChange5"
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginEnd="16dp"
@@ -99,7 +98,7 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_outputTime"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_price"
+        app:layout_constraintStart_toEndOf="@+id/txt_noChange4"
         app:layout_constraintTop_toBottomOf="@+id/list_time"
         android:layout_marginRight="16dp" />
 
@@ -107,26 +106,59 @@
         android:id="@+id/txt_outputPrice"
         android:layout_width="0dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:gravity="center"
         android:text="..."
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_homeConfirm"
         app:layout_constraintEnd_toStartOf="@+id/txt_outputTime"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_price"
-        android:layout_marginLeft="16dp" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/txt_outputTime"
         android:layout_width="0dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="..."
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_homeConfirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt_outputPrice"
         app:layout_constraintTop_toBottomOf="@+id/txt_parkingEnds"
-        android:layout_marginRight="16dp" />
+        app:layout_constraintVertical_bias="0.939" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="118dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="left|center"
+        android:text="@string/selected_car"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="16dp"
+        tools:ignore="RtlHardcoded" />
+
+    <Spinner
+        android:id="@+id/spin_cars"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp" />
 
 </android.support.constraint.ConstraintLayout>
