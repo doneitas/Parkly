@@ -129,6 +129,7 @@ public class CarsFragment extends Fragment {
                     deleteSelectedLicensePlates();
                     deleteClicked = false;
                     adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
+                    adapter.notifyDataSetChanged();
                     registerForContextMenu(lst_Car);
                     lst_Car.setAdapter(adapter);
                     loadData();
@@ -157,11 +158,16 @@ public class CarsFragment extends Fragment {
                 .subscribe(new Consumer<List<LicensePlate>>() {
                     @Override
                     public void accept(List<LicensePlate> licensePlates) throws Exception {
+                        deleteAllLicensesPlates();
                         for (LicensePlate l:licensePlates)
                         {
-                            licensePlateRepository.delete(l);
+                            //licensePlateRepository.delete(l);
+                            licensePlateList.remove(l);
                         }
-                        selectedLicensePlateList.clear();
+                        for (LicensePlate l:licensePlateList)
+                        {
+                            licensePlateRepository.insertAll(l);
+                        }
                     }
 
                 }, new Consumer<Throwable>() {
