@@ -36,6 +36,11 @@ public class LicensePlateRepository implements LicensePlateDao{
     }
 
     @Override
+    public Flowable<List<String>> getAllNumbers() {
+        return mLicensePlateDao.getAllNumbers();
+    }
+
+    @Override
     public Flowable<LicensePlate> loadAllByIds(int[] licensePlateIds) {
         return mLicensePlateDao.loadAllByIds(licensePlateIds);
     }
@@ -43,6 +48,11 @@ public class LicensePlateRepository implements LicensePlateDao{
     @Override
     public LicensePlate findDefault() {
         return mLicensePlateDao.findDefault();
+    }
+
+    @Override
+    public Flowable<List<LicensePlate>> findAllByNumber(List<String> lNumbers) {
+        return mLicensePlateDao.findAllByNumber(lNumbers);
     }
 
     @Override

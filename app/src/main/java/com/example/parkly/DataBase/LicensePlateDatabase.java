@@ -40,11 +40,17 @@ interface LicensePlateDao {
     @Query("SELECT * FROM LicensePlates")
     Flowable<List<LicensePlate>> getAll();
 
+    @Query("SELECT number FROM LicensePlates")
+    Flowable<List<String>> getAllNumbers();
+
     @Query("SELECT * FROM LicensePlates WHERE id IN (:licensePlateIds)")
     Flowable<LicensePlate> loadAllByIds(int[] licensePlateIds);
 
     @Query("SELECT * FROM LicensePlates WHERE current ")
     LicensePlate findDefault();
+
+    @Query("SELECT * FROM LicensePlates WHERE number IN (:lNumbers)")
+    Flowable<List<LicensePlate>> findAllByNumber(List<String> lNumbers);
 
     @Insert
     void insertAll(LicensePlate... numbers);
