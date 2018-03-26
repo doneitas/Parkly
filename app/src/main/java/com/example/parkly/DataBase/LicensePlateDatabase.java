@@ -18,7 +18,7 @@ import static com.example.parkly.DataBase.LicensePlateDatabase.DATABASE_VERSION;
 @Database(entities = LicensePlate.class, version = DATABASE_VERSION)
 public abstract class LicensePlateDatabase extends RoomDatabase {
 
-    static final int DATABASE_VERSION = 2;
+    static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "Database";
     public abstract LicensePlateDao licensePlateDao();
     private static LicensePlateDatabase mInstance;
