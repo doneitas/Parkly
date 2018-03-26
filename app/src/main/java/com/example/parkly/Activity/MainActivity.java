@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import com.example.parkly.Fragment.CarsFragment;
 import com.example.parkly.Fragment.HomeFragment;
+import com.example.parkly.Fragment.SettingsFragment;
 import com.example.parkly.R;
 
 public class MainActivity extends AppCompatActivity
@@ -90,7 +91,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_parking) {
 
         } else if (id == R.id.nav_settings) {
-
+            selectedFragment = new SettingsFragment();
+            fragmentTag = "SETTINGS_FRAGMENT";
         } else if (id == R.id.nav_aboutUs) {
 
         }
