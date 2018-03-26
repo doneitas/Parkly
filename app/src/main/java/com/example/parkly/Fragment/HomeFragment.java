@@ -59,8 +59,8 @@ public class HomeFragment extends Fragment {
     public String parkingEnds;
 
     //Adapter
-    List<LicensePlate> licensePlateList = new ArrayList<>();
-    LicensePlateAdapter adapter;
+    List<String> licensePlateList = new ArrayList<String>();
+    ArrayAdapter<String> adapter;
 
     //Database
     private CompositeDisposable compositeDisposable;
@@ -77,9 +77,9 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        database(view);
-        loadData();
         showPriceAndParkingEnding(view);
+        /*database(view);
+        loadData();*/
         checkCarRegistration();
     }
 
@@ -314,10 +314,10 @@ public class HomeFragment extends Fragment {
         compositeDisposable = new CompositeDisposable();
 
         //init View
-        adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, licensePlateList);
         Spinner spin_DefaultCar = (Spinner) view.findViewById(R.id.spin_DefaultCar);
-        registerForContextMenu(lst_Car);
-        lst_Car.setAdapter(adapter);
+        registerForContextMenu(spin_DefaultCar);
+        spin_DefaultCar.setAdapter(adapter);
 
         licensePlateDatabase = LicensePlateDatabase.getInstance(getActivity());
         licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
@@ -325,18 +325,18 @@ public class HomeFragment extends Fragment {
 
     private void loadData()
     {
-        Disposable disposable = licensePlateRepository.getAll()
+        Disposable disposable = licensePlateRepository.getAllNumbers()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<List<LicensePlate>>() {
+                .subscribe(new Consumer<List<String>>() {
                     @Override
-                    public void accept(List<LicensePlate> licensePlates) throws Exception {
+                    public void accept(List<String> licensePlates) throws Exception {
                         onGetAllLicensePlateSuccess(licensePlates);
-                        if (licensePlates.size()==1 && licensePlates.get(0).getCurrent() == false)
+                        /*if (licensePlates.size()==1 && licensePlates.get(0).getCurrent() == false)
                         {
                             setDefault(licensePlates.get(0));
                         }
-                        else refreshDefault();
+                        else refreshDefault();*/
                     }
 
                 }, new Consumer<Throwable>() {
@@ -348,14 +348,14 @@ public class HomeFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
-    private void onGetAllLicensePlateSuccess(List<LicensePlate> licensePlates)
+    private void onGetAllLicensePlateSuccess(List<String> licensePlates)
     {
         licensePlateList.clear();
         licensePlateList.addAll(licensePlates);
         adapter.notifyDataSetChanged();
     }
 
-    private void setDefault(final LicensePlate licensePlate) {
+    /*private void setDefault(final LicensePlate licensePlate) {
         Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
@@ -388,19 +388,19 @@ public class HomeFragment extends Fragment {
                     }
                 });
         compositeDisposable.add(disposable);
-    }
+    }*/
 
-    private void refreshDefault()
+    /*private void refreshDefault()
     {
         Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
                 LicensePlate licensePlate = licensePlateRepository.findDefault();
-                /*if (licensePlate != null)
+                if (licensePlate != null)
                 {
                     txt_defaultCar.setText(licensePlate.getNumber());
                 }
-                else txt_defaultCar.setText("...");*/
+                else txt_defaultCar.setText("...");
 
                 e.onComplete();
             }
@@ -416,7 +416,7 @@ public class HomeFragment extends Fragment {
                     }
                 });
         compositeDisposable.add(disposable);
-    }
+    }*/
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 }

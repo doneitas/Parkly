@@ -35,6 +35,11 @@ public class LocalUserDataSource implements LicensePlateDao{
     }
 
     @Override
+    public Flowable<List<String>> getAllNumbers() {
+        return licensePlateDao.getAllNumbers();
+    }
+
+    @Override
     public Flowable<LicensePlate> loadAllByIds(int[] licensePlateIds) {
         return licensePlateDao.loadAllByIds(licensePlateIds);
     }
