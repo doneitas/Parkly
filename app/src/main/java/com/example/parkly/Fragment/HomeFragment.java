@@ -4,16 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parkly.Activity.addCarActivity;
+import com.example.parkly.DataBase.LicensePlateAdapter;
 import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
@@ -29,9 +33,12 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
 
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -51,6 +58,15 @@ public class HomeFragment extends Fragment {
     public String finalPrice;
     public String parkingEnds;
 
+    //Adapter
+    List<LicensePlate> licensePlateList = new ArrayList<>();
+    LicensePlateAdapter adapter;
+
+    //Database
+    private CompositeDisposable compositeDisposable;
+    private LicensePlateRepository licensePlateRepository;
+    LicensePlateDatabase licensePlateDatabase;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,11 +77,11 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        database(view);
+        loadData();
         showPriceAndParkingEnding(view);
         checkCarRegistration();
     }
-    //Database
-    public LicensePlateRepository licensePlateRepository;
 
     private void checkCarRegistration() {
         CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -290,4 +306,117 @@ public class HomeFragment extends Fragment {
 
         return totalTime;
     }
+
+    //Everything for database --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    public void database(View view){
+        //Init
+        compositeDisposable = new CompositeDisposable();
+
+        //init View
+        adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
+        Spinner spin_DefaultCar = (Spinner) view.findViewById(R.id.spin_DefaultCar);
+        registerForContextMenu(lst_Car);
+        lst_Car.setAdapter(adapter);
+
+        licensePlateDatabase = LicensePlateDatabase.getInstance(getActivity());
+        licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+    }
+
+    private void loadData()
+    {
+        Disposable disposable = licensePlateRepository.getAll()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<LicensePlate>>() {
+                    @Override
+                    public void accept(List<LicensePlate> licensePlates) throws Exception {
+                        onGetAllLicensePlateSuccess(licensePlates);
+                        if (licensePlates.size()==1 && licensePlates.get(0).getCurrent() == false)
+                        {
+                            setDefault(licensePlates.get(0));
+                        }
+                        else refreshDefault();
+                    }
+
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    private void onGetAllLicensePlateSuccess(List<LicensePlate> licensePlates)
+    {
+        licensePlateList.clear();
+        licensePlateList.addAll(licensePlates);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void setDefault(final LicensePlate licensePlate) {
+        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                LicensePlate oldLicensePlate = licensePlateRepository.findDefault();
+                if (oldLicensePlate != null)
+                {
+                    oldLicensePlate.setCurrent(false);
+                    licensePlateRepository.updateLicensePlate(oldLicensePlate);
+                }
+                licensePlate.setCurrent(true);
+                licensePlateRepository.updateLicensePlate(licensePlate);
+                refreshDefault();
+                e.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer() {
+                    @Override
+                    public void accept(Object o) throws Exception {}
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        loadData();
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    private void refreshDefault()
+    {
+        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                LicensePlate licensePlate = licensePlateRepository.findDefault();
+                /*if (licensePlate != null)
+                {
+                    txt_defaultCar.setText(licensePlate.getNumber());
+                }
+                else txt_defaultCar.setText("...");*/
+
+                e.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer() {
+                    @Override
+                    public void accept(Object o) throws Exception {}
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 }
