@@ -169,7 +169,7 @@ public class CarsFragment extends Fragment {
             case 0:
             {
                 new AlertDialog.Builder(getActivity())
-                        .setMessage("Do you want to set "+licensePlate.getNumber() + " as default car?")
+                        .setMessage("Do you want to set "+licensePlate.getNumber() + " as default car?gg")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
