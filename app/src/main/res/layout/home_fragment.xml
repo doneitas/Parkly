@@ -69,8 +69,8 @@
         android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@+id/list_time"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_time"
-        app:layout_constraintTop_toBottomOf="@+id/spin_cars"
+        app:layout_constraintStart_toEndOf="@+id/txt_noChange2"
+        app:layout_constraintTop_toBottomOf="@+id/spin_Language"
         android:layout_marginRight="16dp" />
 
     <TextView
@@ -82,8 +82,7 @@
         android:text="@string/price"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_outputPrice"
-        app:layout_constraintEnd_toStartOf="@+id/txt_parkingEnds"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/txt.noChange5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/list_zones"
         android:layout_marginLeft="16dp" />
@@ -114,8 +113,10 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_homeConfirm"
         app:layout_constraintEnd_toStartOf="@+id/txt_outputTime"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_price"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_noChange4"
+        app:layout_constraintVertical_bias="1.0"
+        android:layout_marginLeft="16dp"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/txt_outputTime"
@@ -129,8 +130,10 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_homeConfirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt_outputPrice"
-        app:layout_constraintTop_toBottomOf="@+id/txt_parkingEnds"
-        app:layout_constraintVertical_bias="0.939" />
+        app:layout_constraintTop_toBottomOf="@+id/txt.noChange5"
+        app:layout_constraintVertical_bias="0.939"
+        android:layout_marginRight="16dp"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/textView2"
@@ -147,7 +150,7 @@
         tools:ignore="RtlHardcoded" />
 
     <Spinner
-        android:id="@+id/spin_cars"
+        android:id="@+id/spin_Language"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginEnd="16dp"

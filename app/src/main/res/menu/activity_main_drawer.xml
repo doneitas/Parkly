@@ -17,9 +17,9 @@
             android:icon="@drawable/ic_menu_parking"
             android:title="@string/parking_areas" />
         <item
-            android:id="@+id/nav_budget"
-            android:icon="@drawable/ic_menu_money"
-            android:title="@string/budget" />
+        android:id="@+id/nav_budget"
+        android:icon="@drawable/ic_menu_money"
+        android:title="@string/budget" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
