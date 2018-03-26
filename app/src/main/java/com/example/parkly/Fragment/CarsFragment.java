@@ -85,7 +85,7 @@ public class CarsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(getActivity())
-                        .setMessage("Do you want to delete all license plates?")
+                        .setMessage("Do you want to remove all license plates?")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -155,7 +155,7 @@ public class CarsFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
         menu.setHeaderTitle("Select action:");
         menu.add(Menu.NONE, 0, Menu.NONE, "Mark as default");
-        menu.add(Menu.NONE, 1, Menu.NONE, "Delete");
+        menu.add(Menu.NONE, 1, Menu.NONE, "Remove");
         //menu.add(Menu.NONE, 0, Menu.NONE, "DELETE");
     }
 
@@ -186,7 +186,7 @@ public class CarsFragment extends Fragment {
             case 1:
             {
                 new AlertDialog.Builder(getActivity())
-                        .setMessage("Do you want to delete "+licensePlate.getNumber()+" ?")
+                        .setMessage("Do you want to remove "+licensePlate.getNumber()+" ?")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
