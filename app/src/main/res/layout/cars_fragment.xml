@@ -12,7 +12,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Add Car"
+        android:text="@string/add_car"
         app:layout_constraintBottom_toTopOf="@+id/lst_Cars"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt.noChange"
@@ -25,7 +25,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:text="Remove All"
+        android:text="@string/remove"
         app:layout_constraintBottom_toTopOf="@+id/lst_Cars"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_defaultCar"
@@ -55,11 +55,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:gravity="left|center"
-        android:text="Default car:"
+        android:text="@string/default_car"
         android:textSize="25sp"
         app:layout_constraintEnd_toStartOf="@+id/txt_defaultCar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/txt_defaultCar"
@@ -73,6 +74,7 @@
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt.noChange"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText,RtlHardcoded" />
 
 </android.support.constraint.ConstraintLayout>
