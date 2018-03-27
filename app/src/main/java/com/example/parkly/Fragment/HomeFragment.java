@@ -197,8 +197,8 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
 
-                finalPrice = "...";
-                parkingEnds = "...";
+                finalPrice = "-";
+                parkingEnds = "-";
 
                 String tempChosenMinutes = ((TextView) view).getText().toString();
 
