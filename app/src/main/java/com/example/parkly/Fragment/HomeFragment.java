@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment {
     public String finalPrice;
     public String parkingEnds;
     public String defaultNumber;
+    public List<LicensePlate> tempLicensePlate;
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -328,18 +329,15 @@ public class HomeFragment extends Fragment {
 
     private void loadData()
     {
-        Disposable disposable = licensePlateRepository.getAllNumbers()
+
+        Disposable disposable = licensePlateRepository.getAll()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<List<String>>() {
+                .subscribe(new Consumer<List<LicensePlate>>() {
                     @Override
-                    public void accept(List<String> licensePlates) throws Exception {
+                    public void accept(List<LicensePlate> licensePlates) throws Exception {
                         onGetAllLicensePlateSuccess(licensePlates);
-                        /*if (licensePlates.size()==1 && licensePlates.get(0).getCurrent() == false)
-                        {
-                            setDefault(licensePlates.get(0));
-                        }
-                        else refreshDefault();*/
+                        tempLicensePlate = licensePlates;
                     }
 
                 }, new Consumer<Throwable>() {
@@ -349,7 +347,25 @@ public class HomeFragment extends Fragment {
                     }
                 });
         compositeDisposable.add(disposable);
+
         getAndSetDefault();
+
+        spin_DefaultCar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                for(int j=0; j < tempLicensePlate.size(); j++){
+                    if(tempLicensePlate.get(j).getNumber().compareTo(spin_DefaultCar.getSelectedItem().toString()) == 0){
+                        setDefault(tempLicensePlate.get(j));
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                //do nothing
+            }
+
+        });
     }
 
     private void getAndSetDefault(){
@@ -362,6 +378,8 @@ public class HomeFragment extends Fragment {
                 spin_DefaultCar.post(new Runnable() {
                     @Override
                     public void run() {
+
+                        spin_DefaultCar.clearFocus();
 
                         for (int i=0; i < licensePlateList.size(); i++){
                             if (defaultNumber.compareTo(licensePlateList.get(i)) == 0){
@@ -390,14 +408,23 @@ public class HomeFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
-    public void onGetAllLicensePlateSuccess(List<String> licensePlates)
+    public void onGetAllLicensePlateSuccess(List<LicensePlate> licensePlates)
     {
         licensePlateList.clear();
-        licensePlateList.addAll(licensePlates);
+
+        if(licensePlates.size() == 0){
+            licensePlateList.add("Not selected");
+        }
+        else {
+            for (int i = 0; i < licensePlates.size(); i++) {
+                licensePlateList.add(licensePlates.get(i).getNumber());
+            }
+        }
+
         adapter.notifyDataSetChanged();
     }
 
-    /*private void setDefault(final LicensePlate licensePlate) {
+    private void setDefault(final LicensePlate licensePlate) {
         Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
@@ -409,7 +436,6 @@ public class HomeFragment extends Fragment {
                 }
                 licensePlate.setCurrent(true);
                 licensePlateRepository.updateLicensePlate(licensePlate);
-                refreshDefault();
                 e.onComplete();
             }
         })
@@ -423,42 +449,9 @@ public class HomeFragment extends Fragment {
                     public void accept(Throwable throwable) throws Exception {
 
                     }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        loadData();
-                    }
                 });
         compositeDisposable.add(disposable);
-    }*/
-
-    /*private void refreshDefault()
-    {
-        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
-            @Override
-            public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                LicensePlate licensePlate = licensePlateRepository.findDefault();
-                if (licensePlate != null)
-                {
-                    txt_defaultCar.setText(licensePlate.getNumber());
-                }
-                else txt_defaultCar.setText("...");
-
-                e.onComplete();
-            }
-        })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer() {
-                    @Override
-                    public void accept(Object o) throws Exception {}
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                    }
-                });
-        compositeDisposable.add(disposable);
-    }*/
+    }
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 }
