@@ -60,6 +60,7 @@ public class CarsFragment extends Fragment {
     }
 
     TextView txt_defaultCar;
+    Button btn_removeAll;
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
@@ -80,12 +81,13 @@ public class CarsFragment extends Fragment {
             }
         });
 
-        Button btn_removeAll = view.findViewById(R.id.btn_removeAll);
+        btn_removeAll = view.findViewById(R.id.btn_removeAll);
+        disableRemove();
         btn_removeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(getActivity())
-                        .setMessage("Do you want to delete all license plates?")
+                        .setMessage("Do you want to remove all license plates?")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -99,6 +101,20 @@ public class CarsFragment extends Fragment {
                 }).create().show();
             }
         });
+    }
+
+    public void disableRemove()
+    {
+        if (licensePlateList.size() == 0)
+        {
+            btn_removeAll.setClickable(false);
+            btn_removeAll.setEnabled(false);
+        }
+        else
+        {
+            btn_removeAll.setClickable(true);
+            btn_removeAll.setEnabled(true);
+        }
     }
 
     public void database(View view){
@@ -130,6 +146,7 @@ public class CarsFragment extends Fragment {
                             setDefault(licensePlates.get(0));
                         }
                         else refreshDefault();
+                        disableRemove();
                     }
 
                 }, new Consumer<Throwable>() {
@@ -155,7 +172,7 @@ public class CarsFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
         menu.setHeaderTitle("Select action:");
         menu.add(Menu.NONE, 0, Menu.NONE, "Mark as default");
-        menu.add(Menu.NONE, 1, Menu.NONE, "Delete");
+        menu.add(Menu.NONE, 1, Menu.NONE, "Remove");
         //menu.add(Menu.NONE, 0, Menu.NONE, "DELETE");
     }
 
@@ -186,7 +203,7 @@ public class CarsFragment extends Fragment {
             case 1:
             {
                 new AlertDialog.Builder(getActivity())
-                        .setMessage("Do you want to delete "+licensePlate.getNumber()+" ?")
+                        .setMessage("Do you want to remove "+licensePlate.getNumber()+" ?")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -245,12 +262,13 @@ public class CarsFragment extends Fragment {
         Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
+
                 LicensePlate licensePlate = licensePlateRepository.findDefault();
                 if (licensePlate != null)
                 {
                     txt_defaultCar.setText(licensePlate.getNumber());
                 }
-                else txt_defaultCar.setText("...");
+                else txt_defaultCar.setText("List is empty");
 
                 e.onComplete();
             }

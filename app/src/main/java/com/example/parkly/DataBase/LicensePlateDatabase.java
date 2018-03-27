@@ -40,6 +40,9 @@ interface LicensePlateDao {
     @Query("SELECT * FROM LicensePlates")
     Flowable<List<LicensePlate>> getAll();
 
+    @Query("SELECT number FROM LicensePlates")
+    Flowable<List<String>> getAllNumbers();
+
     @Query("SELECT * FROM LicensePlates WHERE id IN (:licensePlateIds)")
     Flowable<LicensePlate> loadAllByIds(int[] licensePlateIds);
 
