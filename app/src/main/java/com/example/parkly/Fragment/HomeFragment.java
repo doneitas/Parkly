@@ -23,9 +23,8 @@ import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
+import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -141,8 +140,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                finalPrice = "...";
-                parkingEnds = "...";
+                finalPrice = "-";
+                parkingEnds = "-";
 
                 String previousZone = chosenZone;
                 chosenZone = ((TextView) view).getText().toString();
@@ -226,8 +225,8 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
 
-                finalPrice = "...";
-                parkingEnds = "...";
+                finalPrice = "-";
+                parkingEnds = "-";
 
                 String tempChosenMinutes = ((TextView) view).getText().toString();
 
