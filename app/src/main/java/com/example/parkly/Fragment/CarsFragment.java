@@ -267,7 +267,7 @@ public class CarsFragment extends Fragment {
                 {
                     txt_defaultCar.setText(licensePlate.getNumber());
                 }
-                else txt_defaultCar.setText("...");
+                else txt_defaultCar.setText("List is empty");
 
                 e.onComplete();
             }
