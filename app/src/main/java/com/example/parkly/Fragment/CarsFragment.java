@@ -262,6 +262,7 @@ public class CarsFragment extends Fragment {
         Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
+
                 LicensePlate licensePlate = licensePlateRepository.findDefault();
                 if (licensePlate != null)
                 {
