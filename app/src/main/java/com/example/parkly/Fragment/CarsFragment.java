@@ -60,6 +60,7 @@ public class CarsFragment extends Fragment {
     }
 
     TextView txt_defaultCar;
+    Button btn_removeAll;
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
@@ -80,7 +81,8 @@ public class CarsFragment extends Fragment {
             }
         });
 
-        Button btn_removeAll = view.findViewById(R.id.btn_removeAll);
+        btn_removeAll = view.findViewById(R.id.btn_removeAll);
+        disableRemove();
         btn_removeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +101,20 @@ public class CarsFragment extends Fragment {
                 }).create().show();
             }
         });
+    }
+
+    public void disableRemove()
+    {
+        if (licensePlateList.size() == 0)
+        {
+            btn_removeAll.setClickable(false);
+            btn_removeAll.setEnabled(false);
+        }
+        else
+        {
+            btn_removeAll.setClickable(true);
+            btn_removeAll.setEnabled(true);
+        }
     }
 
     public void database(View view){
@@ -130,6 +146,7 @@ public class CarsFragment extends Fragment {
                             setDefault(licensePlates.get(0));
                         }
                         else refreshDefault();
+                        disableRemove();
                     }
 
                 }, new Consumer<Throwable>() {
