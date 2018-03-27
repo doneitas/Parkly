@@ -61,6 +61,7 @@ public class HomeFragment extends Fragment {
     public String parkingEnds;
     public String defaultNumber;
     public List<LicensePlate> tempLicensePlate;
+    public boolean isDefaultSelected;
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -374,6 +375,7 @@ public class HomeFragment extends Fragment {
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
 
                 defaultNumber = licensePlateRepository.findDefault().getNumber();
+                isDefaultSelected = licensePlateRepository.findDefault().getCurrent();
 
                 spin_DefaultCar.post(new Runnable() {
                     @Override
@@ -412,13 +414,16 @@ public class HomeFragment extends Fragment {
     {
         licensePlateList.clear();
 
-        if(licensePlates.size() == 0){
+        if(!isDefaultSelected){
             licensePlateList.add("Not selected");
         }
-        else {
-            for (int i = 0; i < licensePlates.size(); i++) {
-                licensePlateList.add(licensePlates.get(i).getNumber());
-            }
+
+        for (int i = 0; i < licensePlates.size(); i++) {
+            licensePlateList.add(licensePlates.get(i).getNumber());
+        }
+
+        if (licensePlateList.size() == 2){
+            licensePlateList.remove("Not selected");
         }
 
         adapter.notifyDataSetChanged();
