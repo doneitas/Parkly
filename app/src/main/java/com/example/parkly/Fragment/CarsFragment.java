@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parkly.Activity.addCarActivity;
-import com.example.parkly.DataBase.LicensePlateDao_Impl;
 import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateAdapter;
 import com.example.parkly.DataBase.LicensePlateDatabase;
@@ -64,6 +63,7 @@ public class CarsFragment extends Fragment {
 
     TextView txt_defaultCar;
     boolean deleteClicked = false;
+    Button btn_removeAll;
 
     //Adapter
     View mView;
@@ -87,6 +87,8 @@ public class CarsFragment extends Fragment {
             }
         });
 
+        btn_removeAll = view.findViewById(R.id.btn_removeAll);
+        disableRemove();
         final ListView lst_Car = view.findViewById(R.id.lst_Cars);
         lst_Car.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -164,6 +166,20 @@ public class CarsFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
+    public void disableRemove()
+    {
+        if (licensePlateList.size() == 0)
+        {
+            btn_removeAll.setClickable(false);
+            btn_removeAll.setEnabled(false);
+        }
+        else
+        {
+            btn_removeAll.setClickable(true);
+            btn_removeAll.setEnabled(true);
+        }
+    }
+
     public void database(View view){
         //Init
         compositeDisposable = new CompositeDisposable();
@@ -199,6 +215,7 @@ public class CarsFragment extends Fragment {
                             setDefault(licensePlates.get(0));
                         }
                         else refreshDefault();
+                        disableRemove();
                     }
 
                 }, new Consumer<Throwable>() {
