@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parkly.Activity.addCarActivity;
+import com.example.parkly.DataBase.LicensePlateDao_Impl;
 import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.DataBase.LicensePlateAdapter;
 import com.example.parkly.DataBase.LicensePlateDatabase;
@@ -55,18 +56,21 @@ public class CarsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        database(view);
+        mView = view;
+        database(mView);
         loadData();
-        init(view);
+        init(mView);
     }
 
     TextView txt_defaultCar;
     boolean deleteClicked = false;
 
     //Adapter
+    View mView;
     List<LicensePlate> licensePlateList = new ArrayList<>();
     List<String> selectedLicensePlateList = new ArrayList<>();
     LicensePlateAdapter adapter;
+    ArrayAdapter<String> arrayAdapter;
 
     //Database
     private CompositeDisposable compositeDisposable;
@@ -75,8 +79,6 @@ public class CarsFragment extends Fragment {
 
     public void init(final View view)
     {
-
-
         Button btn_add = view.findViewById(R.id.btn_add);
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,55 +88,54 @@ public class CarsFragment extends Fragment {
         });
 
         final ListView lst_Car = view.findViewById(R.id.lst_Cars);
-        if (deleteClicked) {
-            lst_Car.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lst_Car.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String selectedItem = ((TextView) view).getText().toString();
-                    if (selectedLicensePlateList.contains(selectedItem)) {
-                        selectedLicensePlateList.remove(selectedItem);
-                    } else {
-                        selectedLicensePlateList.add(selectedItem);
+                    if (deleteClicked) {
+                        String selectedItem = ((TextView) view).getText().toString();
+                        if (selectedLicensePlateList.contains(selectedItem)) {
+                            selectedLicensePlateList.remove(selectedItem);
+                        } else {
+                            selectedLicensePlateList.add(selectedItem);
+                        }
                     }
                 }
-            });
-        }
+        });
+
         Button btn_removeAll = view.findViewById(R.id.btn_removeAll);
         btn_removeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!deleteClicked) {
-                    deleteClicked = true;
-                    lst_Car.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-                    adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
-                    Disposable disposable = licensePlateRepository.getAllNumbers()
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new Consumer<List<String>>() {
-                                @Override
-                                public void accept(List<String> licensePlates) throws Exception {
-                                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, licensePlates);
+                lst_Car.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                Disposable disposable = licensePlateRepository.getAllNumbers()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new Consumer<List<String>>() {
+                            @Override
+                            public void accept(List<String> licensePlates) throws Exception {
+                                if (!deleteClicked) {
+                                    arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, licensePlates);
                                     lst_Car.setAdapter(arrayAdapter);
+                                    arrayAdapter.notifyDataSetChanged();
+                                    deleteClicked = true;
                                 }
-
-                            }, new Consumer<Throwable>() {
-                                @Override
-                                public void accept(Throwable throwable) throws Exception {
-                                    //Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                else
+                                {
+                                    deleteSelectedLicensePlates();
+                                    deleteClicked = false;
+                                    refreshAdapter(mView);
+                                    database(mView);
+                                    loadData();
                                 }
-                            });
-                    compositeDisposable.add(disposable);
-                }
-                else {
+                            }
 
-                    deleteClicked = false;
-                    adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
-                    adapter.notifyDataSetChanged();
-                    registerForContextMenu(lst_Car);
-                    lst_Car.setAdapter(adapter);
-                    deleteSelectedLicensePlates();
-                    loadData();
-                }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                //Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                compositeDisposable.add(disposable);
             }
         });
     }
@@ -148,8 +149,8 @@ public class CarsFragment extends Fragment {
                     public void accept(List<LicensePlate> licensePlates) throws Exception {
                         for (LicensePlate l:licensePlates)
                         {
+                            deleteLicensePlate(l);
                             licensePlateList.remove(l);
-                            licensePlateRepository.delete(l);
                         }
                         selectedLicensePlateList.clear();
                     }
@@ -163,45 +164,25 @@ public class CarsFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
-    public void addLicensePlate(final LicensePlate licensePlate)
-    {
-        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
-            @Override
-            public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                licensePlateRepository.insertAll(licensePlate);
-                e.onComplete();
-            }
-        })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<Object>() {
-                               @Override
-                               public void accept(Object o) throws Exception {
-                                   //Toast.makeText(getApplicationContext(), "License Plate added !", Toast.LENGTH_SHORT).show();
-                               }
-                           }, new Consumer<Throwable>() {
-                               @Override
-                               public void accept(Throwable throwable) throws Exception {
-                                   //Toast.makeText(getApplicationContext(), "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                               }
-                           }
-                );
-        compositeDisposable.add(disposable);
-    }
-
     public void database(View view){
         //Init
         compositeDisposable = new CompositeDisposable();
 
         //init View
-        adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
-        ListView lst_Car = view.findViewById(R.id.lst_Cars);
-        registerForContextMenu(lst_Car);
-        lst_Car.setAdapter(adapter);
+        refreshAdapter(view);
         txt_defaultCar = view.findViewById(R.id.txt_defaultCar);
 
         licensePlateDatabase = LicensePlateDatabase.getInstance(getActivity());
         licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+    }
+
+    public void refreshAdapter(View view)
+    {
+        adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
+        ListView lst_Car = view.findViewById(R.id.lst_Cars);
+        registerForContextMenu(lst_Car);
+        lst_Car.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void loadData()
@@ -378,34 +359,6 @@ public class CarsFragment extends Fragment {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                    }
-                });
-        compositeDisposable.add(disposable);
-    }
-
-    private void deleteAllLicensesPlates() {
-
-        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
-            @Override
-            public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                licensePlateRepository.clear();
-                e.onComplete();
-            }
-        })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer() {
-                    @Override
-                    public void accept(Object o) throws Exception {}
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        loadData();
                     }
                 });
         compositeDisposable.add(disposable);
