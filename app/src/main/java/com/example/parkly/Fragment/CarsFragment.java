@@ -54,11 +54,9 @@ public class CarsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mView = view;
-        database(mView);
+        database(view);
         loadData();
-        init(mView);
+        init(view);
     }
 
     TextView txt_defaultCar;
@@ -66,7 +64,6 @@ public class CarsFragment extends Fragment {
     Button btn_removeAll;
 
     //Adapter
-    View mView;
     List<LicensePlate> licensePlateList = new ArrayList<>();
     List<String> selectedLicensePlateList = new ArrayList<>();
     LicensePlateAdapter adapter;
@@ -125,8 +122,8 @@ public class CarsFragment extends Fragment {
                                 {
                                     deleteSelectedLicensePlates();
                                     deleteClicked = false;
-                                    refreshAdapter(mView);
-                                    database(mView);
+                                    refreshAdapter(view);
+                                    database(view);
                                     loadData();
                                 }
                             }
