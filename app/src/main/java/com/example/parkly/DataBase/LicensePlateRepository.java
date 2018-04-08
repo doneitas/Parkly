@@ -51,6 +51,11 @@ public class LicensePlateRepository implements LicensePlateDao{
     }
 
     @Override
+    public Flowable<List<LicensePlate>> findAllByNumber(List<String> lNumbers) {
+        return mLicensePlateDao.findAllByNumber(lNumbers);
+    }
+
+    @Override
     public void insertAll(LicensePlate... numbers) {
         mLicensePlateDao.insertAll(numbers);
     }
