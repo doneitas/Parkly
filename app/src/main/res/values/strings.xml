@@ -50,8 +50,8 @@
     <string name="remove">Remove</string>
     <string name="default_car">Default car:</string>
     <string name="select_your_language">Select your language</string>
-    <string name="time">Time:</string>
-    <string name="time2">...</string>
+    <string name="time">-</string>
+    <string name="time2">-</string>
     <string name="remaining">" "Remaining:" "</string>
     <string name="ends">Ends:" "</string>
 </resources>

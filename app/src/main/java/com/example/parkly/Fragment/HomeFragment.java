@@ -1,8 +1,10 @@
 package com.example.parkly.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSpinner;
@@ -17,6 +19,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.parkly.Activity.MainActivity;
 import com.example.parkly.Activity.addCarActivity;
 import com.example.parkly.DataBase.LicensePlateAdapter;
 import com.example.parkly.DataBase.Tables.LicensePlate;
@@ -26,6 +29,17 @@ import com.example.parkly.DataBase.LocalUserDataSource;
 import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.R;
 
+import org.w3c.dom.Text;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.Buffer;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -61,6 +75,12 @@ public class HomeFragment extends Fragment {
     public String defaultNumber;
     public List<LicensePlate> tempLicensePlate;
     public boolean isDefaultSelected;
+    private long timeLeftInMilliseconds;
+    private TextView remaining;
+    private TextView timeLeft;
+    private TextView ends;
+    private TextView timeEnds;
+    private TextView confirm;
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -82,17 +102,31 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        init();
+        init(view);
         database(view);
         loadData();
         showPriceAndParkingEnding(view);
         checkCarRegistration();
+        confirmParking(view);
     }
 
-    public void init(){
+    public void init(View view){
         compositeDisposable = new CompositeDisposable();
         licensePlateDatabase = LicensePlateDatabase.getInstance(getActivity());
         licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+
+        confirm = view.findViewById(R.id.btn_homeConfirm);
+    }
+
+    public void disableEnableConfirm(){
+        if (tempPrice.getText().toString().compareTo("-") == 0 || !isDefaultSelected){
+            confirm.setClickable(false);
+            confirm.setEnabled(false);
+        }
+        else{
+            confirm.setClickable(true);
+            confirm.setEnabled(true);
+        }
     }
 
     private void checkCarRegistration() {
@@ -135,6 +169,7 @@ public class HomeFragment extends Fragment {
         TextView outputTime = (TextView)view.findViewById(R.id.txt_outputTime);
         tempTime = outputTime;
 
+        disableEnableConfirm();
 
         listZones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -217,6 +252,8 @@ public class HomeFragment extends Fragment {
 
                 tempPrice.setText(finalPrice);
                 tempTime.setText(parkingEnds);
+
+                disableEnableConfirm();
             }
         });
 
@@ -249,6 +286,8 @@ public class HomeFragment extends Fragment {
                 }
                 tempPrice.setText(finalPrice);
                 tempTime.setText(parkingEnds);
+
+                disableEnableConfirm();
             }
         });
 
@@ -356,6 +395,7 @@ public class HomeFragment extends Fragment {
                 for(int j=0; j < tempLicensePlate.size(); j++){
                     if(tempLicensePlate.get(j).getNumber().compareTo(spin_DefaultCar.getSelectedItem().toString()) == 0){
                         setDefault(tempLicensePlate.get(j));
+                        disableEnableConfirm();
                     }
                 }
             }
@@ -440,6 +480,7 @@ public class HomeFragment extends Fragment {
                 }
                 licensePlate.setCurrent(true);
                 licensePlateRepository.updateLicensePlate(licensePlate);
+                isDefaultSelected = licensePlateRepository.findDefault().getCurrent();
                 e.onComplete();
             }
         })
@@ -458,4 +499,135 @@ public class HomeFragment extends Fragment {
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    private void confirmParking(View view){
+
+        remaining = getActivity().findViewById(R.id.remaining);
+        timeLeft = getActivity().findViewById(R.id.remainingText);
+        ends = getActivity().findViewById(R.id.ends);
+        timeEnds = getActivity().findViewById(R.id.endsText);
+
+        File file = getContext().getFileStreamPath("Countdown");
+
+        if (file.exists()) {
+            if(!MainActivity.isTimerCreated) {
+                try {
+                    FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
+                    InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    int parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
+
+                    startParking(parkingEndsMinutes);
+
+                    String timeEndsText;
+
+                    if ((parkingEndsMinutes / 60) < 10) timeEndsText = "0";
+                    timeEndsText = "" + parkingEndsMinutes / 60;
+                    timeEndsText += ":";
+                    if ((parkingEndsMinutes % 60) < 10) timeEndsText += "0";
+                    timeEndsText += parkingEndsMinutes % 60;
+
+                    timeEnds.setText(timeEndsText);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else {
+            remaining.setVisibility(View.INVISIBLE);
+            timeLeft.setVisibility(View.INVISIBLE);
+            ends.setVisibility(View.INVISIBLE);
+            timeEnds.setVisibility(View.INVISIBLE);
+        }
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                remaining.setVisibility(View.VISIBLE);
+                timeLeft.setVisibility(View.VISIBLE);
+                ends.setVisibility(View.VISIBLE);
+                timeEnds.setVisibility(View.VISIBLE);
+
+                File file = getContext().getFileStreamPath("Countdown");
+
+                if (file.exists()) {
+                    file.delete();
+                    MainActivity.countDownTimer.cancel();
+                }
+
+                Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
+
+                int parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
+
+                startParking(parkingEndsMinutes);
+
+                String fileName = "Countdown";
+
+                try {
+                    FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
+                    fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
+                    fileOutputStream.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                timeEnds.setText(tempTime.getText().toString());
+            }
+        });
+    }
+
+    public void startParking(int parkingEndsMinutes){
+
+        Calendar currentTime = GregorianCalendar.getInstance();
+
+        currentTime.setTime(new Date());
+
+        timeLeftInMilliseconds = (parkingEndsMinutes - (currentTime.get(Calendar.HOUR_OF_DAY) * 60 + currentTime.get(Calendar.MINUTE))) * 60000;
+
+        MainActivity.isTimerCreated = true;
+
+        MainActivity.countDownTimer = new CountDownTimer(timeLeftInMilliseconds, 1000) {
+            @Override
+            public void onTick(long l) {
+                timeLeftInMilliseconds = l;
+                updateTimer(timeLeftInMilliseconds);
+            }
+
+            @Override
+            public void onFinish() {
+                File file = getContext().getFileStreamPath("Countdown");
+                file.delete();
+                remaining.setVisibility(View.INVISIBLE);
+                timeLeft.setVisibility(View.INVISIBLE);
+                ends.setVisibility(View.INVISIBLE);
+                timeEnds.setVisibility(View.INVISIBLE);
+            }
+        }.start();
+    }
+
+    public void updateTimer(long timeLeftInMilliseconds){
+
+        int timeLeftInMinutes = (int) timeLeftInMilliseconds / 60000;
+
+        int hours = (int) timeLeftInMinutes / 60;
+        int minutes = (int) timeLeftInMinutes % 60;
+        int seconds = (int) timeLeftInMilliseconds % 60000 / 1000;
+
+        String timeLeftText;
+
+        timeLeftText = "" + hours;
+        timeLeftText += ":";
+        if(minutes < 10) timeLeftText += "0";
+        timeLeftText += minutes;
+        timeLeftText += ":";
+        if(seconds < 10) timeLeftText += "0";
+        timeLeftText += seconds;
+
+        timeLeft.setText(timeLeftText);
+    }
 }

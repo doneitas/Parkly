@@ -20,27 +20,28 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <TextView
-                android:id="@+id/txt.toolbox"
+                android:id="@+id/ends"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/ends" />
 
             <TextView
-                android:id="@+id/txt.toolbox2"
+                android:id="@+id/endsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/time2" />
+
             <TextView
-                android:id="@+id/txt.toolbox3"
+                android:id="@+id/remaining"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/remaining" />
 
             <TextView
-                android:id="@+id/txt.toolbox4"
+                android:id="@+id/remainingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
