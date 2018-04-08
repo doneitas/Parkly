@@ -517,17 +517,27 @@ public class HomeFragment extends Fragment {
                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                     int parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
 
-                    startParking(parkingEndsMinutes);
+                    //startParking(parkingEndsMinutes);
+                    startParking(180);
 
-                    String timeEndsText;
+                    if(MainActivity.isTimerCreated) {
 
-                    if ((parkingEndsMinutes / 60) < 10) timeEndsText = "0";
-                    timeEndsText = "" + parkingEndsMinutes / 60;
-                    timeEndsText += ":";
-                    if ((parkingEndsMinutes % 60) < 10) timeEndsText += "0";
-                    timeEndsText += parkingEndsMinutes % 60;
+                        String timeEndsText;
 
-                    timeEnds.setText(timeEndsText);
+                        if ((parkingEndsMinutes / 60) < 10) timeEndsText = "0";
+                        timeEndsText = "" + parkingEndsMinutes / 60;
+                        timeEndsText += ":";
+                        if ((parkingEndsMinutes % 60) < 10) timeEndsText += "0";
+                        timeEndsText += parkingEndsMinutes % 60;
+
+                        timeEnds.setText(timeEndsText);
+                    }
+                    else{
+                        remaining.setVisibility(View.INVISIBLE);
+                        timeLeft.setVisibility(View.INVISIBLE);
+                        ends.setVisibility(View.INVISIBLE);
+                        timeEnds.setVisibility(View.INVISIBLE);
+                    }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -588,6 +598,11 @@ public class HomeFragment extends Fragment {
         currentTime.setTime(new Date());
 
         timeLeftInMilliseconds = (parkingEndsMinutes - (currentTime.get(Calendar.HOUR_OF_DAY) * 60 + currentTime.get(Calendar.MINUTE))) * 60000;
+
+        if(timeLeftInMilliseconds <= 0){
+            timeLeftInMilliseconds = -1;
+            return;
+        }
 
         MainActivity.isTimerCreated = true;
 
