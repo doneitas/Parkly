@@ -24,10 +24,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/time" />
+                android:text="@string/ends" />
 
             <TextView
                 android:id="@+id/txt.toolbox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/time2" />
+            <TextView
+                android:id="@+id/txt.toolbox3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/remaining" />
+
+            <TextView
+                android:id="@+id/txt.toolbox4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
