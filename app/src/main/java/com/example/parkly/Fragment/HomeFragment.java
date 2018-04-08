@@ -517,8 +517,7 @@ public class HomeFragment extends Fragment {
                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                     int parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
 
-                    //startParking(parkingEndsMinutes);
-                    startParking(180);
+                    startParking(parkingEndsMinutes);
 
                     if(MainActivity.isTimerCreated) {
 
