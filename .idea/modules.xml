@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Parkly.iml" filepath="$PROJECT_DIR$/Parkly.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../Marius/AndroidStudio5/Parkly/Parkly.iml" filepath="$PROJECT_DIR$/../../../Marius/AndroidStudio5/Parkly/Parkly.iml" />
+      <module fileurl="file://C:\Users\Marius\AndroidStudio5\Parkly\Parkly.iml" filepath="C:\Users\Marius\AndroidStudio5\Parkly\Parkly.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../Marius/AndroidStudio5/Parkly/app/app.iml" filepath="$PROJECT_DIR$/../../../Marius/AndroidStudio5/Parkly/app/app.iml" />
+      <module fileurl="file://C:\Users\Marius\AndroidStudio5\Parkly\app\app.iml" filepath="C:\Users\Marius\AndroidStudio5\Parkly\app\app.iml" />
     </modules>
   </component>
 </project>
