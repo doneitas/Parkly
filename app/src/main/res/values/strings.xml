@@ -52,6 +52,6 @@
     <string name="select_your_language">Select your language</string>
     <string name="time">Time:</string>
     <string name="time2">...</string>
-    <string name="remaining">Remaining</string>
-    <string name="ends">Ends</string>
+    <string name="remaining">" "Remaining:" "</string>
+    <string name="ends">Ends:" "</string>
 </resources>
