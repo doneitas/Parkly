@@ -368,7 +368,7 @@ public class HomeFragment extends Fragment {
                 if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8)
                 {
                     //Sukuriamas alert dialog kintamasis
-                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeFragment.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     //leidzia isjungt paspaudus kazkur uz dialogo ribu
                     builder.setCancelable(true);
                     //dialogo pavadinimas ir tekstas
@@ -400,7 +400,7 @@ public class HomeFragment extends Fragment {
                     //
 
                     //Sukuriamas alert dialog kintamasis
-                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeFragment.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeFragment.this).create();
                     //leidzia isjungt paspaudus kazkur uz dialogo ribu
                     builder.setCancelable(true);
                     //dialogo pavadinimas ir tekstas
