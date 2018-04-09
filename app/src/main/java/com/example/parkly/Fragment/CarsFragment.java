@@ -60,8 +60,8 @@ public class CarsFragment extends Fragment {
     }
 
     TextView txt_defaultCar;
-    boolean deleteClicked = false;
-    Button btn_removeAll;
+    public static boolean deleteClicked = false;
+    public static Button btn_removeAll;
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
@@ -101,7 +101,6 @@ public class CarsFragment extends Fragment {
                 }
         });
 
-        Button btn_removeAll = view.findViewById(R.id.btn_removeAll);
         btn_removeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
