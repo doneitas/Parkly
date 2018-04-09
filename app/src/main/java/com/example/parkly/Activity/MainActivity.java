@@ -68,7 +68,11 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if(getSupportFragmentManager().findFragmentByTag("HOME_FRAGMENT") == null) {
-                loadFragment(new HomeFragment(), "HOME_FRAGMENT");
+            if(getSupportFragmentManager().findFragmentByTag("CARS_FRAGMENT") != null && CarsFragment.deleteClicked){
+                CarsFragment.deleteClicked = false;
+                loadFragment(new CarsFragment(), "CARS_FRAGMENT");
+            }
+            else loadFragment(new HomeFragment(), "HOME_FRAGMENT");
         }
         else super.onBackPressed();
     }

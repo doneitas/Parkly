@@ -392,12 +392,15 @@ public class HomeFragment extends Fragment {
         spin_DefaultCar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                for(int j=0; j < tempLicensePlate.size(); j++){
-                    if(tempLicensePlate.get(j).getNumber().compareTo(spin_DefaultCar.getSelectedItem().toString()) == 0){
+                boolean notSelected = false;
+                if(licensePlateList.get(0).toString().compareTo("Not selected") == 0) notSelected = true;
+                for(int j=0; j < tempLicensePlate.size(); j++) {
+                    if (tempLicensePlate.get(j).getNumber().compareTo(spin_DefaultCar.getSelectedItem().toString()) == 0) {
                         setDefault(tempLicensePlate.get(j));
-                        disableEnableConfirm();
+                        if(notSelected && spin_DefaultCar.getSelectedItemId() < licensePlateList.size() - 1) spin_DefaultCar.setSelection((int)spin_DefaultCar.getSelectedItemId() - 1);
                     }
                 }
+                disableEnableConfirm();
             }
 
             @Override
@@ -459,10 +462,6 @@ public class HomeFragment extends Fragment {
 
         for (int i = 0; i < licensePlates.size(); i++) {
             licensePlateList.add(licensePlates.get(i).getNumber());
-        }
-
-        if (licensePlateList.size() == 2){
-            licensePlateList.remove("Not selected");
         }
 
         adapter.notifyDataSetChanged();
@@ -599,6 +598,8 @@ public class HomeFragment extends Fragment {
         timeLeftInMilliseconds = (parkingEndsMinutes - (currentTime.get(Calendar.HOUR_OF_DAY) * 60 + currentTime.get(Calendar.MINUTE))) * 60000;
 
         if(timeLeftInMilliseconds <= 0){
+            File file = getContext().getFileStreamPath("Countdown");
+            file.delete();
             timeLeftInMilliseconds = -1;
             return;
         }
