@@ -1,6 +1,7 @@
 package com.example.parkly.Activity;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     public static boolean isCurrentFragmentIsHomeFragment;
+    public static boolean isTimerCreated = false;
+    public static CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,11 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if(getSupportFragmentManager().findFragmentByTag("HOME_FRAGMENT") == null) {
-                loadFragment(new HomeFragment(), "HOME_FRAGMENT");
+            if(getSupportFragmentManager().findFragmentByTag("CARS_FRAGMENT") != null && CarsFragment.deleteClicked){
+                CarsFragment.deleteClicked = false;
+                loadFragment(new CarsFragment(), "CARS_FRAGMENT");
+            }
+            else loadFragment(new HomeFragment(), "HOME_FRAGMENT");
         }
         else super.onBackPressed();
     }

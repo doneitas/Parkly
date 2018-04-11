@@ -50,6 +50,11 @@ public class LocalUserDataSource implements LicensePlateDao{
     }
 
     @Override
+    public Flowable<List<LicensePlate>> findAllByNumber(List<String> lNumbers) {
+        return licensePlateDao.findAllByNumber(lNumbers);
+    }
+
+    @Override
     public void insertAll(LicensePlate... numbers) {
         licensePlateDao.insertAll(numbers);
     }

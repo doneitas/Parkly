@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -53,26 +54,28 @@ public class CarsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         database(view);
         loadData();
         init(view);
     }
 
     TextView txt_defaultCar;
-    Button btn_removeAll;
+    public static boolean deleteClicked = false;
+    public static Button btn_removeAll;
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
+    List<String> selectedLicensePlateList = new ArrayList<>();
     LicensePlateAdapter adapter;
+    ArrayAdapter<String> arrayAdapter;
 
     //Database
     private CompositeDisposable compositeDisposable;
     private LicensePlateRepository licensePlateRepository;
     LicensePlateDatabase licensePlateDatabase;
 
-    public void init(View view){
-
+    public void init(final View view)
+    {
         Button btn_add = view.findViewById(R.id.btn_add);
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,24 +86,80 @@ public class CarsFragment extends Fragment {
 
         btn_removeAll = view.findViewById(R.id.btn_removeAll);
         disableRemove();
+        final ListView lst_Car = view.findViewById(R.id.lst_Cars);
+        lst_Car.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (deleteClicked) {
+                        String selectedItem = ((TextView) view).getText().toString();
+                        if (selectedLicensePlateList.contains(selectedItem)) {
+                            selectedLicensePlateList.remove(selectedItem);
+                        } else {
+                            selectedLicensePlateList.add(selectedItem);
+                        }
+                    }
+                }
+        });
+
         btn_removeAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(getActivity())
-                        .setMessage("Do you want to remove all license plates?")
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                lst_Car.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                Disposable disposable = licensePlateRepository.getAllNumbers()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new Consumer<List<String>>() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deleteAllLicensesPlates();
+                            public void accept(List<String> licensePlates) throws Exception {
+                                if (!deleteClicked) {
+                                    arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, licensePlates);
+                                    lst_Car.setAdapter(arrayAdapter);
+                                    arrayAdapter.notifyDataSetChanged();
+                                    deleteClicked = true;
+                                }
+                                else
+                                {
+                                    deleteSelectedLicensePlates();
+                                    deleteClicked = false;
+                                    refreshAdapter(view);
+                                    database(view);
+                                    loadData();
+                                }
                             }
-                        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create().show();
+
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                //Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                compositeDisposable.add(disposable);
             }
         });
+    }
+
+    private void deleteSelectedLicensePlates() {
+        Disposable disposable = licensePlateRepository.findAllByNumber(selectedLicensePlateList)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<LicensePlate>>() {
+                    @Override
+                    public void accept(List<LicensePlate> licensePlates) throws Exception {
+                        for (LicensePlate l:licensePlates)
+                        {
+                            deleteLicensePlate(l);
+                            licensePlateList.remove(l);
+                        }
+                        selectedLicensePlateList.clear();
+                    }
+
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        compositeDisposable.add(disposable);
     }
 
     public void disableRemove()
@@ -122,14 +181,20 @@ public class CarsFragment extends Fragment {
         compositeDisposable = new CompositeDisposable();
 
         //init View
-        adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
-        ListView lst_Car = view.findViewById(R.id.lst_Cars);
-        registerForContextMenu(lst_Car);
-        lst_Car.setAdapter(adapter);
+        refreshAdapter(view);
         txt_defaultCar = view.findViewById(R.id.txt_defaultCar);
 
         licensePlateDatabase = LicensePlateDatabase.getInstance(getActivity());
         licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+    }
+
+    public void refreshAdapter(View view)
+    {
+        adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
+        ListView lst_Car = view.findViewById(R.id.lst_Cars);
+        registerForContextMenu(lst_Car);
+        lst_Car.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void loadData()
@@ -172,8 +237,7 @@ public class CarsFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
         menu.setHeaderTitle("Select action:");
         menu.add(Menu.NONE, 0, Menu.NONE, "Mark as default");
-        menu.add(Menu.NONE, 1, Menu.NONE, "Remove");
-        //menu.add(Menu.NONE, 0, Menu.NONE, "DELETE");
+        //menu.add(Menu.NONE, 1, Menu.NONE, "Remove");
     }
 
     @Override
@@ -200,7 +264,7 @@ public class CarsFragment extends Fragment {
                 }).create().show();
             }
             break;
-            case 1:
+            /*case 1:
             {
                 new AlertDialog.Builder(getActivity())
                         .setMessage("Do you want to remove "+licensePlate.getNumber()+" ?")
@@ -216,7 +280,7 @@ public class CarsFragment extends Fragment {
                     }
                 }).create().show();
             }
-            break;
+            break;*/
         }
 
         return true;
@@ -257,35 +321,6 @@ public class CarsFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
-    private void refreshDefault()
-    {
-        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
-            @Override
-            public void subscribe(ObservableEmitter<Object> e) throws Exception {
-
-                LicensePlate licensePlate = licensePlateRepository.findDefault();
-                if (licensePlate != null)
-                {
-                    txt_defaultCar.setText(licensePlate.getNumber());
-                }
-                else txt_defaultCar.setText("List is empty");
-
-                e.onComplete();
-            }
-        })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer() {
-                    @Override
-                    public void accept(Object o) throws Exception {}
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                    }
-                });
-        compositeDisposable.add(disposable);
-    }
-
     private void deleteLicensePlate(final LicensePlate licensePlate) {
 
         Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
@@ -314,12 +349,22 @@ public class CarsFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
-    private void deleteAllLicensesPlates() {
-
+    private void refreshDefault()
+    {
         Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                licensePlateRepository.clear();
+
+                LicensePlate licensePlate = licensePlateRepository.findDefault();
+                if (licensePlate != null)
+                {
+                    txt_defaultCar.setText(licensePlate.getNumber());
+                }
+                else if (licensePlateList.size() != 0){
+                    txt_defaultCar.setText("Not selected");
+                }
+                else txt_defaultCar.setText("List is empty");
+
                 e.onComplete();
             }
         })
@@ -331,12 +376,6 @@ public class CarsFragment extends Fragment {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        loadData();
                     }
                 });
         compositeDisposable.add(disposable);
