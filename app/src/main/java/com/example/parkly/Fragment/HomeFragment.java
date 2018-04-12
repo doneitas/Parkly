@@ -365,24 +365,9 @@ public class HomeFragment extends Fragment {
         {
             case "Orange":
             {
-                if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8)
+                if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
                 {
-                    //Sukuriamas alert dialog kintamasis
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    //leidzia isjungt paspaudus kazkur uz dialogo ribu
-                    builder.setCancelable(true);
-                    //dialogo pavadinimas ir tekstas
-                    builder.setTitle("Dėmesio!");
-                    builder.setMessage("Šiuo metu parkavimas jūsų pasirinktoje zonoje yra nemokamas!");
-                    //sukuriamas mygtukas, kuri paspaudus issijungia dialogas
-                    builder.setPositiveButton("Gerai", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                        }
-                    });
-                    //ismetamas dialogas
-                    builder.show();
+                    Toast.makeText(getActivity(), "Jūsų pasirinktoje vietoje šiuo metu parkavimas yra nemokas!", Toast.LENGTH_LONG).show();
                 }
                 break;
             }
@@ -393,28 +378,7 @@ public class HomeFragment extends Fragment {
             {
                 if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8)
                 {
-                    //
-
-                    https://www.youtube.com/watch?v=7vWoi8j5vL4  <<<< creation video
-
-                    //
-
-                    //Sukuriamas alert dialog kintamasis
-                    AlertDialog.Builder builder = new AlertDialog.Builder(HomeFragment.this).create();
-                    //leidzia isjungt paspaudus kazkur uz dialogo ribu
-                    builder.setCancelable(true);
-                    //dialogo pavadinimas ir tekstas
-                    builder.setTitle("Dėmesio!");
-                    builder.setMessage("Šiuo metu parkavimas jūsų pasirinktoje zonoje yra nemokamas!");
-                    //sukuriamas mygtukas, kuri paspaudus issijungia dialogas
-                    builder.setPositiveButton("Gerai", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
-                        }
-                    });
-                    //ismetamas dialogas
-                    builder.show();
+                    Toast.makeText(getActivity(), "Jūsų pasirinktoje vietoje šiuo metu parkavimas yra nemokas!", Toast.LENGTH_LONG).show();
                 }
                 break;
             }
@@ -569,45 +533,7 @@ public class HomeFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
-    private void popUp(String color)
-    {
 
-        switch (color) {
-            case "Orange":
-            {
-
-            }
-            case "Yellow":
-            {
-                price = 2 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case "Blue":
-            {
-                price = 0.6 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case "Red":
-            {
-                price = 1.2 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case "Green":
-            {
-                price = 0.3 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            default:
-            {
-                total = 0;
-                break;
-            }
-        }
-    }
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
