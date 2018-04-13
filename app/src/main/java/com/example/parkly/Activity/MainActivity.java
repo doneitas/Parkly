@@ -15,7 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.parkly.Fragment.CarsFragment;
+import com.example.parkly.Fragment.HistoryFragment;
 import com.example.parkly.Fragment.HomeFragment;
+import com.example.parkly.Fragment.ParkingFragment;
 import com.example.parkly.Fragment.SettingsFragment;
 import com.example.parkly.R;
 
@@ -96,7 +98,11 @@ public class MainActivity extends AppCompatActivity
             selectedFragment = new CarsFragment();
             fragmentTag = "CARS_FRAGMENT";
         } else if (id == R.id.nav_parking) {
-
+            selectedFragment = new ParkingFragment();
+            fragmentTag = "PARKING_FRAGMENT";
+        } else if (id == R.id.nav_budget) {
+            selectedFragment = new HistoryFragment();
+            fragmentTag = "HISTORY_FRAGMENT";
         } else if (id == R.id.nav_settings) {
             selectedFragment = new SettingsFragment();
             fragmentTag = "SETTINGS_FRAGMENT";
