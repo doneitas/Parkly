@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         loadFragment(new HomeFragment(), "HOME_FRAGMENT");
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_home);
+        navigationView.setCheckedItem(item.getItemId());
         navigation();
     }
 
@@ -74,7 +77,12 @@ public class MainActivity extends AppCompatActivity
                 CarsFragment.deleteClicked = false;
                 loadFragment(new CarsFragment(), "CARS_FRAGMENT");
             }
-            else loadFragment(new HomeFragment(), "HOME_FRAGMENT");
+            else {
+                loadFragment(new HomeFragment(), "HOME_FRAGMENT");
+                NavigationView navigationView = findViewById(R.id.nav_view);
+                MenuItem item = navigationView.getMenu().findItem(R.id.nav_home);
+                navigationView.setCheckedItem(item.getItemId());
+            }
         }
         else super.onBackPressed();
     }
