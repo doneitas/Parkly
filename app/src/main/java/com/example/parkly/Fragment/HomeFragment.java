@@ -357,6 +357,42 @@ public class HomeFragment extends Fragment {
         return totalTime;
     }
 
+    public boolean needsPopUp (String color)
+    {
+        Calendar currentTime = GregorianCalendar.getInstance();
+        currentTime.setTime(new Date());
+        switch(color)
+        {
+            case "Orange":
+            {
+                if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
+                {
+                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                break;
+            }
+            case "Green":
+            case "Blue":
+            case "Red":
+            case "Yellow":
+            {
+                if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8)
+                {
+                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        return false;
+    }
+
+
     //Everything for database --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public void database(View view){
@@ -555,51 +591,51 @@ public class HomeFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(getActivity())
-                    .setMessage("Do you really want to confirm this parking?")
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                if(!needsPopUp(chosenZone)) {
+                    new AlertDialog.Builder(getActivity())
+                            .setMessage("Do you really want to confirm this parking?")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    remaining.setVisibility(View.VISIBLE);
+                                    timeLeft.setVisibility(View.VISIBLE);
+                                    ends.setVisibility(View.VISIBLE);
+                                    timeEnds.setVisibility(View.VISIBLE);
+
+                                    File file = getContext().getFileStreamPath("Countdown");
+
+                                    if (file.exists()) {
+                                        file.delete();
+                                        MainActivity.countDownTimer.cancel();
+                                    }
+
+                                    Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
+
+                                    int parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
+
+                                    startParking(parkingEndsMinutes);
+
+                                    String fileName = "Countdown";
+
+                                    try {
+                                        FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
+                                        fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
+                                        fileOutputStream.close();
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    timeEnds.setText(tempTime.getText().toString());
+                                }
+                            }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(!needsPopUp(chosenZone)) {
-                                remaining.setVisibility(View.VISIBLE);
-                                timeLeft.setVisibility(View.VISIBLE);
-                                ends.setVisibility(View.VISIBLE);
-                                timeEnds.setVisibility(View.VISIBLE);
-
-                                File file = getContext().getFileStreamPath("Countdown");
-
-                                if (file.exists()) {
-                                    file.delete();
-                                    MainActivity.countDownTimer.cancel();
-                                }
-
-                                Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
-
-                                int parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
-
-                                startParking(parkingEndsMinutes);
-
-                                String fileName = "Countdown";
-
-                                try {
-                                    FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
-                                    fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
-                                    fileOutputStream.close();
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                timeEnds.setText(tempTime.getText().toString());
-                            }
+                            dialog.dismiss();
                         }
-                        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).create().show();
+                    }).create().show();
+                }
             }
         });
     }
