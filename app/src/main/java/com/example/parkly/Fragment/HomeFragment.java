@@ -1,8 +1,6 @@
 package com.example.parkly.Fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -357,7 +355,7 @@ public class HomeFragment extends Fragment {
         return totalTime;
     }
 
-    public void needsPopUp (String color)
+    public boolean needsPopUp (String color)
     {
         Calendar currentTime = GregorianCalendar.getInstance();
         currentTime.setTime(new Date());
@@ -367,7 +365,8 @@ public class HomeFragment extends Fragment {
             {
                 if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
                 {
-                    Toast.makeText(getActivity(), "Jūsų pasirinktoje vietoje šiuo metu parkavimas yra nemokas!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
+                    return true;
                 }
                 break;
             }
@@ -378,7 +377,8 @@ public class HomeFragment extends Fragment {
             {
                 if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8)
                 {
-                    Toast.makeText(getActivity(), "Jūsų pasirinktoje vietoje šiuo metu parkavimas yra nemokas!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
+                    return true;
                 }
                 break;
             }
@@ -387,6 +387,7 @@ public class HomeFragment extends Fragment {
                 break;
             }
         }
+        return false;
     }
 
 
@@ -427,12 +428,15 @@ public class HomeFragment extends Fragment {
         spin_DefaultCar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                for(int j=0; j < tempLicensePlate.size(); j++){
-                    if(tempLicensePlate.get(j).getNumber().compareTo(spin_DefaultCar.getSelectedItem().toString()) == 0){
+                boolean notSelected = false;
+                if(licensePlateList.get(0).toString().compareTo("Not selected") == 0) notSelected = true;
+                for(int j=0; j < tempLicensePlate.size(); j++) {
+                    if (tempLicensePlate.get(j).getNumber().compareTo(spin_DefaultCar.getSelectedItem().toString()) == 0) {
                         setDefault(tempLicensePlate.get(j));
-                        disableEnableConfirm();
+                        if(notSelected && spin_DefaultCar.getSelectedItemId() < licensePlateList.size() - 1) spin_DefaultCar.setSelection((int)spin_DefaultCar.getSelectedItemId() - 1);
                     }
                 }
+                disableEnableConfirm();
             }
 
             @Override
@@ -496,10 +500,6 @@ public class HomeFragment extends Fragment {
             licensePlateList.add(licensePlates.get(i).getNumber());
         }
 
-        if (licensePlateList.size() == 2){
-            licensePlateList.remove("Not selected");
-        }
-
         adapter.notifyDataSetChanged();
     }
 
@@ -532,8 +532,6 @@ public class HomeFragment extends Fragment {
                 });
         compositeDisposable.add(disposable);
     }
-
-
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -591,38 +589,39 @@ public class HomeFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!needsPopUp(chosenZone)) {
+                    remaining.setVisibility(View.VISIBLE);
+                    timeLeft.setVisibility(View.VISIBLE);
+                    ends.setVisibility(View.VISIBLE);
+                    timeEnds.setVisibility(View.VISIBLE);
 
-                remaining.setVisibility(View.VISIBLE);
-                timeLeft.setVisibility(View.VISIBLE);
-                ends.setVisibility(View.VISIBLE);
-                timeEnds.setVisibility(View.VISIBLE);
+                    File file = getContext().getFileStreamPath("Countdown");
 
-                File file = getContext().getFileStreamPath("Countdown");
+                    if (file.exists()) {
+                        file.delete();
+                        MainActivity.countDownTimer.cancel();
+                    }
 
-                if (file.exists()) {
-                    file.delete();
-                    MainActivity.countDownTimer.cancel();
+                    Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
+
+                    int parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
+
+                    startParking(parkingEndsMinutes);
+
+                    String fileName = "Countdown";
+
+                    try {
+                        FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
+                        fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
+                        fileOutputStream.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    timeEnds.setText(tempTime.getText().toString());
                 }
-
-                Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
-
-                int parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
-
-                startParking(parkingEndsMinutes);
-
-                String fileName = "Countdown";
-
-                try {
-                    FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
-                    fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
-                    fileOutputStream.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                timeEnds.setText(tempTime.getText().toString());
             }
         });
     }
@@ -636,6 +635,8 @@ public class HomeFragment extends Fragment {
         timeLeftInMilliseconds = (parkingEndsMinutes - (currentTime.get(Calendar.HOUR_OF_DAY) * 60 + currentTime.get(Calendar.MINUTE))) * 60000;
 
         if(timeLeftInMilliseconds <= 0){
+            File file = getContext().getFileStreamPath("Countdown");
+            file.delete();
             timeLeftInMilliseconds = -1;
             return;
         }
