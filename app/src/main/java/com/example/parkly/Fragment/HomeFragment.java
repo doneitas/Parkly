@@ -560,37 +560,39 @@ public class HomeFragment extends Fragment {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            remaining.setVisibility(View.VISIBLE);
-                            timeLeft.setVisibility(View.VISIBLE);
-                            ends.setVisibility(View.VISIBLE);
-                            timeEnds.setVisibility(View.VISIBLE);
+                            if(!needsPopUp(chosenZone)) {
+                                remaining.setVisibility(View.VISIBLE);
+                                timeLeft.setVisibility(View.VISIBLE);
+                                ends.setVisibility(View.VISIBLE);
+                                timeEnds.setVisibility(View.VISIBLE);
 
-                            File file = getContext().getFileStreamPath("Countdown");
+                                File file = getContext().getFileStreamPath("Countdown");
 
-                            if (file.exists()) {
-                                file.delete();
-                                MainActivity.countDownTimer.cancel();
+                                if (file.exists()) {
+                                    file.delete();
+                                    MainActivity.countDownTimer.cancel();
+                                }
+
+                                Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
+
+                                int parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
+
+                                startParking(parkingEndsMinutes);
+
+                                String fileName = "Countdown";
+
+                                try {
+                                    FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
+                                    fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
+                                    fileOutputStream.close();
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                timeEnds.setText(tempTime.getText().toString());
                             }
-
-                            Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
-
-                            int parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
-
-                            startParking(parkingEndsMinutes);
-
-                            String fileName = "Countdown";
-
-                            try {
-                                FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
-                                fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
-                                fileOutputStream.close();
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            timeEnds.setText(tempTime.getText().toString());
                         }
                         }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
