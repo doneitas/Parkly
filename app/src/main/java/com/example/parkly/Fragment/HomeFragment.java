@@ -83,6 +83,7 @@ public class HomeFragment extends Fragment {
     private TextView ends;
     private TextView timeEnds;
     private TextView confirm;
+    private File file;
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -544,7 +545,7 @@ public class HomeFragment extends Fragment {
         ends = getActivity().findViewById(R.id.ends);
         timeEnds = getActivity().findViewById(R.id.endsText);
 
-        File file = getContext().getFileStreamPath("Countdown");
+        file = getContext().getFileStreamPath("Countdown");
 
         if (file.exists()) {
             if(!MainActivity.isTimerCreated) {
@@ -602,8 +603,6 @@ public class HomeFragment extends Fragment {
                                     ends.setVisibility(View.VISIBLE);
                                     timeEnds.setVisibility(View.VISIBLE);
 
-                                    File file = getContext().getFileStreamPath("Countdown");
-
                                     if (file.exists()) {
                                         file.delete();
                                         MainActivity.countDownTimer.cancel();
@@ -649,8 +648,9 @@ public class HomeFragment extends Fragment {
         timeLeftInMilliseconds = (parkingEndsMinutes - (currentTime.get(Calendar.HOUR_OF_DAY) * 60 + currentTime.get(Calendar.MINUTE))) * 60000;
 
         if(timeLeftInMilliseconds <= 0){
-            File file = getContext().getFileStreamPath("Countdown");
-            file.delete();
+            if(file.exists()) {
+                file.delete();
+            }
             timeLeftInMilliseconds = -1;
             return;
         }
@@ -666,8 +666,9 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                File file = getContext().getFileStreamPath("Countdown");
-                file.delete();
+                if(file.exists()) {
+                    file.delete();
+                }
                 remaining.setVisibility(View.INVISIBLE);
                 timeLeft.setVisibility(View.INVISIBLE);
                 ends.setVisibility(View.INVISIBLE);
