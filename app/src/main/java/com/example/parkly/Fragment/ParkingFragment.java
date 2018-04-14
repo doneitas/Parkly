@@ -1,43 +1,20 @@
 package com.example.parkly.Fragment;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ExpandableListView;
 
-import com.example.parkly.Activity.addCarActivity;
-import com.example.parkly.DataBase.Tables.LicensePlate;
-import com.example.parkly.DataBase.LicensePlateAdapter;
-import com.example.parkly.DataBase.LicensePlateDatabase;
-import com.example.parkly.DataBase.LicensePlateRepository;
-import com.example.parkly.DataBase.LocalUserDataSource;
+import com.example.parkly.Adapters.ExpandableListAdapter;
 import com.example.parkly.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Marius on 2018-03-12.
@@ -52,9 +29,45 @@ public class ParkingFragment extends Fragment {
         return inflater.inflate(R.layout.parking_fragment, null);
     }
 
+    private ExpandableListView lst_zones;
+    private ExpandableListAdapter adapter;
+    private List<String> zoneList;
+    private HashMap<String, List<String>> addressList;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        lst_zones = view.findViewById(R.id.expl_parking);
+
+        //Init data
+        prepareData();
+
+        adapter = new ExpandableListAdapter(this.getContext(),zoneList,addressList);
+
+
+        lst_zones.setAdapter(adapter);
+    }
+
+    private void prepareData()
+    {
+        zoneList = new ArrayList<>();
+        addressList = new HashMap<>();
+
+        List<String> emptyList = new ArrayList<>();
+        emptyList.add("");
+
+        zoneList.add("Green");
+        zoneList.add("Blue");
+        zoneList.add("Red");
+        zoneList.add("Yellow");
+        zoneList.add("Orange");
+
+        addressList.put(zoneList.get(0), emptyList);
+        addressList.put(zoneList.get(1), emptyList);
+        addressList.put(zoneList.get(2), emptyList);
+        addressList.put(zoneList.get(3), emptyList);
+        addressList.put(zoneList.get(4), emptyList);
     }
 
 }
