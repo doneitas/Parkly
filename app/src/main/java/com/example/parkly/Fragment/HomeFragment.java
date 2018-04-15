@@ -647,11 +647,18 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    public long calculateTimeLeft(int parkingEndsMinutes, int hours, int minutes){
+
+        long timeLeftInMilliseconds = (parkingEndsMinutes - (hours * 60 + minutes)) * 60000;
+
+        return  timeLeftInMilliseconds;
+    }
+
     public void startParking(int parkingEndsMinutes, String parkingDate){
 
         Calendar currentTime = GregorianCalendar.getInstance();
         currentTime.setTime(new Date());
-        timeLeftInMilliseconds = (parkingEndsMinutes - (currentTime.get(Calendar.HOUR_OF_DAY) * 60 + currentTime.get(Calendar.MINUTE))) * 60000;
+        timeLeftInMilliseconds = calculateTimeLeft(parkingEndsMinutes, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE));
 
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
