@@ -54,8 +54,11 @@ public class ParkingFragment extends Fragment {
         zoneList = new ArrayList<>();
         addressList = new HashMap<>();
 
-        List<String> emptyList = new ArrayList<>();
-        emptyList.add("");
+        List<String> greenZones = new ArrayList<>();
+        List<String> blueZones = new ArrayList<>();
+        List<String> redZones = new ArrayList<>();
+        List<String> yellowZones = new ArrayList<>();
+        List<String> orangeZones = new ArrayList<>();
 
         zoneList.add("Green");
         zoneList.add("Blue");
@@ -63,11 +66,110 @@ public class ParkingFragment extends Fragment {
         zoneList.add("Yellow");
         zoneList.add("Orange");
 
-        addressList.put(zoneList.get(0), emptyList);
-        addressList.put(zoneList.get(1), emptyList);
-        addressList.put(zoneList.get(2), emptyList);
-        addressList.put(zoneList.get(3), emptyList);
-        addressList.put(zoneList.get(4), emptyList);
+        greenZones.add("Kaunakiemio g.");
+        greenZones.add("Šiaulių g.");
+        greenZones.add("Girstupio g.");
+        greenZones.add("Bažnyčios g.");
+        greenZones.add("Karo Ligoninės g.");
+        greenZones.add("Trakų g.");
+        greenZones.add(" Savanorių pr.");
+        greenZones.add("Tvirtovės al.");
+
+        blueZones.add("Savanorių pr.");
+        blueZones.add("Vytauto pr.");
+        blueZones.add("Totorių g.");
+        blueZones.add("Trakų g.");
+        blueZones.add("Krėvos g.");
+        blueZones.add("I. Kanto g.");
+        blueZones.add("Nemuno g.");
+        blueZones.add("D. Poškos g.");
+        blueZones.add("Puodžių g.");
+        blueZones.add("Šilutės g.");
+        blueZones.add("Smalininkų g.");
+        blueZones.add("Druskininkų g.");
+        blueZones.add("Tvirtovės al.");
+        blueZones.add("Sukilėlių pr.");
+        blueZones.add("Iniciatorių g.");
+        blueZones.add("V.Lašo g.");
+        blueZones.add("Lankos g.");
+        blueZones.add("Klonio g.");
+        blueZones.add("Dusetų g.");
+        blueZones.add("A. Jasaičio g.");
+        blueZones.add("Eivenių g.");
+        blueZones.add("K. Genio g.");
+        blueZones.add("Sukilėlių pr.");
+        blueZones.add("Lazūnų g.");
+        blueZones.add("Ūmėdžių g.");
+        blueZones.add("Ruduokių g.");
+        blueZones.add("J. Lukšos-Daumanto g.");
+        blueZones.add("Žeimentos g.");
+        blueZones.add("Šv. Gertrūdos g.");
+        blueZones.add("Birštono g.");
+        blueZones.add("Karaliaus Mindaugo pr.");
+        blueZones.add("Palangos g.");
+        blueZones.add("Kurpių g.");
+        blueZones.add("Vilniaus g.");
+        blueZones.add("Gimnazijos g.");
+        blueZones.add("J. Jablonskio g.");
+        blueZones.add("A Mapu g.");
+        blueZones.add("L. Zamenhofo g.");
+        blueZones.add("Muitinės g.");
+        blueZones.add("M. Daukšos g.");
+        blueZones.add("J. Naugardo g.");
+        blueZones.add("Muitinės g.");
+        blueZones.add("V. Sladkevičiaus g.");
+        blueZones.add("Šaukliū g.");
+        blueZones.add("Jonavos g.");
+        blueZones.add("A. Jakšto g.");
+        blueZones.add("Kumelių g.");
+        blueZones.add("V. Kuzmos g.");
+        blueZones.add("Aleksoto g.");
+        blueZones.add("Jėzuitų skg.");
+        blueZones.add("Prieplaukos krant.");
+        blueZones.add("T. Daugirdo g.");
+        blueZones.add("Santakos g.");
+        blueZones.add("Muziejaus g.");
+        blueZones.add("Bernardinų skg.");
+        blueZones.add("M. Valančiaus g.");
+        blueZones.add("Raguvos g.");
+        blueZones.add("Pilies g.");
+        blueZones.add("Papilio g.");
+        blueZones.add("Rotušės a.");
+
+        redZones.add("Gedimino g.");
+        redZones.add("Griunvaldo g.");
+        redZones.add("Miško g.");
+        redZones.add("Vaidilutės g.");
+        redZones.add("Kęstučio g.");
+        redZones.add("Vytauto pr.");
+        redZones.add("Laisvės al.");
+        redZones.add("K. Donelaičio g.");
+        redZones.add("M. Dobužinskio g.");
+        redZones.add("V. Putvinskio g.");
+
+        yellowZones.add("Gedimino g.");
+        yellowZones.add("A. Mickevičiaus g.");
+        yellowZones.add("Spaustuvininkų g.");
+        yellowZones.add("Kęstučio g.");
+        yellowZones.add(" S. Daukanto g.");
+        yellowZones.add("Maironio g.");
+        yellowZones.add("Laisvės al.");
+        yellowZones.add("K. Donelaičio g.");
+        yellowZones.add("Vasario 16-osios g.");
+        yellowZones.add("J. Gruodžio g.");
+        yellowZones.add("I. kanto g.");
+        yellowZones.add("L. Sapiegos g.");
+        yellowZones.add("E. Ožeškienės g.");
+        yellowZones.add("V. Putvinskio g.");
+        yellowZones.add("Aušros tak.");
+
+        orangeZones.add("Rotušės a.");
+
+        addressList.put(zoneList.get(0), greenZones);
+        addressList.put(zoneList.get(1), blueZones);
+        addressList.put(zoneList.get(2), redZones);
+        addressList.put(zoneList.get(3), yellowZones);
+        addressList.put(zoneList.get(4), orangeZones);
     }
 
 }
