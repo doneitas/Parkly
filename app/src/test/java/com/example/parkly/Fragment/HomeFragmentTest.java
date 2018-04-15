@@ -44,15 +44,88 @@ public class HomeFragmentTest {
         assertEquals(expected, output);
 
         //---------------------------------------------------------------------------
+
+        input1 = "Orange";
+        input2 = 0;
+        input3 = 30;
+        expected = "1.00" + " \u20ac";
+
+        output = homeFragment.estimatedPrice(input1, input2, input3);
+
+        assertEquals(expected, output);
+
+        //---------------------------------------------------------------------------
+
+        input1 = "Green";
+        input2 = 3;
+        input3 = 0;
+        expected = "0.90" + " \u20ac";
+
+        output = homeFragment.estimatedPrice(input1, input2, input3);
+
+        assertEquals(expected, output);
+
+        //---------------------------------------------------------------------------
+
+        input1 = "Blue";
+        input2 = 6;
+        input3 = 0;
+        expected = "3.60" + " \u20ac";
+
+        output = homeFragment.estimatedPrice(input1, input2, input3);
+
+        assertEquals(expected, output);
+
+        //---------------------------------------------------------------------------
+
+        input1 = "Orange";
+        input2 = 0;
+        input3 = 45;
+        expected = "1.50" + " \u20ac";
+
+        output = homeFragment.estimatedPrice(input1, input2, input3);
+
+        assertEquals(expected, output);
+
+        //---------------------------------------------------------------------------
+
+        input1 = "Red";
+        input2 = 5;
+        input3 = 0;
+        expected = "6.00" + " \u20ac";
+
+        output = homeFragment.estimatedPrice(input1, input2, input3);
+
+        assertEquals(expected, output);
+
+        //---------------------------------------------------------------------------
+
+        input1 = "Yellow";
+        input2 = 3;
+        input3 = 0;
+        expected = "6.00" + " \u20ac";
+
+        output = homeFragment.estimatedPrice(input1, input2, input3);
+
+        assertEquals(expected, output);
+
+        //---------------------------------------------------------------------------
+
+        input1 = "Green";
+        input2 = 10;
+        input3 = 0;
+        expected = "3.00" + " \u20ac";
+
+        output = homeFragment.estimatedPrice(input1, input2, input3);
+
+        assertEquals(expected, output);
+
+        //---------------------------------------------------------------------------
+
     }
 
     @Test
     public void estimatedTime() throws Exception {
-        //Paklausti
-    }
-
-    @Test
-    public void  showPriceAndParkingEnding(){
         //Paklausti
     }
 
