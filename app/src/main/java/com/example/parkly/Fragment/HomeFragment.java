@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.Buffer;
 import java.nio.file.Files;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -83,6 +84,7 @@ public class HomeFragment extends Fragment {
     private TextView ends;
     private TextView timeEnds;
     private TextView confirm;
+    private File file;
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -158,17 +160,17 @@ public class HomeFragment extends Fragment {
         final ArrayList<String> time = new ArrayList<String>();
 
 
-        listZones = (ListView)view.findViewById(R.id.list_zones);
-        listTime = (ListView)view.findViewById(R.id.list_time);
+        listZones = view.findViewById(R.id.list_zones);
+        listTime = view.findViewById(R.id.list_time);
         final ArrayAdapter<String> zonesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, zones);
         final ArrayAdapter<String> timeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, time);
         listZones.setAdapter(zonesAdapter);
         listTime.setAdapter(timeAdapter);
 
 
-        TextView outputPrice = (TextView)view.findViewById(R.id.txt_outputPrice);
+        TextView outputPrice = view.findViewById(R.id.txt_outputPrice);
         tempPrice = outputPrice;
-        TextView outputTime = (TextView)view.findViewById(R.id.txt_outputTime);
+        TextView outputTime = view.findViewById(R.id.txt_outputTime);
         tempTime = outputTime;
 
         disableEnableConfirm();
@@ -399,7 +401,7 @@ public class HomeFragment extends Fragment {
 
         //init View
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, licensePlateList);
-        spin_DefaultCar = (Spinner) view.findViewById(R.id.spin_DefaultCar);
+        spin_DefaultCar = view.findViewById(R.id.spin_DefaultCar);
         registerForContextMenu(spin_DefaultCar);
         spin_DefaultCar.setAdapter(adapter);
     }
@@ -544,7 +546,7 @@ public class HomeFragment extends Fragment {
         ends = getActivity().findViewById(R.id.ends);
         timeEnds = getActivity().findViewById(R.id.endsText);
 
-        File file = getContext().getFileStreamPath("Countdown");
+        file = getContext().getFileStreamPath("Countdown");
 
         if (file.exists()) {
             if(!MainActivity.isTimerCreated) {
@@ -553,8 +555,9 @@ public class HomeFragment extends Fragment {
                     InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                     int parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
+                    String parkingDate = bufferedReader.readLine();
 
-                    startParking(parkingEndsMinutes);
+                    startParking(parkingEndsMinutes, parkingDate);
 
                     if(MainActivity.isTimerCreated) {
 
@@ -602,8 +605,6 @@ public class HomeFragment extends Fragment {
                                     ends.setVisibility(View.VISIBLE);
                                     timeEnds.setVisibility(View.VISIBLE);
 
-                                    File file = getContext().getFileStreamPath("Countdown");
-
                                     if (file.exists()) {
                                         file.delete();
                                         MainActivity.countDownTimer.cancel();
@@ -613,13 +614,19 @@ public class HomeFragment extends Fragment {
 
                                     int parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
 
-                                    startParking(parkingEndsMinutes);
+                                    Date c = Calendar.getInstance().getTime();
+                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                                    String formattedDate = df.format(c);
+
+                                    startParking(parkingEndsMinutes, formattedDate);
 
                                     String fileName = "Countdown";
 
                                     try {
                                         FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
                                         fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
+                                        fileOutputStream.write("\n".getBytes());
+                                        fileOutputStream.write(formattedDate.getBytes());
                                         fileOutputStream.close();
                                     } catch (FileNotFoundException e) {
                                         e.printStackTrace();
@@ -640,17 +647,20 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public void startParking(int parkingEndsMinutes){
+    public void startParking(int parkingEndsMinutes, String parkingDate){
 
         Calendar currentTime = GregorianCalendar.getInstance();
-
         currentTime.setTime(new Date());
-
         timeLeftInMilliseconds = (parkingEndsMinutes - (currentTime.get(Calendar.HOUR_OF_DAY) * 60 + currentTime.get(Calendar.MINUTE))) * 60000;
 
-        if(timeLeftInMilliseconds <= 0){
-            File file = getContext().getFileStreamPath("Countdown");
-            file.delete();
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = df.format(c);
+
+        if(timeLeftInMilliseconds <= 0 || parkingDate.compareTo(formattedDate) != 0){
+            if(file.exists()) {
+                file.delete();
+            }
             timeLeftInMilliseconds = -1;
             return;
         }
@@ -666,8 +676,9 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                File file = getContext().getFileStreamPath("Countdown");
-                file.delete();
+                if(file.exists()) {
+                    file.delete();
+                }
                 remaining.setVisibility(View.INVISIBLE);
                 timeLeft.setVisibility(View.INVISIBLE);
                 ends.setVisibility(View.INVISIBLE);
@@ -680,8 +691,8 @@ public class HomeFragment extends Fragment {
 
         int timeLeftInMinutes = (int) timeLeftInMilliseconds / 60000;
 
-        int hours = (int) timeLeftInMinutes / 60;
-        int minutes = (int) timeLeftInMinutes % 60;
+        int hours = timeLeftInMinutes / 60;
+        int minutes = timeLeftInMinutes % 60;
         int seconds = (int) timeLeftInMilliseconds % 60000 / 1000;
 
         String timeLeftText;
