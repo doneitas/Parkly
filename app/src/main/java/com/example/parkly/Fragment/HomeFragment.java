@@ -594,7 +594,6 @@ public class HomeFragment extends Fragment {
         }
 
         final MediaPlayer confirmSoundMP = MediaPlayer.create(getActivity(), R.raw.sound.mp3);
-
         Button playConfirmSound = (Button) view.findViewById(R.id.btn_homeConfirm);
 
         confirm.setOnClickListener(new View.OnClickListener() {
