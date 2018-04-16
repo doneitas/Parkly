@@ -593,8 +593,7 @@ public class HomeFragment extends Fragment {
             timeEnds.setVisibility(View.INVISIBLE);
         }
 
-        final MediaPlayer confirmSoundMP = MediaPlayer.create(getActivity(), R.raw.sound.mp3);
-        Button playConfirmSound = (Button) view.findViewById(R.id.btn_homeConfirm);
+        final MediaPlayer confirmSoundMP = MediaPlayer.create(getActivity(), R.raw.sound);
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -609,6 +608,8 @@ public class HomeFragment extends Fragment {
                                     timeLeft.setVisibility(View.VISIBLE);
                                     ends.setVisibility(View.VISIBLE);
                                     timeEnds.setVisibility(View.VISIBLE);
+
+                                    confirmSoundMP.start();
 
                                     if (file.exists()) {
                                         file.delete();
