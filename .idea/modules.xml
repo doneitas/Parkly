@@ -3,15 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Parkly.iml" filepath="$PROJECT_DIR$/Parkly.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../../Marius/AndroidStudio/Parkly3/Parkly.iml" filepath="$PROJECT_DIR$/../../../../Marius/AndroidStudio/Parkly3/Parkly.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../../Marius/AndroidStudio/Parkly2/Parkly.iml" filepath="$PROJECT_DIR$/../../../../Marius/AndroidStudio/Parkly2/Parkly.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../../Marius/AndroidStudio5/Parkly/Parkly.iml" filepath="$PROJECT_DIR$/../../../../Marius/AndroidStudio5/Parkly/Parkly.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Parkly.iml" filepath="$PROJECT_DIR$/Parkly.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../../donvel/AndroidStudioProjects/Parkly/Parkly2.iml" filepath="$PROJECT_DIR$/../../../../donvel/AndroidStudioProjects/Parkly/Parkly2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../../donvel/AndroidStudioProjects/Parkly/Parkly3.iml" filepath="$PROJECT_DIR$/../../../../donvel/AndroidStudioProjects/Parkly/Parkly3.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../../Marius/AndroidStudio/Parkly3/app/app.iml" filepath="$PROJECT_DIR$/../../../../Marius/AndroidStudio/Parkly3/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../../../../Marius/AndroidStudio5/Parkly/app/app.iml" filepath="$PROJECT_DIR$/../../../../Marius/AndroidStudio5/Parkly/app/app.iml" />
     </modules>
   </component>
 </project>
