@@ -75,7 +75,7 @@ public class addCarActivity extends Activity {
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String value = txt_plate.getText().toString();
+                final String value = txt_plate.getText().toString().toUpperCase();
                 if(isNumberCorrect(value)) {
                     Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
                         @Override
