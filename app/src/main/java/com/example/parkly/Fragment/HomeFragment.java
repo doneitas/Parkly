@@ -3,6 +3,8 @@ package com.example.parkly.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -580,6 +583,8 @@ public class HomeFragment extends Fragment {
             timeEnds.setVisibility(View.INVISIBLE);
         }
 
+        final MediaPlayer confirmSoundMP = MediaPlayer.create(getActivity(), R.raw.sound);
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -593,6 +598,8 @@ public class HomeFragment extends Fragment {
                                     timeLeft.setVisibility(View.VISIBLE);
                                     ends.setVisibility(View.VISIBLE);
                                     timeEnds.setVisibility(View.VISIBLE);
+
+                                    confirmSoundMP.start();
 
                                     if (file.exists()) {
                                         file.delete();
