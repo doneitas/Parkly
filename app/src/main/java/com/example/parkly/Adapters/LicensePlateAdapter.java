@@ -1,4 +1,4 @@
-package com.example.parkly.DataBase;
+package com.example.parkly.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
