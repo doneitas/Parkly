@@ -369,7 +369,7 @@ public class HomeFragment extends Fragment {
             case "Red":
             case "Yellow":
             {
-                 //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
+                //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
                 if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
                     if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
                         Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
