@@ -125,10 +125,11 @@ public class CarsFragment extends Fragment {
                                     deleteSelectedLicensePlates();
                                     deleteClicked = false;
                                     refreshAdapter(view);
-                                    database(view);
-                                    loadData();
                                     btn_add.setClickable(true);
                                     btn_add.setEnabled(true);
+                                    database(view);
+                                    loadData();
+
                                 }
                             }
 
