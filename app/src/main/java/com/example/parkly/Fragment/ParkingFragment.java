@@ -1,13 +1,22 @@
 package com.example.parkly.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.example.parkly.Adapters.ExpandableListAdapter;
 import com.example.parkly.R;
@@ -34,6 +43,7 @@ public class ParkingFragment extends Fragment {
     private List<String> zoneList;
     private HashMap<String, List<String>> addressList;
 
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -47,6 +57,45 @@ public class ParkingFragment extends Fragment {
 
 
         lst_zones.setAdapter(adapter);
+        /*lst_zones.setOnLongClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
+            {
+
+
+                return false;
+            }
+        });*/
+
+        lst_zones.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+                    int childPosition = ExpandableListView.getPackedPositionChild(id);
+
+                    final String address = addressList.get(zoneList.get(groupPosition)).get(childPosition);
+                    new AlertDialog.Builder(getActivity())
+                            .setMessage("Get location (Google maps)")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse("geo:0,0?q="+address+"+Kaunas"));
+                                    startActivity(intent);
+                                }
+                            }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+                    return true;
+                }
+
+                return false;
+            }
+        });
     }
 
     private void prepareData()
@@ -72,7 +121,7 @@ public class ParkingFragment extends Fragment {
         greenZones.add("Bažnyčios g.");
         greenZones.add("Karo Ligoninės g.");
         greenZones.add("Trakų g.");
-        greenZones.add(" Savanorių pr.");
+        greenZones.add("Savanorių pr.");
         greenZones.add("Tvirtovės al.");
 
         blueZones.add("Savanorių pr.");
@@ -171,5 +220,4 @@ public class ParkingFragment extends Fragment {
         addressList.put(zoneList.get(3), yellowZones);
         addressList.put(zoneList.get(4), orangeZones);
     }
-
 }
