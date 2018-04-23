@@ -76,7 +76,7 @@ public class ParkingFragment extends Fragment {
 
                     final String address = addressList.get(zoneList.get(groupPosition)).get(childPosition);
                     new AlertDialog.Builder(getActivity())
-                            .setMessage("Get location (Google maps)")
+                            .setMessage("Do you really want to get the location of " + address + " ?")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
