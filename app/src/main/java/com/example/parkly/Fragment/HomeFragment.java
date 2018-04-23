@@ -556,18 +556,19 @@ public class HomeFragment extends Fragment {
         file = getContext().getFileStreamPath("Countdown");
 
         if (file.exists()) {
-            if(!MainActivity.isTimerCreated) {
-                try {
-                    FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
-                    InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
-                    String parkingDate = bufferedReader.readLine();
-                    currentZone = bufferedReader.readLine();
+            try {
 
+                FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
+                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
+                String parkingDate = bufferedReader.readLine();
+                currentZone = bufferedReader.readLine();
+
+                if (!MainActivity.isTimerCreated) {
                     startParking(parkingDate);
 
-                    if(MainActivity.isTimerCreated) {
+                    if (MainActivity.isTimerCreated) {
 
                         String timeEndsText;
 
@@ -578,18 +579,17 @@ public class HomeFragment extends Fragment {
                         timeEndsText += parkingEndsMinutes % 60;
 
                         timeEnds.setText(timeEndsText);
-                    }
-                    else{
+                    } else {
                         remaining.setVisibility(View.INVISIBLE);
                         timeLeft.setVisibility(View.INVISIBLE);
                         ends.setVisibility(View.INVISIBLE);
                         timeEnds.setVisibility(View.INVISIBLE);
                     }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         else {
