@@ -145,11 +145,11 @@ public class HomeFragment extends Fragment {
     public void showPriceAndParkingEnding(View view)
     {
         final ArrayList<String> zones = new ArrayList<String>();
-        zones.add("Green (0.30€/h)");
-        zones.add("Blue (0.60€/h)");
-        zones.add("Red (1.20€/h)");
-        zones.add("Yellow (2€/h)");
-        zones.add("Orange (2€/h)");
+        zones.add("Green 0.30€/h");
+        zones.add("Blue 0.60€/h");
+        zones.add("Red 1.20€/h");
+        zones.add("Yellow 2€/h");
+        zones.add("Orange 2€/h");
         final ArrayList<String> time = new ArrayList<String>();
 
 
@@ -187,7 +187,7 @@ public class HomeFragment extends Fragment {
 
 
                 switch (chosenZone){
-                    case "Green (0.30€/h)":{
+                    case "Green 0.30€/h":{
                         time.removeAll(time);
                         time.add("1  h  0 min");
                         time.add("2  h  0 min");
@@ -202,7 +202,7 @@ public class HomeFragment extends Fragment {
                         chosenMinutes = -1;
                         break;
                     }
-                    case "Blue (0.60€/h)":{
+                    case "Blue 0.60€/h":{
                         time.removeAll(time);
                         time.add("0  h 30 min");
                         time.add("1  h  0 min");
@@ -297,31 +297,31 @@ public class HomeFragment extends Fragment {
         double price = 0;
         switch(color)
         {
-            case "Orange (2€/h)":
+            case "Orange 2€/h":
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Yellow (2€/h)":
+            case "Yellow 2€/h":
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Blue (0.60€/h)":
+            case "Blue 0.60€/h":
             {
                 price = 0.6 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Red (1.20€/h)":
+            case "Red 1.20€/h":
             {
                 price = 1.2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Green (0.30€/h)":
+            case "Green 0.30€/h":
             {
                 price = 0.3 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
@@ -359,7 +359,7 @@ public class HomeFragment extends Fragment {
         currentTime.setTime(new Date());
         switch(color)
         {
-            case "Orange (2€/h)":
+            case "Orange 2€/h":
             {
                 if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
                 {
@@ -368,10 +368,10 @@ public class HomeFragment extends Fragment {
                 }
                 break;
             }
-            case "Green (0.30€/h)":
-            case "Blue (0.60€/h)":
-            case "Red (1.20€/h)":
-            case "Yellow (2€/h)":
+            case "Green 0.30€/h":
+            case "Blue 0.60€/h":
+            case "Red 1.20€/h":
+            case "Yellow 2€/h":
             {
                 if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8)
                 {
