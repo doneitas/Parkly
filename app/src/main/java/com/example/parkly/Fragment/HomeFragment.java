@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
     private TextView timeEnds;
     private TextView confirm;
     private File file;
-    private String currentZone = null;
+    private String currentZone = "";
     private int parkingEndsMinutes = -1;
 
     //Adapter
@@ -103,9 +103,9 @@ public class HomeFragment extends Fragment {
         init(view);
         database(view);
         loadData();
-        showPriceAndParkingEnding(view);
         checkCarRegistration();
         confirmParking(view);
+        showPriceAndParkingEnding(view);
     }
 
     public void init(View view){
@@ -280,12 +280,8 @@ public class HomeFragment extends Fragment {
                     chosenMinutes = -1;
                 }
                 else if (chosenZone != "") {
-                    if (chosenZone == currentZone) {
-                        minutes += parkingEndsMinutes;
-
-                        parkingEnds = estimatedTime(minutes/60, minutes%60);
-                        finalPrice = estimatedPrice(chosenZone, minutes/60, minutes%60);
-                    }
+                    parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
+                    finalPrice = estimatedPrice(chosenZone, chosenMinutes / 60, chosenMinutes % 60);
                 }
                 tempPrice.setText(finalPrice);
                 tempTime.setText(parkingEnds);
@@ -346,10 +342,17 @@ public class HomeFragment extends Fragment {
 
     public String estimatedTime(int chosenHour, int chosenMinute)
     {
-        //numatoma parkavimosi pabaiga
         Calendar currentTime = GregorianCalendar.getInstance();
-        //nustatomas esamas laikas
-        currentTime.setTime(new Date());
+        Date date = new Date();
+        if(chosenZone.compareTo(currentZone) == 0){
+            currentTime.set(Calendar.HOUR_OF_DAY, parkingEndsMinutes/60);
+            currentTime.set(Calendar.MINUTE, parkingEndsMinutes%60);
+            currentTime.set(Calendar.SECOND,0);
+            currentTime.set(Calendar.MILLISECOND,0);
+
+            date = currentTime.getTime();
+        }
+        currentTime.setTime(date);
         currentTime.add(Calendar.HOUR_OF_DAY, chosenHour);
         currentTime.add(Calendar.MINUTE, chosenMinute);
 
@@ -647,6 +650,11 @@ public class HomeFragment extends Fragment {
 
                                     timeEnds.setText(tempTime.getText().toString());
                                     currentZone = chosenZone;
+
+                                    if(chosenMinutes != -1) {
+                                        parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
+                                        tempTime.setText(parkingEnds);
+                                    }
                                 }
                             }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
@@ -681,6 +689,8 @@ public class HomeFragment extends Fragment {
                 file.delete();
             }
             timeLeftInMilliseconds = -1;
+            chosenZone = "";
+            parkingEndsMinutes = -1;
             return;
         }
 
@@ -697,6 +707,9 @@ public class HomeFragment extends Fragment {
             public void onFinish() {
                 if(file.exists()) {
                     file.delete();
+                    timeLeftInMilliseconds = -1;
+                    currentZone = "";
+                    parkingEndsMinutes = -1;
                 }
                 remaining.setVisibility(View.INVISIBLE);
                 timeLeft.setVisibility(View.INVISIBLE);
