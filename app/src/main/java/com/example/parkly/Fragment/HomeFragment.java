@@ -604,7 +604,7 @@ public class HomeFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(true/*!needsPopUp(chosenZone)*/) {
+                if(!needsPopUp(chosenZone)) {
                     new AlertDialog.Builder(getActivity())
                             .setMessage("Do you really want to confirm this parking?")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
