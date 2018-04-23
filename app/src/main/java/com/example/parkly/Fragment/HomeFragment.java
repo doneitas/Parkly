@@ -77,6 +77,8 @@ public class HomeFragment extends Fragment {
     private TextView timeEnds;
     private TextView confirm;
     private File file;
+    private String currentZone = null;
+    private int parkingEndsMinutes = -1;
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -265,21 +267,25 @@ public class HomeFragment extends Fragment {
                 String tempChosenMinutes = ((TextView) view).getText().toString();
 
                 Scanner scan = new Scanner(tempChosenMinutes).useDelimiter("\\s+");
-                int hour = scan.nextInt();
+                int minutes = scan.nextInt() * 60;
                 scan.next();
-                int minute = scan.nextInt();
+                minutes += scan.nextInt();
                 scan.close();
 
                 int previousMinutes = chosenMinutes;
-                chosenMinutes = (hour*60)+minute;
+                chosenMinutes = minutes;
 
                 if (previousMinutes == chosenMinutes){
                     listTime.setItemChecked(listTime.getCheckedItemPosition(), false);
                     chosenMinutes = -1;
                 }
-                else if (chosenZone != ""){
-                    parkingEnds = estimatedTime(hour, minute);
-                    finalPrice = estimatedPrice(chosenZone, hour, minute);
+                else if (chosenZone != "") {
+                    if (chosenZone == currentZone) {
+                        minutes += parkingEndsMinutes;
+
+                        parkingEnds = estimatedTime(minutes/60, minutes%60);
+                        finalPrice = estimatedPrice(chosenZone, minutes/60, minutes%60);
+                    }
                 }
                 tempPrice.setText(finalPrice);
                 tempTime.setText(parkingEnds);
@@ -552,10 +558,11 @@ public class HomeFragment extends Fragment {
                     FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
                     InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    int parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
+                    parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
                     String parkingDate = bufferedReader.readLine();
+                    currentZone = bufferedReader.readLine();
 
-                    startParking(parkingEndsMinutes, parkingDate);
+                    startParking(parkingDate);
 
                     if(MainActivity.isTimerCreated) {
 
@@ -614,13 +621,13 @@ public class HomeFragment extends Fragment {
 
                                     Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
 
-                                    int parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
+                                    parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
 
                                     Date c = Calendar.getInstance().getTime();
                                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                                     String formattedDate = df.format(c);
 
-                                    startParking(parkingEndsMinutes, formattedDate);
+                                    startParking(formattedDate);
 
                                     String fileName = "Countdown";
 
@@ -629,6 +636,8 @@ public class HomeFragment extends Fragment {
                                         fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
                                         fileOutputStream.write("\n".getBytes());
                                         fileOutputStream.write(formattedDate.getBytes());
+                                        fileOutputStream.write("\n".getBytes());
+                                        fileOutputStream.write(chosenZone.getBytes());
                                         fileOutputStream.close();
                                     } catch (FileNotFoundException e) {
                                         e.printStackTrace();
@@ -637,6 +646,7 @@ public class HomeFragment extends Fragment {
                                     }
 
                                     timeEnds.setText(tempTime.getText().toString());
+                                    currentZone = chosenZone;
                                 }
                             }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
@@ -656,7 +666,7 @@ public class HomeFragment extends Fragment {
         return  timeLeftInMilliseconds;
     }
 
-    public void startParking(int parkingEndsMinutes, String parkingDate){
+    public void startParking(String parkingDate){
 
         Calendar currentTime = GregorianCalendar.getInstance();
         currentTime.setTime(new Date());
