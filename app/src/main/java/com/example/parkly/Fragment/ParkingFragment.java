@@ -109,11 +109,11 @@ public class ParkingFragment extends Fragment {
         List<String> yellowZones = new ArrayList<>();
         List<String> orangeZones = new ArrayList<>();
 
-        zoneList.add("Green (0.30€/h)");
-        zoneList.add("Blue (0.60€/h)");
-        zoneList.add("Red (1.20€/h)");
-        zoneList.add("Yellow (2€/h)");
-        zoneList.add("Orange (2€/h)");
+        zoneList.add("Green 0.3€/h");
+        zoneList.add("Blue 0.6€/h");
+        zoneList.add("Red 1.2€/h");
+        zoneList.add("Yellow 2€/h");
+        zoneList.add("Orange 2€/h");
 
         greenZones.add("Kaunakiemio g.");
         greenZones.add("Šiaulių g.");
