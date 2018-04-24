@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -67,7 +65,8 @@ public class HomeFragment extends Fragment {
     public String chosenZone = "";
     public String finalPrice;
     public String parkingEnds;
-    public String defaultNumber;
+    public String chosenDefaultNumber = "";
+    public String currentDefaultNumber = "";
     public List<LicensePlate> tempLicensePlate;
     public boolean isDefaultSelected;
     private long timeLeftInMilliseconds;
@@ -77,6 +76,8 @@ public class HomeFragment extends Fragment {
     private TextView timeEnds;
     private TextView confirm;
     private File file;
+    private String currentZone = "";
+    private int parkingEndsMinutes = -1;
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -101,9 +102,9 @@ public class HomeFragment extends Fragment {
         init(view);
         database(view);
         loadData();
-        showPriceAndParkingEnding(view);
         checkCarRegistration();
         confirmParking(view);
+        showPriceAndParkingEnding(view);
     }
 
     public void init(View view){
@@ -115,7 +116,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void disableEnableConfirm(){
-        if (tempPrice.getText().toString().compareTo("-") == 0 || !isDefaultSelected){
+        if (tempPrice.getText().toString().compareTo("-") == 0){
             confirm.setClickable(false);
             confirm.setEnabled(false);
         }
@@ -141,14 +142,15 @@ public class HomeFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
+
     public void showPriceAndParkingEnding(View view)
     {
         final ArrayList<String> zones = new ArrayList<String>();
-        zones.add("Green");
-        zones.add("Blue");
-        zones.add("Red");
-        zones.add("Yellow");
-        zones.add("Orange");
+        zones.add("Green 0.3€/h");
+        zones.add("Blue 0.6€/h");
+        zones.add("Red 1.2€/h");
+        zones.add("Yellow 2€/h");
+        zones.add("Orange 2€/h");
         final ArrayList<String> time = new ArrayList<String>();
 
 
@@ -186,7 +188,7 @@ public class HomeFragment extends Fragment {
 
 
                 switch (chosenZone){
-                    case "Green":{
+                    case "Green 0.3€/h":{
                         time.removeAll(time);
                         time.add("1  h  0 min");
                         time.add("2  h  0 min");
@@ -201,7 +203,7 @@ public class HomeFragment extends Fragment {
                         chosenMinutes = -1;
                         break;
                     }
-                    case "Blue":{
+                    case "Blue 0.6€/h":{
                         time.removeAll(time);
                         time.add("0  h 30 min");
                         time.add("1  h  0 min");
@@ -264,21 +266,21 @@ public class HomeFragment extends Fragment {
                 String tempChosenMinutes = ((TextView) view).getText().toString();
 
                 Scanner scan = new Scanner(tempChosenMinutes).useDelimiter("\\s+");
-                int hour = scan.nextInt();
+                int minutes = scan.nextInt() * 60;
                 scan.next();
-                int minute = scan.nextInt();
+                minutes += scan.nextInt();
                 scan.close();
 
                 int previousMinutes = chosenMinutes;
-                chosenMinutes = (hour*60)+minute;
+                chosenMinutes = minutes;
 
                 if (previousMinutes == chosenMinutes){
                     listTime.setItemChecked(listTime.getCheckedItemPosition(), false);
                     chosenMinutes = -1;
                 }
-                else if (chosenZone != ""){
-                    parkingEnds = estimatedTime(hour, minute);
-                    finalPrice = estimatedPrice(chosenZone, hour, minute);
+                else if (chosenZone != "") {
+                    parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
+                    finalPrice = estimatedPrice(chosenZone, chosenMinutes / 60, chosenMinutes % 60);
                 }
                 tempPrice.setText(finalPrice);
                 tempTime.setText(parkingEnds);
@@ -296,31 +298,31 @@ public class HomeFragment extends Fragment {
         double price = 0;
         switch(color)
         {
-            case "Orange":
+            case "Orange 2€/h":
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Yellow":
+            case "Yellow 2€/h":
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Blue":
+            case "Blue 0.6€/h":
             {
                 price = 0.6 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Red":
+            case "Red 1.2€/h":
             {
                 price = 1.2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Green":
+            case "Green 0.3€/h":
             {
                 price = 0.3 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
@@ -339,10 +341,17 @@ public class HomeFragment extends Fragment {
 
     public String estimatedTime(int chosenHour, int chosenMinute)
     {
-        //numatoma parkavimosi pabaiga
         Calendar currentTime = GregorianCalendar.getInstance();
-        //nustatomas esamas laikas
-        currentTime.setTime(new Date());
+        Date date = new Date();
+        if(chosenZone.compareTo(currentZone) == 0 && chosenDefaultNumber.compareTo(currentDefaultNumber) == 0){
+            currentTime.set(Calendar.HOUR_OF_DAY, parkingEndsMinutes/60);
+            currentTime.set(Calendar.MINUTE, parkingEndsMinutes%60);
+            currentTime.set(Calendar.SECOND,0);
+            currentTime.set(Calendar.MILLISECOND,0);
+
+            date = currentTime.getTime();
+        }
+        currentTime.setTime(date);
         currentTime.add(Calendar.HOUR_OF_DAY, chosenHour);
         currentTime.add(Calendar.MINUTE, chosenMinute);
 
@@ -351,13 +360,14 @@ public class HomeFragment extends Fragment {
         return totalTime;
     }
 
+
     public boolean needsPopUp (String color)
     {
         Calendar currentTime = GregorianCalendar.getInstance();
         currentTime.setTime(new Date());
         switch(color)
         {
-            case "Orange":
+            case "Orange 2€/h":
             {
                 if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
                 {
@@ -366,13 +376,17 @@ public class HomeFragment extends Fragment {
                 }
                 break;
             }
-            case "Green":
-            case "Blue":
-            case "Red":
-            case "Yellow":
+            case "Green 0.3€/h":
+            case "Blue 0.6€/h":
+            case "Red 1.2€/h":
+            case "Yellow 2€/h":
             {
-                if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8)
-                {
+                  //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
+                if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
+                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE today", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
                     Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
                     return true;
                 }
@@ -432,7 +446,6 @@ public class HomeFragment extends Fragment {
                         if(notSelected && spin_DefaultCar.getSelectedItemId() < licensePlateList.size() - 1) spin_DefaultCar.setSelection((int)spin_DefaultCar.getSelectedItemId() - 1);
                     }
                 }
-                disableEnableConfirm();
             }
 
             @Override
@@ -448,7 +461,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void subscribe(ObservableEmitter<Object> e) {
 
-                defaultNumber = licensePlateRepository.findDefault().getNumber();
+                chosenDefaultNumber = licensePlateRepository.findDefault().getNumber();
                 isDefaultSelected = licensePlateRepository.findDefault().getCurrent();
 
                 spin_DefaultCar.post(new Runnable() {
@@ -458,7 +471,7 @@ public class HomeFragment extends Fragment {
                         spin_DefaultCar.clearFocus();
 
                         for (int i=0; i < licensePlateList.size(); i++){
-                            if (defaultNumber.compareTo(licensePlateList.get(i)) == 0){
+                            if (chosenDefaultNumber.compareTo(licensePlateList.get(i)) == 0){
                                 spin_DefaultCar.setSelection(i);
                             }
                         }
@@ -490,6 +503,7 @@ public class HomeFragment extends Fragment {
 
         if(!isDefaultSelected){
             licensePlateList.add("Not selected");
+            chosenDefaultNumber = "";
         }
 
         for (int i = 0; i < licensePlates.size(); i++) {
@@ -512,6 +526,14 @@ public class HomeFragment extends Fragment {
                 licensePlate.setCurrent(true);
                 licensePlateRepository.updateLicensePlate(licensePlate);
                 isDefaultSelected = licensePlateRepository.findDefault().getCurrent();
+                chosenDefaultNumber = licensePlateRepository.findDefault().getNumber();
+
+                if (chosenMinutes != -1) {
+                    chosenDefaultNumber = licensePlateRepository.findDefault().getNumber();
+                    parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
+                    tempTime.setText(parkingEnds);
+                }
+
                 e.onComplete();
             }
         })
@@ -541,17 +563,20 @@ public class HomeFragment extends Fragment {
         file = getContext().getFileStreamPath("Countdown");
 
         if (file.exists()) {
-            if(!MainActivity.isTimerCreated) {
-                try {
-                    FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
-                    InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    int parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
-                    String parkingDate = bufferedReader.readLine();
+            try {
 
-                    startParking(parkingEndsMinutes, parkingDate);
+                FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
+                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
+                String parkingDate = bufferedReader.readLine();
+                currentZone = bufferedReader.readLine();
+                currentDefaultNumber = bufferedReader.readLine();
 
-                    if(MainActivity.isTimerCreated) {
+                if (!MainActivity.isTimerCreated) {
+                    startParking(parkingDate);
+
+                    if (MainActivity.isTimerCreated) {
 
                         String timeEndsText;
 
@@ -562,18 +587,17 @@ public class HomeFragment extends Fragment {
                         timeEndsText += parkingEndsMinutes % 60;
 
                         timeEnds.setText(timeEndsText);
-                    }
-                    else{
+                    } else {
                         remaining.setVisibility(View.INVISIBLE);
                         timeLeft.setVisibility(View.INVISIBLE);
                         ends.setVisibility(View.INVISIBLE);
                         timeEnds.setVisibility(View.INVISIBLE);
                     }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         else {
@@ -589,55 +613,69 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!needsPopUp(chosenZone)) {
-                    new AlertDialog.Builder(getActivity())
-                            .setMessage("Do you really want to confirm this parking?")
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    remaining.setVisibility(View.VISIBLE);
-                                    timeLeft.setVisibility(View.VISIBLE);
-                                    ends.setVisibility(View.VISIBLE);
-                                    timeEnds.setVisibility(View.VISIBLE);
+                    if(isDefaultSelected) {
+                        new AlertDialog.Builder(getActivity())
+                                .setMessage("Do you really want to confirm this parking?")
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        remaining.setVisibility(View.VISIBLE);
+                                        timeLeft.setVisibility(View.VISIBLE);
+                                        ends.setVisibility(View.VISIBLE);
+                                        timeEnds.setVisibility(View.VISIBLE);
 
-                                    confirmSoundMP.start();
+                                        confirmSoundMP.start();
 
-                                    if (file.exists()) {
-                                        file.delete();
-                                        MainActivity.countDownTimer.cancel();
-                                    }
+                                        if (file.exists()) {
+                                            file.delete();
+                                            MainActivity.countDownTimer.cancel();
+                                        }
 
-                                    Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
+                                        Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
 
-                                    int parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
+                                        parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
 
-                                    Date c = Calendar.getInstance().getTime();
-                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                                    String formattedDate = df.format(c);
+                                        Date c = Calendar.getInstance().getTime();
+                                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                                        String formattedDate = df.format(c);
 
-                                    startParking(parkingEndsMinutes, formattedDate);
+                                        startParking(formattedDate);
 
-                                    String fileName = "Countdown";
+                                        String fileName = "Countdown";
 
-                                    try {
-                                        FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
-                                        fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
-                                        fileOutputStream.write("\n".getBytes());
-                                        fileOutputStream.write(formattedDate.getBytes());
-                                        fileOutputStream.close();
-                                    } catch (FileNotFoundException e) {
-                                        e.printStackTrace();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                        try {
+                                            FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
+                                            fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
+                                            fileOutputStream.write("\n".getBytes());
+                                            fileOutputStream.write(formattedDate.getBytes());
+                                            fileOutputStream.write("\n".getBytes());
+                                            fileOutputStream.write(chosenZone.getBytes());
+                                            fileOutputStream.write("\n".getBytes());
+                                            fileOutputStream.write(chosenDefaultNumber.getBytes());
+                                            fileOutputStream.close();
+                                        } catch (FileNotFoundException e) {
+                                            e.printStackTrace();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
 
                                     timeEnds.setText(tempTime.getText().toString());
-                                }
-                            }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create().show();
+                                    currentZone = chosenZone;
+                                    currentDefaultNumber = chosenDefaultNumber;
+
+                                        if (chosenMinutes != -1) {
+                                            parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
+                                            tempTime.setText(parkingEnds);
+                                        }
+                                    }
+                                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+                    }
+                    else Toast.makeText(getActivity(), "Please select a default car", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -650,7 +688,7 @@ public class HomeFragment extends Fragment {
         return  timeLeftInMilliseconds;
     }
 
-    public void startParking(int parkingEndsMinutes, String parkingDate){
+    public void startParking(String parkingDate){
 
         Calendar currentTime = GregorianCalendar.getInstance();
         currentTime.setTime(new Date());
@@ -665,6 +703,9 @@ public class HomeFragment extends Fragment {
                 file.delete();
             }
             timeLeftInMilliseconds = -1;
+            currentZone = "";
+            parkingEndsMinutes = -1;
+            currentDefaultNumber = "";
             return;
         }
 
@@ -681,6 +722,10 @@ public class HomeFragment extends Fragment {
             public void onFinish() {
                 if(file.exists()) {
                     file.delete();
+                    timeLeftInMilliseconds = -1;
+                    currentZone = "";
+                    parkingEndsMinutes = -1;
+                    currentDefaultNumber = "";
                 }
                 remaining.setVisibility(View.INVISIBLE);
                 timeLeft.setVisibility(View.INVISIBLE);
