@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void disableEnableConfirm(){
-        if (tempPrice.getText().toString().compareTo("-") == 0 || !isDefaultSelected){
+        if (tempPrice.getText().toString().compareTo("-") == 0){
             confirm.setClickable(false);
             confirm.setEnabled(false);
         }
@@ -447,7 +447,6 @@ public class HomeFragment extends Fragment {
                         if(notSelected && spin_DefaultCar.getSelectedItemId() < licensePlateList.size() - 1) spin_DefaultCar.setSelection((int)spin_DefaultCar.getSelectedItemId() - 1);
                     }
                 }
-                disableEnableConfirm();
             }
 
             @Override
@@ -605,63 +604,66 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!needsPopUp(chosenZone)) {
-                    new AlertDialog.Builder(getActivity())
-                            .setMessage("Do you really want to confirm this parking?")
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    remaining.setVisibility(View.VISIBLE);
-                                    timeLeft.setVisibility(View.VISIBLE);
-                                    ends.setVisibility(View.VISIBLE);
-                                    timeEnds.setVisibility(View.VISIBLE);
+                    if(isDefaultSelected) {
+                        new AlertDialog.Builder(getActivity())
+                                .setMessage("Do you really want to confirm this parking?")
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        remaining.setVisibility(View.VISIBLE);
+                                        timeLeft.setVisibility(View.VISIBLE);
+                                        ends.setVisibility(View.VISIBLE);
+                                        timeEnds.setVisibility(View.VISIBLE);
 
-                                    confirmSoundMP.start();
+                                        confirmSoundMP.start();
 
-                                    if (file.exists()) {
-                                        file.delete();
-                                        MainActivity.countDownTimer.cancel();
-                                    }
+                                        if (file.exists()) {
+                                            file.delete();
+                                            MainActivity.countDownTimer.cancel();
+                                        }
 
-                                    Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
+                                        Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
 
-                                    parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
+                                        parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
 
-                                    Date c = Calendar.getInstance().getTime();
-                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                                    String formattedDate = df.format(c);
+                                        Date c = Calendar.getInstance().getTime();
+                                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                                        String formattedDate = df.format(c);
 
-                                    startParking(formattedDate);
+                                        startParking(formattedDate);
 
-                                    String fileName = "Countdown";
+                                        String fileName = "Countdown";
 
-                                    try {
-                                        FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
-                                        fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
-                                        fileOutputStream.write("\n".getBytes());
-                                        fileOutputStream.write(formattedDate.getBytes());
-                                        fileOutputStream.write("\n".getBytes());
-                                        fileOutputStream.write(chosenZone.getBytes());
-                                        fileOutputStream.close();
-                                    } catch (FileNotFoundException e) {
-                                        e.printStackTrace();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                        try {
+                                            FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
+                                            fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
+                                            fileOutputStream.write("\n".getBytes());
+                                            fileOutputStream.write(formattedDate.getBytes());
+                                            fileOutputStream.write("\n".getBytes());
+                                            fileOutputStream.write(chosenZone.getBytes());
+                                            fileOutputStream.close();
+                                        } catch (FileNotFoundException e) {
+                                            e.printStackTrace();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
 
                                     timeEnds.setText(tempTime.getText().toString());
                                     currentZone = chosenZone;
 
-                                    if(chosenMinutes != -1) {
-                                        parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
-                                        tempTime.setText(parkingEnds);
+                                        if (chosenMinutes != -1) {
+                                            parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
+                                            tempTime.setText(parkingEnds);
+                                        }
                                     }
-                                }
-                            }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).create().show();
+                                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+                    }
+                    else Toast.makeText(getActivity(), "Please select a default car", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -689,7 +691,7 @@ public class HomeFragment extends Fragment {
                 file.delete();
             }
             timeLeftInMilliseconds = -1;
-            chosenZone = "";
+            currentZone = "";
             parkingEndsMinutes = -1;
             return;
         }
