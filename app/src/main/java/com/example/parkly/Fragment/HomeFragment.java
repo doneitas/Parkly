@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -67,7 +65,8 @@ public class HomeFragment extends Fragment {
     public String chosenZone = "";
     public String finalPrice;
     public String parkingEnds;
-    public String defaultNumber;
+    public String chosenDefaultNumber = "";
+    public String currentDefaultNumber = "";
     public List<LicensePlate> tempLicensePlate;
     public boolean isDefaultSelected;
     private long timeLeftInMilliseconds;
@@ -344,7 +343,7 @@ public class HomeFragment extends Fragment {
     {
         Calendar currentTime = GregorianCalendar.getInstance();
         Date date = new Date();
-        if(chosenZone.compareTo(currentZone) == 0){
+        if(chosenZone.compareTo(currentZone) == 0 && chosenDefaultNumber.compareTo(currentDefaultNumber) == 0){
             currentTime.set(Calendar.HOUR_OF_DAY, parkingEndsMinutes/60);
             currentTime.set(Calendar.MINUTE, parkingEndsMinutes%60);
             currentTime.set(Calendar.SECOND,0);
@@ -462,7 +461,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void subscribe(ObservableEmitter<Object> e) {
 
-                defaultNumber = licensePlateRepository.findDefault().getNumber();
+                chosenDefaultNumber = licensePlateRepository.findDefault().getNumber();
                 isDefaultSelected = licensePlateRepository.findDefault().getCurrent();
 
                 spin_DefaultCar.post(new Runnable() {
@@ -472,7 +471,7 @@ public class HomeFragment extends Fragment {
                         spin_DefaultCar.clearFocus();
 
                         for (int i=0; i < licensePlateList.size(); i++){
-                            if (defaultNumber.compareTo(licensePlateList.get(i)) == 0){
+                            if (chosenDefaultNumber.compareTo(licensePlateList.get(i)) == 0){
                                 spin_DefaultCar.setSelection(i);
                             }
                         }
@@ -504,6 +503,7 @@ public class HomeFragment extends Fragment {
 
         if(!isDefaultSelected){
             licensePlateList.add("Not selected");
+            chosenDefaultNumber = "";
         }
 
         for (int i = 0; i < licensePlates.size(); i++) {
@@ -526,6 +526,14 @@ public class HomeFragment extends Fragment {
                 licensePlate.setCurrent(true);
                 licensePlateRepository.updateLicensePlate(licensePlate);
                 isDefaultSelected = licensePlateRepository.findDefault().getCurrent();
+                chosenDefaultNumber = licensePlateRepository.findDefault().getNumber();
+
+                if (chosenMinutes != -1) {
+                    chosenDefaultNumber = licensePlateRepository.findDefault().getNumber();
+                    parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
+                    tempTime.setText(parkingEnds);
+                }
+
                 e.onComplete();
             }
         })
@@ -563,6 +571,7 @@ public class HomeFragment extends Fragment {
                 parkingEndsMinutes = Integer.parseInt(bufferedReader.readLine());
                 String parkingDate = bufferedReader.readLine();
                 currentZone = bufferedReader.readLine();
+                currentDefaultNumber = bufferedReader.readLine();
 
                 if (!MainActivity.isTimerCreated) {
                     startParking(parkingDate);
@@ -641,6 +650,8 @@ public class HomeFragment extends Fragment {
                                             fileOutputStream.write(formattedDate.getBytes());
                                             fileOutputStream.write("\n".getBytes());
                                             fileOutputStream.write(chosenZone.getBytes());
+                                            fileOutputStream.write("\n".getBytes());
+                                            fileOutputStream.write(chosenDefaultNumber.getBytes());
                                             fileOutputStream.close();
                                         } catch (FileNotFoundException e) {
                                             e.printStackTrace();
@@ -650,6 +661,7 @@ public class HomeFragment extends Fragment {
 
                                     timeEnds.setText(tempTime.getText().toString());
                                     currentZone = chosenZone;
+                                    currentDefaultNumber = chosenDefaultNumber;
 
                                         if (chosenMinutes != -1) {
                                             parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
@@ -693,6 +705,7 @@ public class HomeFragment extends Fragment {
             timeLeftInMilliseconds = -1;
             currentZone = "";
             parkingEndsMinutes = -1;
+            currentDefaultNumber = "";
             return;
         }
 
@@ -712,6 +725,7 @@ public class HomeFragment extends Fragment {
                     timeLeftInMilliseconds = -1;
                     currentZone = "";
                     parkingEndsMinutes = -1;
+                    currentDefaultNumber = "";
                 }
                 remaining.setVisibility(View.INVISIBLE);
                 timeLeft.setVisibility(View.INVISIBLE);
