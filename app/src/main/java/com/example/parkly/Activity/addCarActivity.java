@@ -2,6 +2,8 @@ package com.example.parkly.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +37,20 @@ public class addCarActivity extends Activity {
     //Database
     private CompositeDisposable compositeDisposable;
     public LicensePlateRepository licensePlateRepository;
+
+    private String blockCharacterSet = "~#^|$%&*! ";
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return "";
+            }
+            return null;
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +87,7 @@ public class addCarActivity extends Activity {
 
         btn_confirm = findViewById(R.id.btn_confirm);
         txt_plate = findViewById(R.id.txt_plate);
+        txt_plate.setFilters(new InputFilter[] {filter});
 
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
