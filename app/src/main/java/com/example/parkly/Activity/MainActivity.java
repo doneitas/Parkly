@@ -84,7 +84,10 @@ public class MainActivity extends AppCompatActivity
                 navigationView.setCheckedItem(item.getItemId());
             }
         }
-        else super.onBackPressed();
+        else {
+            finish();
+            System.exit(0);
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
