@@ -603,7 +603,7 @@ public class HomeFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(true/*!needsPopUp(chosenZone)*/) {
+                if(!needsPopUp(chosenZone)) {
                     if(isDefaultSelected) {
                         new AlertDialog.Builder(getActivity())
                                 .setMessage("Do you really want to confirm this parking?")
@@ -648,8 +648,8 @@ public class HomeFragment extends Fragment {
                                             e.printStackTrace();
                                         }
 
-                                        timeEnds.setText(tempTime.getText().toString());
-                                        currentZone = chosenZone;
+                                    timeEnds.setText(tempTime.getText().toString());
+                                    currentZone = chosenZone;
 
                                         if (chosenMinutes != -1) {
                                             parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
@@ -691,7 +691,7 @@ public class HomeFragment extends Fragment {
                 file.delete();
             }
             timeLeftInMilliseconds = -1;
-            chosenZone = "";
+            currentZone = "";
             parkingEndsMinutes = -1;
             return;
         }
