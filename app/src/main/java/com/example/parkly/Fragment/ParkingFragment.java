@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.parkly.Adapters.ExpandableListAdapter;
@@ -96,6 +97,25 @@ public class ParkingFragment extends Fragment {
                 return false;
             }
         });
+
+        SearchView searchView = view.findViewById(R.id.sview_parking);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+              @Override
+              public boolean onQueryTextSubmit(String query) {
+                  return false;
+              }
+
+              @Override
+              public boolean onQueryTextChange(String newText) {
+                  if (newText != null && !newText.isEmpty())
+                  {
+                      addressList.containsValue(newText);
+
+                  }
+                  return false;
+              }
+          }
+        );
     }
 
     private void prepareData()
