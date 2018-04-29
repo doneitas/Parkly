@@ -106,43 +106,52 @@ public class CarsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 lst_Car.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-                Disposable disposable = licensePlateRepository.getAllNumbers()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new Consumer<List<String>>() {
-                            @Override
-                            public void accept(List<String> licensePlates) throws Exception {
-                                if (!deleteClicked) {
-                                    arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, licensePlates);
-                                    lst_Car.setAdapter(arrayAdapter);
-                                    arrayAdapter.notifyDataSetChanged();
-                                    deleteClicked = true;
-                                    btn_add.setClickable(false);
-                                    btn_add.setEnabled(false);
-                                }
-                                else
-                                {
-                                    deleteSelectedLicensePlates();
-                                    deleteClicked = false;
-                                    refreshAdapter(view);
-                                    btn_add.setClickable(true);
-                                    btn_add.setEnabled(true);
-                                    database(view);
-                                    loadData();
-
-                                }
-                            }
-
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                //Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                compositeDisposable.add(disposable);
-            }
+                    if (!deleteClicked) {
+                        arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, getNumbers());
+                        lst_Car.setAdapter(arrayAdapter);
+                        arrayAdapter.notifyDataSetChanged();
+                        deleteClicked = true;
+                        btn_add.setClickable(false);
+                        btn_add.setEnabled(false);
+                    }
+                    else
+                    {
+                        deleteSelectedLicensePlates();
+                        deleteClicked = false;
+                        refreshAdapter(view);
+                        btn_add.setClickable(true);
+                        btn_add.setEnabled(true);
+                        database(view);
+                        loadData();
+                    }
+                }
         });
     }
+
+    private List<String> getNumbers() {
+        final List<String> numbers = new ArrayList<>();
+        Disposable disposable = licensePlateRepository.getAll()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<LicensePlate>>() {
+                    @Override
+                    public void accept(List<LicensePlate> licensePlates) throws Exception {
+                        for (LicensePlate l:licensePlates)
+                        {
+                            numbers.add(l.getNumber());
+                        }
+                    }
+
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                    }
+                });
+        compositeDisposable.add(disposable);
+        return numbers;
+    }
+
+
 
     private void deleteSelectedLicensePlates() {
         Disposable disposable = licensePlateRepository.findAllByNumber(selectedLicensePlateList)
