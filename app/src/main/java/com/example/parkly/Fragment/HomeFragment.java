@@ -353,10 +353,11 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public boolean needsPopUp (String color)
+    public boolean needsPopUp (String color, Calendar currentTime )
     {
-        Calendar currentTime = GregorianCalendar.getInstance();
-        currentTime.setTime(new Date());
+        //perkelti data i calla
+        //Calendar currentTime = GregorianCalendar.getInstance();
+        //currentTime.setTime(new Date());
         switch(color)
         {
             case "Orange 2€/h":
@@ -594,7 +595,10 @@ public class HomeFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!needsPopUp(chosenZone)) {
+                //inicijuoti data cia
+                Calendar currentTime = GregorianCalendar.getInstance();
+                currentTime.setTime(new Date());
+                if(!needsPopUp(chosenZone, currentTime)) {
                     new AlertDialog.Builder(getActivity())
                             .setMessage("Do you really want to confirm this parking?")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {

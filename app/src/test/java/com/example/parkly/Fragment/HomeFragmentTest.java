@@ -128,80 +128,158 @@ public class HomeFragmentTest {
 
     }
 
+    /*
+     public boolean needsPopUp (String color, Calendar currentTime )
+    {
+        //perkelti data i calla
+        //Calendar currentTime = GregorianCalendar.getInstance();
+        //currentTime.setTime(new Date());
+        switch(color)
+        {
+            case "Orange 2€/h":
+            {
+                if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
+                {
+                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                break;
+            }
+            case "Green 0.3€/h":
+            case "Blue 0.6€/h":
+            case "Red 1.2€/h":
+            case "Yellow 2€/h":
+            {
+                  //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
+                if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
+                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE today", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
+                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        return false;
+    }
+     */
     @Test
     public void needsPopUp() throws  Exception{
 
+        //----------------TESTING WITH DAYS----------------------------------------
+
         Calendar currentTime = GregorianCalendar.getInstance();
-        currentTime.setTime(new Date());
+        currentTime.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        currentTime.set(Calendar.HOUR_OF_DAY, 15);
         String input1 = "Orange 2€/h";
-        boolean output = false;
+        boolean output;
 
         HomeFragment homeFragment = new HomeFragment();
-        output = homeFragment.needsPopUp(input1);
+        output = homeFragment.needsPopUp(input1, currentTime);
 
-        if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8) {
-            assertTrue(output);
-        }else{
-            assertFalse(output);
-        }
+        assertFalse(output);
+
 
         //---------------------------------------------------------------------------
 
         input1 = "Green 0.3€/h";
-        output = false;
-        output = homeFragment.needsPopUp(input1);
+        currentTime.add(Calendar.DAY_OF_WEEK, 1);
 
-        if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1){
-            assertTrue(output);
-        }else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8){
-            assertTrue(output);
-        }else{
-            assertFalse(output);
-        }
+
+        output = homeFragment.needsPopUp(input1, currentTime);
+
+        assertFalse(output);
 
         //---------------------------------------------------------------------------
 
         input1 = "Blue 0.6€/h";
-        output = false;
-        output = homeFragment.needsPopUp(input1);
+        currentTime.add(Calendar.DAY_OF_WEEK, 1);
 
-        if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1){
-            assertTrue(output);
-        }else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8){
-            assertTrue(output);
-        }else{
-            assertFalse(output);
-        }
+        output = homeFragment.needsPopUp(input1, currentTime);
+
+        assertFalse(output);
 
         //---------------------------------------------------------------------------
 
         input1 = "Red 1.2€/h";
-        output = false;
-        output = homeFragment.needsPopUp(input1);
+        currentTime.add(Calendar.DAY_OF_WEEK, 1);
 
-        if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1){
-            assertTrue(output);
-        }else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8){
-            assertTrue(output);
-        }else{
-            assertFalse(output);
-        }
+        output = homeFragment.needsPopUp(input1, currentTime);
+
+        assertFalse(output);
 
         //---------------------------------------------------------------------------
 
         input1 = "Yellow 2€/h";
-        output = false;
-        output = homeFragment.needsPopUp(input1);
+        currentTime.add(Calendar.DAY_OF_WEEK, 1);
 
-        if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1){
-            assertTrue(output);
-        }else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8){
-            assertTrue(output);
-        }else{
-            assertFalse(output);
-        }
+        output = homeFragment.needsPopUp(input1, currentTime);
+
+        assertFalse(output);
 
         //---------------------------------------------------------------------------
+
+        currentTime.add(Calendar.DAY_OF_WEEK, 1);
+
+        output = homeFragment.needsPopUp(input1, currentTime);
+
+        assertFalse(output);
+
+        //---------------------------------------------------------------------------
+
+        currentTime.add(Calendar.DAY_OF_WEEK, 1);
+
+        output = homeFragment.needsPopUp(input1, currentTime);
+
+        assertTrue(output);
+
+        //---------------------------------------------------------------------------
+
+        //----------------TESTING WITH DAYS----------------------------------------
+
+        //---------------------------------------------------------------------------
+
+        currentTime.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+        currentTime.set(Calendar.HOUR_OF_DAY, 5);
+        input1 = "Yellow 2€/h";
+
+        output = homeFragment.needsPopUp(input1, currentTime);
+
+        assertTrue(output);
+
+        //---------------------------------------------------------------------------
+
+        currentTime.set(Calendar.HOUR_OF_DAY, 15);
+
+        output = homeFragment.needsPopUp(input1, currentTime);
+
+        assertFalse(output);
+
+        //---------------------------------------------------------------------------
+
+        input1 = "Orange 2€/h";
+        currentTime.set(Calendar.HOUR_OF_DAY, 5);
+
+        output = homeFragment.needsPopUp(input1, currentTime);
+
+        assertTrue(output);
+
+        //---------------------------------------------------------------------------
+
+        currentTime.set(Calendar.HOUR_OF_DAY, 15);
+
+        output = homeFragment.needsPopUp(input1, currentTime);
+
+        assertFalse(output);
+
+        //---------------------------------------------------------------------------
+
     }
 
     @Test
