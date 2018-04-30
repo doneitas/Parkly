@@ -54,4 +54,6 @@
     <string name="time2">-</string>
     <string name="remaining">" "Remaining:" "</string>
     <string name="ends">Ends:" "</string>
+    <string name="car">Car:</string>
+    <string name="color">Color:</string>
 </resources>
