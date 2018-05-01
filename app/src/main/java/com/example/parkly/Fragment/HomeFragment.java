@@ -1,14 +1,18 @@
 package com.example.parkly.Fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +53,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 /**
  * Created by donvel on 2018-03-12.
@@ -253,6 +259,7 @@ public class HomeFragment extends Fragment {
                     }
                     case "": {
                         time.removeAll(time);
+                        break;
                     }
                 }
 
@@ -686,6 +693,9 @@ public class HomeFragment extends Fragment {
                                             fileOutputStream.write("\n".getBytes());
                                             fileOutputStream.write(chosenDefaultNumber.getBytes());
                                             fileOutputStream.close();
+
+                                            sendMessage();
+
                                         } catch (FileNotFoundException e) {
                                             e.printStackTrace();
                                         } catch (IOException e) {
@@ -717,6 +727,68 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void sendMessage(){
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
+                    == PackageManager.PERMISSION_DENIED) {
+
+                Log.d("permission", "permission denied to SEND_SMS - requesting it");
+                String[] permissions = {Manifest.permission.SEND_SMS};
+
+                requestPermissions(permissions, 1);
+
+                send();
+
+            }
+            else{
+
+                send();
+
+            }
+        }
+        else {
+
+            send();
+
+        }
+    }
+
+    public void send(){
+        SmsManager sms = SmsManager.getDefault();
+
+        String zone = "";
+
+        switch(currentZone){
+            case Green:
+                zone = "Z";
+                break;
+            case Blue:
+                zone = "M";
+                break;
+            case Red:
+                zone = "R";
+                break;
+            case Yellow:
+                zone = "G";
+                break;
+            case Orange:
+                zone = "A";
+                break;
+
+        }
+
+        int hour = chosenMinutes / 60;
+        int minute = chosenMinutes % 60;
+        //Scanner scan = new Scanner(String.valueOf(chosenMinutes)).useDelimiter("\\s+");
+        String parkingTime = String.valueOf(hour) + "." + String.valueOf(minute);
+
+        String message = "PK " + parkingTime + "" + zone + "" + currentDefaultNumber;
+
+        sms.sendTextMessage("+37063694869", null, message, null, null);
     }
 
     public long calculateTimeLeft(int parkingEndsMinutes, int hours, int minutes){
