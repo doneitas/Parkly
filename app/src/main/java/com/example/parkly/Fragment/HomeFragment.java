@@ -1,14 +1,19 @@
 package com.example.parkly.Fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +54,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 /**
  * Created by donvel on 2018-03-12.
@@ -253,6 +260,7 @@ public class HomeFragment extends Fragment {
                     }
                     case "": {
                         time.removeAll(time);
+                        break;
                     }
                 }
 
@@ -635,8 +643,6 @@ public class HomeFragment extends Fragment {
             timeEnds.setVisibility(View.INVISIBLE);
         }
 
-        final MediaPlayer confirmSoundMP = MediaPlayer.create(getActivity(), R.raw.sound);
-
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -648,62 +654,10 @@ public class HomeFragment extends Fragment {
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        car.setVisibility(View.VISIBLE);
-                                        showCar.setVisibility(View.VISIBLE);
-                                        zone.setVisibility(View.VISIBLE);
-                                        showZone.setVisibility(View.VISIBLE);
-                                        remaining.setVisibility(View.VISIBLE);
-                                        timeLeft.setVisibility(View.VISIBLE);
-                                        ends.setVisibility(View.VISIBLE);
-                                        timeEnds.setVisibility(View.VISIBLE);
-
-                                        confirmSoundMP.start();
-
-                                        if (file.exists()) {
-                                            file.delete();
-                                            MainActivity.countDownTimer.cancel();
-                                        }
-
-                                        Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
-
-                                        parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
-
-                                        Date c = Calendar.getInstance().getTime();
-                                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                                        String formattedDate = df.format(c);
-
-                                        startParking(formattedDate);
-
-                                        String fileName = "Countdown";
-
-                                        try {
-                                            FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
-                                            fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
-                                            fileOutputStream.write("\n".getBytes());
-                                            fileOutputStream.write(formattedDate.getBytes());
-                                            fileOutputStream.write("\n".getBytes());
-                                            fileOutputStream.write(chosenZone.getBytes());
-                                            fileOutputStream.write("\n".getBytes());
-                                            fileOutputStream.write(chosenDefaultNumber.getBytes());
-                                            fileOutputStream.close();
-                                        } catch (FileNotFoundException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        currentZone = chosenZone;
-                                        currentDefaultNumber = chosenDefaultNumber;
-
-                                        showCar.setText(currentDefaultNumber);
-
-                                        scan = new Scanner(currentZone).useDelimiter("\\s+");
-                                        showZone.setText(scan.next());
-                                        timeEnds.setText(tempTime.getText().toString());
-
-                                        if (chosenMinutes != -1) {
-                                            parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
-                                            tempTime.setText(parkingEnds);
+                                        checkSMSPermissions();
+                                        if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
+                                                == PackageManager.PERMISSION_GRANTED) {
+                                            confirmAndSend();
                                         }
                                     }
                                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -717,6 +671,142 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void confirmAndSend(){
+
+        car.setVisibility(View.VISIBLE);
+        showCar.setVisibility(View.VISIBLE);
+        zone.setVisibility(View.VISIBLE);
+        showZone.setVisibility(View.VISIBLE);
+        remaining.setVisibility(View.VISIBLE);
+        timeLeft.setVisibility(View.VISIBLE);
+        ends.setVisibility(View.VISIBLE);
+        timeEnds.setVisibility(View.VISIBLE);
+
+        MediaPlayer confirmSoundMP = MediaPlayer.create(getActivity(), R.raw.sound);
+        confirmSoundMP.start();
+
+        if (file.exists()) {
+            file.delete();
+            if (MainActivity.isTimerCreated) {
+                MainActivity.countDownTimer.cancel();
+                MainActivity.isTimerCreated = false;
+            }
+        }
+
+        Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
+
+        parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
+
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = df.format(c);
+
+        startParking(formattedDate);
+
+        String fileName = "Countdown";
+
+        try {
+            FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
+            fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
+            fileOutputStream.write("\n".getBytes());
+            fileOutputStream.write(formattedDate.getBytes());
+            fileOutputStream.write("\n".getBytes());
+            fileOutputStream.write(chosenZone.getBytes());
+            fileOutputStream.write("\n".getBytes());
+            fileOutputStream.write(chosenDefaultNumber.getBytes());
+            fileOutputStream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        currentZone = chosenZone;
+        currentDefaultNumber = chosenDefaultNumber;
+
+        showCar.setText(currentDefaultNumber);
+
+        scan = new Scanner(currentZone).useDelimiter("\\s+");
+        showZone.setText(scan.next());
+        timeEnds.setText(tempTime.getText().toString());
+
+        if (chosenMinutes != -1) {
+            parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
+            tempTime.setText(parkingEnds);
+        }
+
+        send();
+
+    }
+
+    public void checkSMSPermissions(){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
+                    == PackageManager.PERMISSION_DENIED) {
+
+                Log.d("permission", "permission denied to SEND_SMS - requesting it");
+                String[] permissions = {Manifest.permission.SEND_SMS};
+
+                requestPermissions(permissions, 1);
+
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode == 1){
+
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                confirmAndSend();
+            } else{
+                Toast.makeText(getActivity(), "Permission was not granted", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    public void send(){
+        SmsManager sms = SmsManager.getDefault();
+
+        String zone = "";
+
+        switch(currentZone){
+            case Green:
+                zone = "Z";
+                break;
+            case Blue:
+                zone = "M";
+                break;
+            case Red:
+                zone = "R";
+                break;
+            case Yellow:
+                zone = "G";
+                break;
+            case Orange:
+                zone = "A";
+                break;
+
+        }
+
+        int hour = chosenMinutes / 60;
+        int minute = chosenMinutes % 60;
+
+        String parkingTime = String.valueOf(hour) + "." + String.valueOf(minute);
+
+        String message = "PK " + parkingTime + " " + zone + " " + currentDefaultNumber;
+
+        sms.sendTextMessage("+37063694869", null, message, null, null);
+
+        Toast.makeText(getActivity(), "Parking confirmed successfully", Toast.LENGTH_SHORT).show();
     }
 
     public long calculateTimeLeft(int parkingEndsMinutes, int hours, int minutes){
@@ -764,6 +854,7 @@ public class HomeFragment extends Fragment {
                     currentZone = "";
                     parkingEndsMinutes = -1;
                     currentDefaultNumber = "";
+                    MainActivity.isTimerCreated = false;
                 }
                 car.setVisibility(View.INVISIBLE);
                 showCar.setVisibility(View.INVISIBLE);
