@@ -361,10 +361,11 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public boolean needsPopUp (String color)
+    public boolean needsPopUp (String color, Calendar currentTime )
     {
-        Calendar currentTime = GregorianCalendar.getInstance();
-        currentTime.setTime(new Date());
+        //perkelti data i calla
+        //Calendar currentTime = GregorianCalendar.getInstance();
+        //currentTime.setTime(new Date());
         switch(color)
         {
             case "Orange 2€/h":
@@ -381,7 +382,7 @@ public class HomeFragment extends Fragment {
             case "Red 1.2€/h":
             case "Yellow 2€/h":
             {
-                  //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
+                //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
                 if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
                     Toast.makeText(getActivity(), "Parking in chosen zone is FREE today", Toast.LENGTH_LONG).show();
                     return true;
@@ -612,7 +613,8 @@ public class HomeFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!needsPopUp(chosenZone)) {
+                Calendar currentTime = GregorianCalendar.getInstance();
+                if(!needsPopUp(chosenZone, currentTime)) {
                     if(isDefaultSelected) {
                         new AlertDialog.Builder(getActivity())
                                 .setMessage("Do you really want to confirm this parking?")
