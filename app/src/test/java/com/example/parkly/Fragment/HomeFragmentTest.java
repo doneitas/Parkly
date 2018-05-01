@@ -134,6 +134,7 @@ public class HomeFragmentTest {
         long expected = 15 * 60000;
 
         HomeFragment homeFragment = new HomeFragment();
+        //
         output = homeFragment.calculateTimeLeft(input1, input2, input3);
 
         assertEquals(expected, output);
