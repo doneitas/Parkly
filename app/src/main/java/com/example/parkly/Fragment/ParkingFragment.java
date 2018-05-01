@@ -102,6 +102,7 @@ public class ParkingFragment extends Fragment {
               public boolean onQueryTextChange(String newText) {
                   if (newText != null && !newText.isEmpty())
                   {
+                      // trimint reikia newText, tai šioje vietoje metodas turėtų gražinti patrimintą newText.
                       if (searchTextLength > newText.length()) {
                           prepareData();
                           searchTextLength = newText.length();
