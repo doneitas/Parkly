@@ -87,8 +87,7 @@ public class addCarActivity extends Activity {
 
         btn_confirm = findViewById(R.id.btn_confirm);
         txt_plate = findViewById(R.id.txt_plate);
-        txt_plate.setFilters(new InputFilter[] {filter});
-        txt_plate.setFilters(new InputFilter[] {new InputFilter.LengthFilter(6)});
+        txt_plate.setFilters(new InputFilter[] {new InputFilter.LengthFilter(6), filter});
 
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
