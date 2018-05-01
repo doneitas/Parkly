@@ -647,7 +647,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Calendar currentTime = GregorianCalendar.getInstance();
-                if(true/*!needsPopUp(chosenZone, currentTime)*/) {
+                if(!needsPopUp(chosenZone, currentTime)) {
                     if(isDefaultSelected) {
                         new AlertDialog.Builder(getActivity())
                                 .setMessage("Do you really want to confirm this parking?")
