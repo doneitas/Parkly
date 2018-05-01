@@ -70,6 +70,10 @@ public class HomeFragment extends Fragment {
     public List<LicensePlate> tempLicensePlate;
     public boolean isDefaultSelected;
     private long timeLeftInMilliseconds;
+    private TextView car;
+    private TextView showCar;
+    private TextView zone;
+    private TextView showZone;
     private TextView remaining;
     private TextView timeLeft;
     private TextView ends;
@@ -78,6 +82,12 @@ public class HomeFragment extends Fragment {
     private File file;
     private String currentZone = "";
     private int parkingEndsMinutes = -1;
+
+    private final String Green = "Green 0.3€/h";
+    private final String Blue = "Blue 0.6€/h";
+    private final String Red = "Red 1.2€/h";
+    private final String Yellow = "Yellow 2€/h";
+    private final String Orange = "Orange 2€/h";
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -146,11 +156,11 @@ public class HomeFragment extends Fragment {
     public void showPriceAndParkingEnding(View view)
     {
         final ArrayList<String> zones = new ArrayList<String>();
-        zones.add("Green 0.3€/h");
-        zones.add("Blue 0.6€/h");
-        zones.add("Red 1.2€/h");
-        zones.add("Yellow 2€/h");
-        zones.add("Orange 2€/h");
+        zones.add(Green);
+        zones.add(Blue);
+        zones.add(Red);
+        zones.add(Yellow);
+        zones.add(Orange);
         final ArrayList<String> time = new ArrayList<String>();
 
 
@@ -188,7 +198,7 @@ public class HomeFragment extends Fragment {
 
 
                 switch (chosenZone){
-                    case "Green 0.3€/h":{
+                    case Green:{
                         time.removeAll(time);
                         time.add("1  h  0 min");
                         time.add("2  h  0 min");
@@ -203,7 +213,7 @@ public class HomeFragment extends Fragment {
                         chosenMinutes = -1;
                         break;
                     }
-                    case "Blue 0.6€/h":{
+                    case Blue:{
                         time.removeAll(time);
                         time.add("0  h 30 min");
                         time.add("1  h  0 min");
@@ -298,31 +308,31 @@ public class HomeFragment extends Fragment {
         double price = 0;
         switch(color)
         {
-            case "Orange 2€/h":
+            case Orange:
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Yellow 2€/h":
+            case Yellow:
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Blue 0.6€/h":
+            case Blue:
             {
                 price = 0.6 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Red 1.2€/h":
+            case Red:
             {
                 price = 1.2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Green 0.3€/h":
+            case Green:
             {
                 price = 0.3 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
@@ -368,7 +378,7 @@ public class HomeFragment extends Fragment {
         //currentTime.setTime(new Date());
         switch(color)
         {
-            case "Orange 2€/h":
+            case Orange:
             {
                 if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
                 {
@@ -377,10 +387,10 @@ public class HomeFragment extends Fragment {
                 }
                 break;
             }
-            case "Green 0.3€/h":
-            case "Blue 0.6€/h":
-            case "Red 1.2€/h":
-            case "Yellow 2€/h":
+            case Green:
+            case Blue:
+            case Red:
+            case Yellow:
             {
                 //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
                 if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
@@ -556,6 +566,10 @@ public class HomeFragment extends Fragment {
 
     private void confirmParking(View view){
 
+        car = getActivity().findViewById(R.id.car);
+        showCar = getActivity().findViewById(R.id.carText);
+        zone = getActivity().findViewById(R.id.color);
+        showZone = getActivity().findViewById(R.id.colorText);
         remaining = getActivity().findViewById(R.id.remaining);
         timeLeft = getActivity().findViewById(R.id.remainingText);
         ends = getActivity().findViewById(R.id.ends);
@@ -579,6 +593,11 @@ public class HomeFragment extends Fragment {
 
                     if (MainActivity.isTimerCreated) {
 
+                        showCar.setText(currentDefaultNumber);
+
+                        Scanner scan = new Scanner(currentZone).useDelimiter("\\s+");
+                        showZone.setText(scan.next());
+
                         String timeEndsText;
 
                         if ((parkingEndsMinutes / 60) < 10) timeEndsText = "0";
@@ -589,6 +608,10 @@ public class HomeFragment extends Fragment {
 
                         timeEnds.setText(timeEndsText);
                     } else {
+                        car.setVisibility(View.INVISIBLE);
+                        showCar.setVisibility(View.INVISIBLE);
+                        zone.setVisibility(View.INVISIBLE);
+                        showZone.setVisibility(View.INVISIBLE);
                         remaining.setVisibility(View.INVISIBLE);
                         timeLeft.setVisibility(View.INVISIBLE);
                         ends.setVisibility(View.INVISIBLE);
@@ -602,6 +625,10 @@ public class HomeFragment extends Fragment {
             }
         }
         else {
+            car.setVisibility(View.INVISIBLE);
+            showCar.setVisibility(View.INVISIBLE);
+            zone.setVisibility(View.INVISIBLE);
+            showZone.setVisibility(View.INVISIBLE);
             remaining.setVisibility(View.INVISIBLE);
             timeLeft.setVisibility(View.INVISIBLE);
             ends.setVisibility(View.INVISIBLE);
@@ -621,6 +648,10 @@ public class HomeFragment extends Fragment {
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        car.setVisibility(View.VISIBLE);
+                                        showCar.setVisibility(View.VISIBLE);
+                                        zone.setVisibility(View.VISIBLE);
+                                        showZone.setVisibility(View.VISIBLE);
                                         remaining.setVisibility(View.VISIBLE);
                                         timeLeft.setVisibility(View.VISIBLE);
                                         ends.setVisibility(View.VISIBLE);
@@ -661,9 +692,14 @@ public class HomeFragment extends Fragment {
                                             e.printStackTrace();
                                         }
 
-                                    timeEnds.setText(tempTime.getText().toString());
-                                    currentZone = chosenZone;
-                                    currentDefaultNumber = chosenDefaultNumber;
+                                        currentZone = chosenZone;
+                                        currentDefaultNumber = chosenDefaultNumber;
+
+                                        showCar.setText(currentDefaultNumber);
+
+                                        scan = new Scanner(currentZone).useDelimiter("\\s+");
+                                        showZone.setText(scan.next());
+                                        timeEnds.setText(tempTime.getText().toString());
 
                                         if (chosenMinutes != -1) {
                                             parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
@@ -729,6 +765,10 @@ public class HomeFragment extends Fragment {
                     parkingEndsMinutes = -1;
                     currentDefaultNumber = "";
                 }
+                car.setVisibility(View.INVISIBLE);
+                showCar.setVisibility(View.INVISIBLE);
+                zone.setVisibility(View.INVISIBLE);
+                showZone.setVisibility(View.INVISIBLE);
                 remaining.setVisibility(View.INVISIBLE);
                 timeLeft.setVisibility(View.INVISIBLE);
                 ends.setVisibility(View.INVISIBLE);
