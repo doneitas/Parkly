@@ -255,6 +255,7 @@ public class CarsFragment extends Fragment {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        licensePlateDatabase.setTransactionSuccessful();
                     }
                 });
         compositeDisposable.add(disposable);
@@ -416,5 +417,12 @@ public class CarsFragment extends Fragment {
                     }
                 });
         compositeDisposable.add(disposable);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        compositeDisposable.clear();
     }
 }
