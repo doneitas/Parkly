@@ -172,6 +172,7 @@ public class CarsFragment extends Fragment {
 
 
     private void deleteSelectedLicensePlates() {
+        licensePlateDatabase.beginTransaction();
         Disposable disposable = licensePlateRepository.findAllByNumber(selectedLicensePlateList)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -194,6 +195,8 @@ public class CarsFragment extends Fragment {
                     }
                 });
         compositeDisposable.add(disposable);
+        licensePlateDatabase.endTransaction();
+        licensePlateDatabase.beginTransaction();
     }
 
     public void disableRemove()
@@ -255,7 +258,7 @@ public class CarsFragment extends Fragment {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                        licensePlateDatabase.setTransactionSuccessful();
+                        licensePlateDatabase.endTransaction();
                     }
                 });
         compositeDisposable.add(disposable);
