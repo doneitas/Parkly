@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -21,11 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parkly.Activity.addCarActivity;
-import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.Adapters.LicensePlateAdapter;
 import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
+import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.R;
 
 import java.util.ArrayList;
@@ -62,15 +61,15 @@ public class CarsFragment extends Fragment {
 
     TextView txt_defaultCar;
     public static boolean deleteClicked = false;
-    public static Button btn_removeAll;
-    public static Button btn_add;
+    public Button btn_removeAll;
+    public Button btn_add;
+    public ListView lst_Car;
 
     //Adapter
     List<LicensePlate> licensePlateList = new ArrayList<>();
     List<String> selectedLicensePlateList = new ArrayList<>();
     LicensePlateAdapter adapter;
     ArrayAdapter<String> arrayAdapter;
-    List<String> numbers = new ArrayList<>();
 
     //Database
     private CompositeDisposable compositeDisposable;
@@ -89,7 +88,6 @@ public class CarsFragment extends Fragment {
 
         btn_removeAll = view.findViewById(R.id.btn_removeAll);
         disableRemove();
-        final ListView lst_Car = view.findViewById(R.id.lst_Cars);
         lst_Car.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -127,76 +125,33 @@ public class CarsFragment extends Fragment {
                         refreshAdapter(view);
                         btn_add.setClickable(true);
                         btn_add.setEnabled(true);
-                        //database(view);
-                        selectedLicensePlateList.clear();
-                        Fragment currentFragment = getFragmentManager().findFragmentByTag("CARS_FRAGMENT");
-                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.detach(currentFragment);
-                        fragmentTransaction.attach(currentFragment);
-                        fragmentTransaction.commitNow();
-                        loadData();
                     }
                 }
         });
     }
 
     private List<String> numbers() {
-
-        Disposable disposable = licensePlateRepository.getAll()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<List<LicensePlate>>() {
-                    @Override
-                    public void accept(List<LicensePlate> licensePlates) throws Exception {
-                            numbers = numbers(licensePlates);
-                    }
-
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                    }
-                });
-        compositeDisposable.add(disposable);
-        return numbers;
-    }
-
-    private List<String> numbers(List<LicensePlate> licensePlates) {
         List<String> numbers = new ArrayList<>();
-        for (LicensePlate l:licensePlates)
+        for (LicensePlate l:licensePlateList)
         {
             numbers.add(l.getNumber());
         }
         return numbers;
     }
 
-
-
     private void deleteSelectedLicensePlates() {
-        licensePlateDatabase.beginTransaction();
-        Disposable disposable = licensePlateRepository.findAllByNumber(selectedLicensePlateList)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<List<LicensePlate>>() {
-                    @Override
-                    public void accept(List<LicensePlate> licensePlates) throws Exception {
-                        selectedLicensePlateList.clear();
-                        for (LicensePlate l:licensePlates)
-                        {
-                            deleteLicensePlate(l);
-                            licensePlateList.remove(l);
-                        }
-                        selectedLicensePlateList = new ArrayList<>();
-                    }
-
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        //Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-        compositeDisposable.add(disposable);
-        licensePlateDatabase.endTransaction();
-        licensePlateDatabase.beginTransaction();
+        List<LicensePlate> licensePlates = new ArrayList<>();
+        for (LicensePlate l:licensePlateList) {
+            if (selectedLicensePlateList.contains(l.getNumber())) {
+                licensePlates.add(l);
+            }
+        }
+        for (LicensePlate l:licensePlates)
+        {
+            deleteLicensePlate(l);
+            licensePlateList.remove(l);
+        }
+        selectedLicensePlateList.clear();
     }
 
     public void disableRemove()
@@ -228,7 +183,7 @@ public class CarsFragment extends Fragment {
     public void refreshAdapter(View view)
     {
         adapter = new LicensePlateAdapter(getActivity(), licensePlateList);
-        ListView lst_Car = view.findViewById(R.id.lst_Cars);
+        lst_Car = view.findViewById(R.id.lst_Cars);
         registerForContextMenu(lst_Car);
         lst_Car.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -241,7 +196,7 @@ public class CarsFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer<List<LicensePlate>>() {
                     @Override
-                    public void accept(List<LicensePlate> licensePlates) throws Exception {
+                    public void accept(List<LicensePlate> licensePlates) {
                         onGetAllLicensePlateSuccess(licensePlates);
                         if (licensePlates.size()==1 && !licensePlates.get(0).getCurrent())
                         {
@@ -251,14 +206,12 @@ public class CarsFragment extends Fragment {
                         disableRemove();
                         btn_add.setClickable(true);
                         btn_add.setEnabled(true);
-                        selectedLicensePlateList.clear();
                     }
 
                 }, new Consumer<Throwable>() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
+                    public void accept(Throwable throwable) {
                         Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                        licensePlateDatabase.endTransaction();
                     }
                 });
         compositeDisposable.add(disposable);
@@ -275,10 +228,8 @@ public class CarsFragment extends Fragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
     {
         super.onCreateContextMenu(menu, v, menuInfo);
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
         menu.setHeaderTitle("Select action:");
         menu.add(Menu.NONE, 0, Menu.NONE, "Mark as default");
-        //menu.add(Menu.NONE, 1, Menu.NONE, "Remove");
     }
 
     @Override
@@ -305,23 +256,6 @@ public class CarsFragment extends Fragment {
                 }).create().show();
             }
             break;
-            /*case 1:
-            {
-                new AlertDialog.Builder(getActivity())
-                        .setMessage("Do you want to remove "+licensePlate.getNumber()+" ?")
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                deleteLicensePlate(licensePlate);
-                            }
-                        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create().show();
-            }
-            break;*/
         }
 
         return true;
@@ -330,7 +264,7 @@ public class CarsFragment extends Fragment {
     private void setDefault(final LicensePlate licensePlate) {
         Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
-            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+            public void subscribe(ObservableEmitter<Object> e) {
                 LicensePlate oldLicensePlate = licensePlateRepository.findDefault();
                 if (oldLicensePlate != null)
                 {
@@ -347,15 +281,15 @@ public class CarsFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer() {
                     @Override
-                    public void accept(Object o) throws Exception {}
+                    public void accept(Object o) {}
                 }, new Consumer<Throwable>() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
+                    public void accept(Throwable throwable) {
 
                     }
                 }, new Action() {
                     @Override
-                    public void run() throws Exception {
+                    public void run() {
                         loadData();
                     }
                 });
@@ -366,7 +300,7 @@ public class CarsFragment extends Fragment {
 
         Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
-            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+            public void subscribe(ObservableEmitter<Object> e) {
                 licensePlateRepository.delete(licensePlate);
                 e.onComplete();
             }
@@ -375,16 +309,11 @@ public class CarsFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer() {
                     @Override
-                    public void accept(Object o) throws Exception {}
+                    public void accept(Object o) {}
                 }, new Consumer<Throwable>() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
+                    public void accept(Throwable throwable) {
                         Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        //loadData();
                     }
                 });
         compositeDisposable.add(disposable);
@@ -394,7 +323,7 @@ public class CarsFragment extends Fragment {
     {
         Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
-            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+            public void subscribe(ObservableEmitter<Object> e) {
 
                 LicensePlate licensePlate = licensePlateRepository.findDefault();
                 if (licensePlate != null)
@@ -413,10 +342,10 @@ public class CarsFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Consumer() {
                     @Override
-                    public void accept(Object o) throws Exception {}
+                    public void accept(Object o) {}
                 }, new Consumer<Throwable>() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
+                    public void accept(Throwable throwable) {
                     }
                 });
         compositeDisposable.add(disposable);
