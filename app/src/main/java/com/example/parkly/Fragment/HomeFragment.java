@@ -1,6 +1,8 @@
 package com.example.parkly.Fragment;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +32,9 @@ import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
 import com.example.parkly.DataBase.Tables.LicensePlate;
+import com.example.parkly.Notifications.NotificationReceiver_First;
+import com.example.parkly.Notifications.NotificationReceiver_Second;
+import com.example.parkly.Notifications.NotificationReceiver_Third;
 import com.example.parkly.R;
 
 import java.io.BufferedReader;
@@ -658,6 +663,7 @@ public class HomeFragment extends Fragment {
                                         if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
                                                 == PackageManager.PERMISSION_GRANTED) {
                                             confirmAndSend();
+                                            setNotifications();
                                         }
                                     }
                                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -671,6 +677,61 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void setNotifications(){
+
+        Calendar calendar = Calendar.getInstance();
+
+        long notificationTime = (parkingEndsMinutes * 60000) - (10 * 60000);
+        int hours = (int) notificationTime / 3600000;
+        int minutes = (int) (notificationTime % 3600000) / 60000;
+
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+
+        Intent intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_First.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        calendar = Calendar.getInstance();
+
+        notificationTime = (parkingEndsMinutes * 60000) - (5 * 60000);
+        hours = (int) notificationTime / 3600000;
+        minutes = (int) (notificationTime % 3600000) / 60000;
+
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+
+        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Second.class);
+
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, parkingEndsMinutes / 60);
+        calendar.set(Calendar.MINUTE, parkingEndsMinutes % 60);
+
+        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Third.class);
+
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
     }
 
     public void confirmAndSend(){
@@ -800,7 +861,11 @@ public class HomeFragment extends Fragment {
         int hour = chosenMinutes / 60;
         int minute = chosenMinutes % 60;
 
-        String parkingTime = String.valueOf(hour) + "." + String.valueOf(minute);
+        if(minute != 0 && minute % 2 == 0){
+            minute = minute / 10;
+        }
+
+        String parkingTime = minute == 0 ? String.valueOf(hour) : String.valueOf(hour) + "." + String.valueOf(minute);
 
         String message = "PK " + parkingTime + " " + zone + " " + currentDefaultNumber;
 
