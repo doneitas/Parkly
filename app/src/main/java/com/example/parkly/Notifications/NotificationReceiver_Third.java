@@ -4,7 +4,12 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+
+import com.example.parkly.R;
 
 /**
  * Created by donvel on 2018-05-07.
@@ -17,8 +22,12 @@ public class NotificationReceiver_Third extends BroadcastReceiver {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(android.R.mipmap.sym_def_app_icon)
+                .setSound(alarmSound)
+                .setSmallIcon(android.R.drawable.ic_popup_reminder)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
                 .setContentTitle("Information about parking")
                 .setContentText("Your parking time has ended")
                 .setAutoCancel(true);
