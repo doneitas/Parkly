@@ -47,7 +47,6 @@ public class ParkingFragment extends Fragment {
     private HashMap<String, List<String>> addressList;
     private int searchTextLength = 0;
 
-
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -59,6 +58,8 @@ public class ParkingFragment extends Fragment {
 
         mContext = this.getContext();
         adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
+
+
 
         lst_zones.setAdapter(adapter);
         lst_zones.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -100,19 +101,20 @@ public class ParkingFragment extends Fragment {
 
               @Override
               public boolean onQueryTextChange(String newText) {
-                  if (newText != null && !newText.isEmpty())
+                  String newTrimmedText = trimText(newText);
+                  if (newTrimmedText != null && !newTrimmedText.isEmpty())
                   {
-                      // trimint reikia newText, tai šioje vietoje metodas turėtų gražinti patrimintą newText.
-                      if (searchTextLength > newText.length()) {
+                      // trimint reikia newText, tai šioje vietoje metodas turėtų gražinti patrimintą newText
+                      if (searchTextLength > newTrimmedText.length()) {
                           prepareData();
-                          searchTextLength = newText.length();
+                          searchTextLength = newTrimmedText.length();
                       }
-                      else searchTextLength = newText.length();
+                      else searchTextLength = newTrimmedText.length();
 
                       ArrayList<String> tempList = new ArrayList<>();
                       for (int i = 0; i < 5; i++) {
                           for (String item : addressList.get(zoneList.get(i))) {
-                              if (item.toUpperCase().contains(newText.toUpperCase()))
+                              if (item.toUpperCase().contains(newTrimmedText.toUpperCase()))
                               {
                                   tempList.add(item);
                               }
@@ -142,6 +144,14 @@ public class ParkingFragment extends Fragment {
           }
         );
     }
+
+    public String trimText(String newText)
+    {
+        String temp = newText.trim().replaceAll(" +", " ");
+        return temp;
+    }
+
+
 
     private void prepareData()
     {
