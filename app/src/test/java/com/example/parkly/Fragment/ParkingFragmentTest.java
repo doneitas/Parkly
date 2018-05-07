@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class ParkingFragmentTest {
 
     @Test
-    public void estimatedPrice() throws Exception {
+    public void trimTest() throws Exception {
 
         String input1 = "   Testing Space";
         String expected = "Testing Space";
