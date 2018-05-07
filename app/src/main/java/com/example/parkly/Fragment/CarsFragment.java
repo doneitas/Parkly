@@ -113,7 +113,7 @@ public class CarsFragment extends Fragment {
                             @Override
                             public void accept(List<String> licensePlates) throws Exception {
                                 if (!deleteClicked) {
-                                    arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, licensePlates);
+                                    arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.cars_tab_layout_1, licensePlates);
                                     lst_Car.setAdapter(arrayAdapter);
                                     arrayAdapter.notifyDataSetChanged();
                                     deleteClicked = true;
@@ -257,7 +257,7 @@ public class CarsFragment extends Fragment {
         {
             case 0:
             {
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
                         .setMessage("Do you want to set "+licensePlate.getNumber() + " as default car?")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
