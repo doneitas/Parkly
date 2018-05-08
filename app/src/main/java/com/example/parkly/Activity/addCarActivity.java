@@ -2,6 +2,8 @@ package com.example.parkly.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
@@ -56,6 +58,20 @@ public class addCarActivity extends Activity {
         getWindow().setLayout((int) (width * .8), (int) (height * .6));
     }
 
+    private String blockCharacterSet = "~#^|$%&*! ";
+    private InputFilter filter = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return "";
+            }
+            return null;
+        }
+    };
+
+
     public static boolean isNumberCorrect(String number) {
         String expression = "[a-zA-Z]{3}+[0-9]{3}";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
@@ -71,6 +87,7 @@ public class addCarActivity extends Activity {
 
         btn_confirm = findViewById(R.id.btn_confirm);
         txt_plate = findViewById(R.id.txt_plate);
+        txt_plate.setFilters(new InputFilter[] {new InputFilter.LengthFilter(6), filter});
 
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,14 +1,21 @@
 package com.example.parkly.Fragment;
 
+import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +32,9 @@ import com.example.parkly.DataBase.LicensePlateDatabase;
 import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
 import com.example.parkly.DataBase.Tables.LicensePlate;
+import com.example.parkly.Notifications.NotificationReceiver_First;
+import com.example.parkly.Notifications.NotificationReceiver_Second;
+import com.example.parkly.Notifications.NotificationReceiver_Third;
 import com.example.parkly.R;
 
 import java.io.BufferedReader;
@@ -50,6 +60,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
+
 /**
  * Created by donvel on 2018-03-12.
  */
@@ -70,6 +82,10 @@ public class HomeFragment extends Fragment {
     public List<LicensePlate> tempLicensePlate;
     public boolean isDefaultSelected;
     private long timeLeftInMilliseconds;
+    private TextView car;
+    private TextView showCar;
+    private TextView zone;
+    private TextView showZone;
     private TextView remaining;
     private TextView timeLeft;
     private TextView ends;
@@ -78,6 +94,12 @@ public class HomeFragment extends Fragment {
     private File file;
     private String currentZone = "";
     private int parkingEndsMinutes = -1;
+
+    private final String Green = "Green 0.3€/h";
+    private final String Blue = "Blue 0.6€/h";
+    private final String Red = "Red 1.2€/h";
+    private final String Yellow = "Yellow 2€/h";
+    private final String Orange = "Orange 2€/h";
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -146,11 +168,11 @@ public class HomeFragment extends Fragment {
     public void showPriceAndParkingEnding(View view)
     {
         final ArrayList<String> zones = new ArrayList<>();
-        zones.add("Green 0.3€/h");
-        zones.add("Blue 0.6€/h");
-        zones.add("Red 1.2€/h");
-        zones.add("Yellow 2€/h");
-        zones.add("Orange 2€/h");
+        zones.add(Green);
+        zones.add(Blue);
+        zones.add(Red);
+        zones.add(Yellow);
+        zones.add(Orange);
         final ArrayList<String> time = new ArrayList<>();
 
 
@@ -188,7 +210,7 @@ public class HomeFragment extends Fragment {
 
 
                 switch (chosenZone){
-                    case "Green 0.3€/h":{
+                    case Green:{
                         time.removeAll(time);
                         time.add("1  h  0 min");
                         time.add("2  h  0 min");
@@ -203,7 +225,7 @@ public class HomeFragment extends Fragment {
                         chosenMinutes = -1;
                         break;
                     }
-                    case "Blue 0.6€/h":{
+                    case Blue:{
                         time.removeAll(time);
                         time.add("0  h 30 min");
                         time.add("1  h  0 min");
@@ -243,6 +265,7 @@ public class HomeFragment extends Fragment {
                     }
                     case "": {
                         time.removeAll(time);
+                        break;
                     }
                 }
 
@@ -298,31 +321,31 @@ public class HomeFragment extends Fragment {
         double price = 0;
         switch(color)
         {
-            case "Orange 2€/h":
+            case Orange:
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Yellow 2€/h":
+            case Yellow:
             {
                 price = 2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Blue 0.6€/h":
+            case Blue:
             {
                 price = 0.6 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Red 1.2€/h":
+            case Red:
             {
                 price = 1.2 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
                 break;
             }
-            case "Green 0.3€/h":
+            case Green:
             {
                 price = 0.3 / 60d;
                 total = ((chosenHour*60) + chosenMinute) * price;
@@ -361,13 +384,14 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public boolean needsPopUp (String color)
+    public boolean needsPopUp (String color, Calendar currentTime )
     {
-        Calendar currentTime = GregorianCalendar.getInstance();
-        currentTime.setTime(new Date());
+        //perkelti data i calla
+        //Calendar currentTime = GregorianCalendar.getInstance();
+        //currentTime.setTime(new Date());
         switch(color)
         {
-            case "Orange 2€/h":
+            case Orange:
             {
                 if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
                 {
@@ -376,12 +400,12 @@ public class HomeFragment extends Fragment {
                 }
                 break;
             }
-            case "Green 0.3€/h":
-            case "Blue 0.6€/h":
-            case "Red 1.2€/h":
-            case "Yellow 2€/h":
+            case Green:
+            case Blue:
+            case Red:
+            case Yellow:
             {
-                  //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
+                //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
                 if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
                     Toast.makeText(getActivity(), "Parking in chosen zone is FREE today", Toast.LENGTH_LONG).show();
                     return true;
@@ -555,6 +579,10 @@ public class HomeFragment extends Fragment {
 
     private void confirmParking(View view){
 
+        car = getActivity().findViewById(R.id.car);
+        showCar = getActivity().findViewById(R.id.carText);
+        zone = getActivity().findViewById(R.id.color);
+        showZone = getActivity().findViewById(R.id.colorText);
         remaining = getActivity().findViewById(R.id.remaining);
         timeLeft = getActivity().findViewById(R.id.remainingText);
         ends = getActivity().findViewById(R.id.ends);
@@ -578,6 +606,11 @@ public class HomeFragment extends Fragment {
 
                     if (MainActivity.isTimerCreated) {
 
+                        showCar.setText(currentDefaultNumber);
+
+                        Scanner scan = new Scanner(currentZone).useDelimiter("\\s+");
+                        showZone.setText(scan.next());
+
                         String timeEndsText;
 
                         if ((parkingEndsMinutes / 60) < 10) timeEndsText = "0";
@@ -588,6 +621,10 @@ public class HomeFragment extends Fragment {
 
                         timeEnds.setText(timeEndsText);
                     } else {
+                        car.setVisibility(View.INVISIBLE);
+                        showCar.setVisibility(View.INVISIBLE);
+                        zone.setVisibility(View.INVISIBLE);
+                        showZone.setVisibility(View.INVISIBLE);
                         remaining.setVisibility(View.INVISIBLE);
                         timeLeft.setVisibility(View.INVISIBLE);
                         ends.setVisibility(View.INVISIBLE);
@@ -601,71 +638,32 @@ public class HomeFragment extends Fragment {
             }
         }
         else {
+            car.setVisibility(View.INVISIBLE);
+            showCar.setVisibility(View.INVISIBLE);
+            zone.setVisibility(View.INVISIBLE);
+            showZone.setVisibility(View.INVISIBLE);
             remaining.setVisibility(View.INVISIBLE);
             timeLeft.setVisibility(View.INVISIBLE);
             ends.setVisibility(View.INVISIBLE);
             timeEnds.setVisibility(View.INVISIBLE);
         }
 
-        final MediaPlayer confirmSoundMP = MediaPlayer.create(getActivity(), R.raw.sound);
-
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!needsPopUp(chosenZone)) {
+                Calendar currentTime = GregorianCalendar.getInstance();
+                if(!needsPopUp(chosenZone, currentTime)) {
                     if(isDefaultSelected) {
                         new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
                                 .setMessage("Do you really want to confirm this parking?")
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        remaining.setVisibility(View.VISIBLE);
-                                        timeLeft.setVisibility(View.VISIBLE);
-                                        ends.setVisibility(View.VISIBLE);
-                                        timeEnds.setVisibility(View.VISIBLE);
-
-                                        confirmSoundMP.start();
-
-                                        if (file.exists()) {
-                                            file.delete();
-                                            MainActivity.countDownTimer.cancel();
-                                        }
-
-                                        Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
-
-                                        parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
-
-                                        Date c = Calendar.getInstance().getTime();
-                                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                                        String formattedDate = df.format(c);
-
-                                        startParking(formattedDate);
-
-                                        String fileName = "Countdown";
-
-                                        try {
-                                            FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
-                                            fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
-                                            fileOutputStream.write("\n".getBytes());
-                                            fileOutputStream.write(formattedDate.getBytes());
-                                            fileOutputStream.write("\n".getBytes());
-                                            fileOutputStream.write(chosenZone.getBytes());
-                                            fileOutputStream.write("\n".getBytes());
-                                            fileOutputStream.write(chosenDefaultNumber.getBytes());
-                                            fileOutputStream.close();
-                                        } catch (FileNotFoundException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    timeEnds.setText(tempTime.getText().toString());
-                                    currentZone = chosenZone;
-                                    currentDefaultNumber = chosenDefaultNumber;
-
-                                        if (chosenMinutes != -1) {
-                                            parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
-                                            tempTime.setText(parkingEnds);
+                                        checkSMSPermissions();
+                                        if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
+                                                == PackageManager.PERMISSION_GRANTED) {
+                                            confirmAndSend();
+                                            setNotifications();
                                         }
                                     }
                                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -679,6 +677,201 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void setNotifications(){
+
+        Calendar calendar = Calendar.getInstance();
+
+        long notificationTime = (parkingEndsMinutes * 60000) - (10 * 60000);
+        int hours = (int) notificationTime / 3600000;
+        int minutes = (int) (notificationTime % 3600000) / 60000;
+
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+
+        Intent intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_First.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        calendar = Calendar.getInstance();
+
+        notificationTime = (parkingEndsMinutes * 60000) - (5 * 60000);
+        hours = (int) notificationTime / 3600000;
+        minutes = (int) (notificationTime % 3600000) / 60000;
+
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+
+        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Second.class);
+
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.HOUR_OF_DAY, parkingEndsMinutes / 60);
+        calendar.set(Calendar.MINUTE, parkingEndsMinutes % 60);
+
+        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Third.class);
+
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+    }
+
+    public void confirmAndSend(){
+
+        car.setVisibility(View.VISIBLE);
+        showCar.setVisibility(View.VISIBLE);
+        zone.setVisibility(View.VISIBLE);
+        showZone.setVisibility(View.VISIBLE);
+        remaining.setVisibility(View.VISIBLE);
+        timeLeft.setVisibility(View.VISIBLE);
+        ends.setVisibility(View.VISIBLE);
+        timeEnds.setVisibility(View.VISIBLE);
+
+        MediaPlayer confirmSoundMP = MediaPlayer.create(getActivity(), R.raw.sound);
+        confirmSoundMP.start();
+
+        if (file.exists()) {
+            file.delete();
+            if (MainActivity.isTimerCreated) {
+                MainActivity.countDownTimer.cancel();
+                MainActivity.isTimerCreated = false;
+            }
+        }
+
+        Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
+
+        parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
+
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = df.format(c);
+
+        startParking(formattedDate);
+
+        String fileName = "Countdown";
+
+        try {
+            FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
+            fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
+            fileOutputStream.write("\n".getBytes());
+            fileOutputStream.write(formattedDate.getBytes());
+            fileOutputStream.write("\n".getBytes());
+            fileOutputStream.write(chosenZone.getBytes());
+            fileOutputStream.write("\n".getBytes());
+            fileOutputStream.write(chosenDefaultNumber.getBytes());
+            fileOutputStream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        currentZone = chosenZone;
+        currentDefaultNumber = chosenDefaultNumber;
+
+        showCar.setText(currentDefaultNumber);
+
+        scan = new Scanner(currentZone).useDelimiter("\\s+");
+        showZone.setText(scan.next());
+        timeEnds.setText(tempTime.getText().toString());
+
+        if (chosenMinutes != -1) {
+            parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
+            tempTime.setText(parkingEnds);
+        }
+
+        send();
+
+    }
+
+    public void checkSMSPermissions(){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
+                    == PackageManager.PERMISSION_DENIED) {
+
+                Log.d("permission", "permission denied to SEND_SMS - requesting it");
+                String[] permissions = {Manifest.permission.SEND_SMS};
+
+                requestPermissions(permissions, 1);
+
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(requestCode == 1){
+
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                confirmAndSend();
+            } else{
+                Toast.makeText(getActivity(), "Permission was not granted", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    public void send(){
+        SmsManager sms = SmsManager.getDefault();
+
+        String zone = "";
+
+        switch(currentZone){
+            case Green:
+                zone = "Z";
+                break;
+            case Blue:
+                zone = "M";
+                break;
+            case Red:
+                zone = "R";
+                break;
+            case Yellow:
+                zone = "G";
+                break;
+            case Orange:
+                zone = "A";
+                break;
+
+        }
+
+        int hour = chosenMinutes / 60;
+        int minute = chosenMinutes % 60;
+
+        if(minute != 0 && minute % 2 == 0){
+            minute = minute / 10;
+        }
+
+        String parkingTime = minute == 0 ? String.valueOf(hour) : String.valueOf(hour) + "." + String.valueOf(minute);
+
+        String message = "PK " + parkingTime + " " + zone + " " + currentDefaultNumber;
+
+        sms.sendTextMessage("+37063694869", null, message, null, null);
+
+        Toast.makeText(getActivity(), "Parking confirmed successfully", Toast.LENGTH_SHORT).show();
     }
 
     public long calculateTimeLeft(int parkingEndsMinutes, int hours, int minutes){
@@ -726,7 +919,12 @@ public class HomeFragment extends Fragment {
                     currentZone = "";
                     parkingEndsMinutes = -1;
                     currentDefaultNumber = "";
+                    MainActivity.isTimerCreated = false;
                 }
+                car.setVisibility(View.INVISIBLE);
+                showCar.setVisibility(View.INVISIBLE);
+                zone.setVisibility(View.INVISIBLE);
+                showZone.setVisibility(View.INVISIBLE);
                 remaining.setVisibility(View.INVISIBLE);
                 timeLeft.setVisibility(View.INVISIBLE);
                 ends.setVisibility(View.INVISIBLE);

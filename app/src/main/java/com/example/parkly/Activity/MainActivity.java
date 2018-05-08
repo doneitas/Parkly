@@ -1,5 +1,8 @@
 package com.example.parkly.Activity;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -10,9 +13,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.example.parkly.Fragment.CarsFragment;
 import com.example.parkly.Fragment.HistoryFragment;
@@ -20,6 +25,8 @@ import com.example.parkly.Fragment.HomeFragment;
 import com.example.parkly.Fragment.ParkingFragment;
 import com.example.parkly.Fragment.SettingsFragment;
 import com.example.parkly.R;
+
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -32,6 +39,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
 
         loadFragment(new HomeFragment(), "HOME_FRAGMENT");
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -85,8 +94,20 @@ public class MainActivity extends AppCompatActivity
             }
         }
         else {
-            finish();
-            System.exit(0);
+            new AlertDialog.Builder(this)
+                    .setMessage("Do you really want to close the application?")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                            System.exit(0);
+                        }
+                    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create().show();
         }
     }
 
@@ -130,5 +151,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
+
     }
 }

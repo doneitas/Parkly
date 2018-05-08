@@ -1,6 +1,7 @@
 package com.example.parkly.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.parkly.Adapters.ExpandableListAdapter;
@@ -38,14 +40,15 @@ public class ParkingFragment extends Fragment {
         return inflater.inflate(R.layout.parking_fragment, null);
     }
 
+    private Context mContext;
     private ExpandableListView lst_zones;
     private ExpandableListAdapter adapter;
     private List<String> zoneList;
     private HashMap<String, List<String>> addressList;
-
+    private int searchTextLength = 0;
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         lst_zones = view.findViewById(R.id.expl_parking);
@@ -53,20 +56,12 @@ public class ParkingFragment extends Fragment {
         //Init data
         prepareData();
 
-        adapter = new ExpandableListAdapter(this.getContext(),zoneList,addressList);
+        mContext = this.getContext();
+        adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
+
 
 
         lst_zones.setAdapter(adapter);
-        /*lst_zones.setOnLongClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
-            {
-
-
-                return false;
-            }
-        });*/
-
         lst_zones.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -96,7 +91,67 @@ public class ParkingFragment extends Fragment {
                 return false;
             }
         });
+
+        SearchView searchView = view.findViewById(R.id.sview_parking);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+              @Override
+              public boolean onQueryTextSubmit(String query) {
+                  return false;
+              }
+
+              @Override
+              public boolean onQueryTextChange(String newText) {
+                  String newTrimmedText = trimText(newText);
+                  if (newTrimmedText != null && !newTrimmedText.isEmpty())
+                  {
+                      // trimint reikia newText, tai šioje vietoje metodas turėtų gražinti patrimintą newText
+                      if (searchTextLength > newTrimmedText.length()) {
+                          prepareData();
+                          searchTextLength = newTrimmedText.length();
+                      }
+                      else searchTextLength = newTrimmedText.length();
+
+                      ArrayList<String> tempList = new ArrayList<>();
+                      for (int i = 0; i < 5; i++) {
+                          for (String item : addressList.get(zoneList.get(i))) {
+                              if (item.toUpperCase().contains(newTrimmedText.toUpperCase()))
+                              {
+                                  tempList.add(item);
+                              }
+                          }
+                          addressList.get(zoneList.get(i)).clear();
+                          addressList.get(zoneList.get(i)).addAll(tempList);
+                          tempList.clear();
+                      }
+                      adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
+                      lst_zones.setAdapter(adapter);
+                      lst_zones.expandGroup(0);
+                      lst_zones.expandGroup(1);
+                      lst_zones.expandGroup(2);
+                      lst_zones.expandGroup(3);
+                      lst_zones.expandGroup(4);
+                      adapter.notifyDataSetChanged();
+                  }
+                  else
+                  {
+                      prepareData();
+                      adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
+                      lst_zones.setAdapter(adapter);
+                      adapter.notifyDataSetChanged();
+                  }
+                  return true;
+              }
+          }
+        );
     }
+
+    public String trimText(String newText)
+    {
+        String temp = newText.trim().replaceAll(" +", " ");
+        return temp;
+    }
+
+
 
     private void prepareData()
     {
@@ -200,7 +255,7 @@ public class ParkingFragment extends Fragment {
         yellowZones.add("A. Mickevičiaus g.");
         yellowZones.add("Spaustuvininkų g.");
         yellowZones.add("Kęstučio g.");
-        yellowZones.add(" S. Daukanto g.");
+        yellowZones.add("S. Daukanto g.");
         yellowZones.add("Maironio g.");
         yellowZones.add("Laisvės al.");
         yellowZones.add("K. Donelaičio g.");
