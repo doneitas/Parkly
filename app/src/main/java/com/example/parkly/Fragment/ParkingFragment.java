@@ -147,8 +147,7 @@ public class ParkingFragment extends Fragment {
 
     public String trimText(String newText)
     {
-        String temp = newText.trim().replaceAll(" +", " ");
-        return temp;
+        return newText.trim().replaceAll(" +", " ");
     }
 
 
@@ -201,7 +200,6 @@ public class ParkingFragment extends Fragment {
         blueZones.add("A. Jasaičio g.");
         blueZones.add("Eivenių g.");
         blueZones.add("K. Genio g.");
-        blueZones.add("Sukilėlių pr.");
         blueZones.add("Lazūnų g.");
         blueZones.add("Ūmėdžių g.");
         blueZones.add("Ruduokių g.");
