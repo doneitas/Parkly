@@ -664,8 +664,8 @@ public class HomeFragment extends Fragment {
                                                 == PackageManager.PERMISSION_GRANTED) {
                                             confirmAndSend();
                                             setNotifications();
+                                            confirmButtonSound();
                                         }
-                                        confirmButtonSound();
                                     }
                                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
@@ -752,9 +752,6 @@ public class HomeFragment extends Fragment {
         timeLeft.setVisibility(View.VISIBLE);
         ends.setVisibility(View.VISIBLE);
         timeEnds.setVisibility(View.VISIBLE);
-
-        MediaPlayer confirmSoundMP = MediaPlayer.create(getActivity(), R.raw.sound);
-        confirmSoundMP.start();
 
         if (file.exists()) {
             file.delete();
