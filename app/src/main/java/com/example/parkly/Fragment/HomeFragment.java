@@ -684,7 +684,6 @@ public class HomeFragment extends Fragment {
     {
         MediaPlayer MPconfirmSound = MediaPlayer.create(getActivity(), R.raw.sound);
         MPconfirmSound.start();
-        MPconfirmSound.release();
     }
 
     public void setNotifications(){
