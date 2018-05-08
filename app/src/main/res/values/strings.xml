@@ -33,9 +33,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="parking_zone">Parking zone</string>
+    <string name="parking_zone">Parking\nzone</string>
     <string name="confirm">Confirm</string>
-    <string name="parking_duration">Parking duration</string>
+    <string name="parking_duration">Parking\nduration</string>
     <string name="price">Price</string>
     <string name="parking_ends">Parking ends</string>
     <string name="home">Home</string>

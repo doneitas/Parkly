@@ -167,19 +167,19 @@ public class HomeFragment extends Fragment {
 
     public void showPriceAndParkingEnding(View view)
     {
-        final ArrayList<String> zones = new ArrayList<String>();
+        final ArrayList<String> zones = new ArrayList<>();
         zones.add(Green);
         zones.add(Blue);
         zones.add(Red);
         zones.add(Yellow);
         zones.add(Orange);
-        final ArrayList<String> time = new ArrayList<String>();
+        final ArrayList<String> time = new ArrayList<>();
 
 
         listZones = view.findViewById(R.id.list_zones);
         listTime = view.findViewById(R.id.list_time);
-        final ArrayAdapter<String> zonesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, zones);
-        final ArrayAdapter<String> timeAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice, time);
+        final ArrayAdapter<String> zonesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, zones);
+        final ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, time);
         listZones.setAdapter(zonesAdapter);
         listTime.setAdapter(timeAdapter);
 
@@ -430,7 +430,7 @@ public class HomeFragment extends Fragment {
     public void database(View view){
 
         //init View
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, licensePlateList);
+        adapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_layout, licensePlateList);
         spin_DefaultCar = view.findViewById(R.id.spin_DefaultCar);
         registerForContextMenu(spin_DefaultCar);
         spin_DefaultCar.setAdapter(adapter);
@@ -654,7 +654,7 @@ public class HomeFragment extends Fragment {
                 Calendar currentTime = GregorianCalendar.getInstance();
                 if(!needsPopUp(chosenZone, currentTime)) {
                     if(isDefaultSelected) {
-                        new AlertDialog.Builder(getActivity())
+                        new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
                                 .setMessage("Do you really want to confirm this parking?")
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override

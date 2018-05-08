@@ -26,7 +26,7 @@ public class LicensePlateAdapter extends ArrayAdapter<LicensePlate>
     {
         LicensePlate licensePlate = getItem(position);
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.license_plate, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.cars_tab_layout_2, parent, false);
         }
         TextView tvLicensePlate = convertView.findViewById(R.id.license_plate);
         assert licensePlate != null;

@@ -241,7 +241,7 @@ public class CarsFragment extends Fragment {
         {
             case 0:
             {
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
                         .setMessage("Do you want to set "+licensePlate.getNumber() + " as default car?")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
