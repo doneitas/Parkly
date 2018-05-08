@@ -665,6 +665,7 @@ public class HomeFragment extends Fragment {
                                             confirmAndSend();
                                             setNotifications();
                                         }
+                                        confirmButtonSound();
                                     }
                                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
@@ -677,6 +678,13 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void confirmButtonSound()
+    {
+        MediaPlayer MPconfirmSound = MediaPlayer.create(getActivity(), R.raw.sound);
+        MPconfirmSound.start();
+        MPconfirmSound.release();
     }
 
     public void setNotifications(){

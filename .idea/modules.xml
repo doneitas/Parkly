@@ -3,10 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Parkly.iml" filepath="$PROJECT_DIR$/Parkly.iml" />
-      <module fileurl="file://C:\Users\Marius\AndroidStudio\Parkly2\Parkly.iml" filepath="C:\Users\Marius\AndroidStudio\Parkly2\Parkly.iml" />
-      <module fileurl="file://C:\Users\donvel\AndroidStudioProjects\Parkly\Parkly2.iml" filepath="C:\Users\donvel\AndroidStudioProjects\Parkly\Parkly2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Marius\AndroidStudio\Parkly2\app\app.iml" filepath="C:\Users\Marius\AndroidStudio\Parkly2\app\app.iml" />
     </modules>
   </component>
 </project>
