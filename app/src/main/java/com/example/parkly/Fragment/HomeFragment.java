@@ -664,6 +664,7 @@ public class HomeFragment extends Fragment {
                                                 == PackageManager.PERMISSION_GRANTED) {
                                             confirmAndSend();
                                             setNotifications();
+                                            confirmButtonSound();
                                         }
                                     }
                                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -677,6 +678,12 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void confirmButtonSound()
+    {
+        MediaPlayer MPconfirmSound = MediaPlayer.create(getActivity(), R.raw.sound);
+        MPconfirmSound.start();
     }
 
     public void setNotifications(){
@@ -744,9 +751,6 @@ public class HomeFragment extends Fragment {
         timeLeft.setVisibility(View.VISIBLE);
         ends.setVisibility(View.VISIBLE);
         timeEnds.setVisibility(View.VISIBLE);
-
-        MediaPlayer confirmSoundMP = MediaPlayer.create(getActivity(), R.raw.sound);
-        confirmSoundMP.start();
 
         if (file.exists()) {
             file.delete();

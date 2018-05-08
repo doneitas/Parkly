@@ -34,4 +34,19 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="8dp"
         tools:ignore="RtlHardcoded" />
+
+    <Switch
+        android:id="@+id/switch_sound"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Sound"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_language"
+        android:checked="true"
+        />
+
 </android.support.constraint.ConstraintLayout>
