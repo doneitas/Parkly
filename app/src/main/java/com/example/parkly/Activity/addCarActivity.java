@@ -16,6 +16,8 @@ import com.example.parkly.DataBase.LocalUserDataSource;
 import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +39,7 @@ public class addCarActivity extends Activity {
     //Database
     private CompositeDisposable compositeDisposable;
     public LicensePlateRepository licensePlateRepository;
+    List<LicensePlate> licensePlateList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
