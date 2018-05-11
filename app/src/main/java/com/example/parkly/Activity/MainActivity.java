@@ -1,6 +1,7 @@
 package com.example.parkly.Activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -17,7 +18,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.example.parkly.Fragment.CarsFragment;
 import com.example.parkly.Fragment.HistoryFragment;
@@ -111,6 +115,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void hideKeyboard(){
+        View view = this.getCurrentFocus();
+        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -125,18 +135,23 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             selectedFragment = new HomeFragment();
             fragmentTag = "HOME_FRAGMENT";
+            hideKeyboard();
             isCurrentFragmentIsHomeFragment = true;
         } else if (id == R.id.nav_cars) {
             selectedFragment = new CarsFragment();
+            hideKeyboard();
             fragmentTag = "CARS_FRAGMENT";
         } else if (id == R.id.nav_parking) {
             selectedFragment = new ParkingFragment();
+            hideKeyboard();
             fragmentTag = "PARKING_FRAGMENT";
-        } else if (id == R.id.nav_budget) {
+        /*} else if (id == R.id.nav_budget) {
             selectedFragment = new HistoryFragment();
-            fragmentTag = "HISTORY_FRAGMENT";
+            hideKeyboard();
+            fragmentTag = "HISTORY_FRAGMENT";*/
         } else if (id == R.id.nav_settings) {
             selectedFragment = new SettingsFragment();
+            hideKeyboard();
             fragmentTag = "SETTINGS_FRAGMENT";
         } else if (id == R.id.nav_aboutUs) {
 
