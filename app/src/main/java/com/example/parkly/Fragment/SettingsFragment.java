@@ -42,7 +42,7 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        aSwitch = view.findViewById(R.id.switch_SMS);
+        aSwitch = view.findViewById(R.id.switch_sound);
 
         checkState();
         onSoundClick();
