@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -795,7 +796,28 @@ public class HomeFragment extends Fragment {
         showCar.setText(currentDefaultNumber);
 
         scan = new Scanner(currentZone).useDelimiter("\\s+");
-        showZone.setText(scan.next());
+        String color = scan.next();
+        showZone.setText(color);
+        switch(currentZone){
+            case Orange:
+                showZone.setTextColor(Color.parseColor("#F9A602"));
+                break;
+            case Blue:
+                showZone.setTextColor(Color.parseColor("#73C2FB"));
+                break;
+            case Red:
+                showZone.setTextColor(Color.parseColor("#FF0000"));
+                break;
+            case Green:
+                showZone.setTextColor(Color.parseColor("#7FFF00"));
+                break;
+            case Yellow:
+                showZone.setTextColor(Color.parseColor("#FFFB00"));
+                break;
+            default:
+                showZone.setTextColor(Color.parseColor("#FFFFFF"));
+                break;
+        }
         timeEnds.setText(tempTime.getText().toString());
 
         if (chosenMinutes != -1) {
@@ -954,7 +976,21 @@ public class HomeFragment extends Fragment {
         timeLeftText += ":";
         if(seconds < 10) timeLeftText += "0";
         timeLeftText += seconds;
+        if(timeLeftInMinutes > 11){
+            timeLeft.setTextColor(-1275068417);
+        }
 
+        if(timeLeftInMinutes < 10 && timeLeftInMinutes > 5){
+            timeLeft.setTextColor(Color.parseColor("#FF0000"));
+        }
+        if(timeLeftInMinutes < 5){
+            if(timeLeft.getCurrentTextColor() == Color.parseColor("#FF0000")){
+                timeLeft.setTextColor(Color.parseColor("#FFFB00"));
+            }
+            else if(timeLeft.getCurrentTextColor() == Color.parseColor("#FFFB00")){
+                timeLeft.setTextColor(Color.parseColor("#FF0000"));
+            }
+        }
         timeLeft.setText(timeLeftText);
     }
 }
