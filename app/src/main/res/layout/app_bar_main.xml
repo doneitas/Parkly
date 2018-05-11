@@ -30,12 +30,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:text="@string/ends"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginLeft="8dp" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/endsText"
@@ -45,6 +43,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:text="@string/time2"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ends"
                     android:layout_marginLeft="8dp" />
@@ -54,12 +53,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="105dp"
                     android:layout_weight="1"
                     android:text="@string/remaining"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/endsText"
-                    android:layout_marginLeft="8dp" />
+                    app:layout_constraintStart_toStartOf="@+id/ends"
+                    android:layout_marginLeft="105dp" />
 
                 <TextView
                     android:id="@+id/remainingText"
@@ -69,6 +68,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:text="@string/time2"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/remaining"
                     android:layout_marginLeft="8dp" />
@@ -77,12 +77,10 @@
                     android:id="@+id/car"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/car"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginLeft="8dp" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/carText"
@@ -91,6 +89,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:text="-"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/car"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginLeft="8dp" />
@@ -99,12 +98,12 @@
                     android:id="@+id/color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="105dp"
                     android:layout_marginTop="8dp"
                     android:text="@string/color"
-                    app:layout_constraintStart_toEndOf="@+id/carText"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginLeft="8dp" />
+                    android:layout_marginLeft="105dp" />
 
                 <TextView
                     android:id="@+id/colorText"
