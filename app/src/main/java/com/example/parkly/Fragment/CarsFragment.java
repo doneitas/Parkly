@@ -107,7 +107,7 @@ public class CarsFragment extends Fragment {
             public void onClick(View v) {
                 lst_Car.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
                     if (!deleteClicked) {
-                        arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, numbers());
+                        arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.cars_tab_layout_1, numbers());
                         lst_Car.setAdapter(arrayAdapter);
                         arrayAdapter.notifyDataSetChanged();
                         deleteClicked = true;
