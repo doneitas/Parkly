@@ -391,6 +391,7 @@ public class HomeFragment extends Fragment {
                 totalTime = "0:00";
                 needAlert = true;
             }
+            else needAlert = false;
         } else if ( parkingEndsMinutes > (18*60) || currentTime.get(Calendar.DAY_OF_MONTH) != c.get(Calendar.DAY_OF_MONTH)) {
             if(c.get(Calendar.HOUR_OF_DAY) <= 18 && c.get(Calendar.HOUR_OF_DAY) >= 8) {
                 totalTime = "18:00";
@@ -681,23 +682,30 @@ public class HomeFragment extends Fragment {
                                         checkSMSPermissions();
                                         if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
                                                 == PackageManager.PERMISSION_GRANTED) {
-                                            new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                                    .setMessage("!!! ATTENTION !!! Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?")
-                                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (needAlert) {
+                                                new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
+                                                        .setMessage("!!! ATTENTION !!! Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?")
+                                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which) {
 
-                                                            confirmAndSend();
-                                                            setNotifications();
-                                                            confirmButtonSound();
+                                                                confirmAndSend();
+                                                                setNotifications();
+                                                                confirmButtonSound();
 
-                                                        }
-                                                    }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    dialog.dismiss();
-                                                }
-                                            }).create().show();
+                                                            }
+                                                        }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                }).create().show();
+                                            }
+                                            else {
+                                                confirmAndSend();
+                                                setNotifications();
+                                                confirmButtonSound();
+                                            }
                                         }
                                     }
                                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
