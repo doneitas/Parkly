@@ -983,8 +983,9 @@ public class HomeFragment extends Fragment {
         if(timeLeftInMinutes < 10 && timeLeftInMinutes > 5){
             timeLeft.setTextColor(Color.parseColor("#FF0000"));
         }
+
         if(timeLeftInMinutes < 5){
-            if(timeLeft.getCurrentTextColor() == Color.parseColor("#FF0000")){
+            if(timeLeft.getCurrentTextColor() == Color.parseColor("#FF0000") || timeLeft.getCurrentTextColor() == -1275068417){
                 timeLeft.setTextColor(Color.parseColor("#FFFB00"));
             }
             else if(timeLeft.getCurrentTextColor() == Color.parseColor("#FFFB00")){
