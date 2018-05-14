@@ -57,7 +57,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/contrail_one"
+        android:fontFamily="sans-serif"
         android:gravity="start|center"
         android:text="@string/default_car"
         android:textColor="@color/colorText"
