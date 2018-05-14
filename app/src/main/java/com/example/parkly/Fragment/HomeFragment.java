@@ -95,6 +95,7 @@ public class HomeFragment extends Fragment {
     private File file;
     private String currentZone = "";
     private int parkingEndsMinutes = -1;
+    private boolean needAlert = false;
 
     private final String Green = "Green 0.3€/h";
     private final String Blue = "Blue 0.6€/h";
@@ -306,6 +307,7 @@ public class HomeFragment extends Fragment {
                     parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
                     finalPrice = estimatedPrice(chosenZone, chosenMinutes / 60, chosenMinutes % 60);
                 }
+
                 tempPrice.setText(finalPrice);
                 tempTime.setText(parkingEnds);
 
@@ -380,6 +382,23 @@ public class HomeFragment extends Fragment {
         currentTime.add(Calendar.MINUTE, chosenMinute);
 
         String totalTime = (currentTime.get(Calendar.HOUR_OF_DAY) < 10? ("0"+currentTime.get(Calendar.HOUR_OF_DAY)) : currentTime.get(Calendar.HOUR_OF_DAY)) + ":" + (currentTime.get(Calendar.MINUTE) < 10? ("0"+currentTime.get(Calendar.MINUTE)) : currentTime.get(Calendar.MINUTE));
+
+        Calendar c = GregorianCalendar.getInstance();
+        c.setTime(new Date());
+
+        if(chosenZone == Orange){
+            if((timeEnds.getText().toString().compareTo("0:00") == 0 && chosenDefaultNumber.compareTo(currentDefaultNumber) == 0) || currentTime.get(Calendar.DAY_OF_MONTH) != c.get(Calendar.DAY_OF_MONTH)){
+                totalTime = "0:00";
+                needAlert = true;
+            }
+            else needAlert = false;
+        } else if ( parkingEndsMinutes > (18*60) || currentTime.get(Calendar.DAY_OF_MONTH) != c.get(Calendar.DAY_OF_MONTH)) {
+            if(c.get(Calendar.HOUR_OF_DAY) <= 18 && c.get(Calendar.HOUR_OF_DAY) >= 8) {
+                totalTime = "18:00";
+                needAlert = true;
+            }
+        }
+        else needAlert = false;
 
         return totalTime;
     }
@@ -663,9 +682,30 @@ public class HomeFragment extends Fragment {
                                         checkSMSPermissions();
                                         if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
                                                 == PackageManager.PERMISSION_GRANTED) {
-                                            confirmAndSend();
-                                            setNotifications();
-                                            confirmButtonSound();
+                                            if (needAlert) {
+                                                new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
+                                                        .setMessage("!!! ATTENTION !!! Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?")
+                                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                                confirmAndSend();
+                                                                setNotifications();
+                                                                confirmButtonSound();
+
+                                                            }
+                                                        }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                }).create().show();
+                                            }
+                                            else {
+                                                confirmAndSend();
+                                                setNotifications();
+                                                confirmButtonSound();
+                                            }
                                         }
                                     }
                                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -691,7 +731,14 @@ public class HomeFragment extends Fragment {
 
         Calendar calendar = Calendar.getInstance();
 
-        long notificationTime = (parkingEndsMinutes * 60000) - (10 * 60000);
+        long notificationTime;
+
+
+
+        if(parkingEndsMinutes == 0){
+                notificationTime = ((parkingEndsMinutes + ((23 * 60) + 59)) * 60000) - (10 * 60000);
+        }
+        else notificationTime = (parkingEndsMinutes * 60000) - (10 * 60000);
         int hours = (int) notificationTime / 3600000;
         int minutes = (int) (notificationTime % 3600000) / 60000;
 
@@ -710,7 +757,10 @@ public class HomeFragment extends Fragment {
 
         calendar = Calendar.getInstance();
 
-        notificationTime = (parkingEndsMinutes * 60000) - (5 * 60000);
+        if(parkingEndsMinutes == 0){
+            notificationTime = ((parkingEndsMinutes + ((23 * 60) + 59)) * 60000) - (5 * 60000);
+        }
+        else notificationTime = (parkingEndsMinutes * 60000) - (5 * 60000);
         hours = (int) notificationTime / 3600000;
         minutes = (int) (notificationTime % 3600000) / 60000;
 
@@ -729,8 +779,13 @@ public class HomeFragment extends Fragment {
 
         calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.HOUR_OF_DAY, parkingEndsMinutes / 60);
-        calendar.set(Calendar.MINUTE, parkingEndsMinutes % 60);
+        if(parkingEndsMinutes == 0){
+            calendar.set(Calendar.HOUR_OF_DAY, ((parkingEndsMinutes + ((23 * 60) + 59) / 60)));
+            calendar.set(Calendar.MINUTE, ((parkingEndsMinutes + ((23 * 60) + 59) % 60)));
+        } else {
+            calendar.set(Calendar.HOUR_OF_DAY, (parkingEndsMinutes / 60));
+            calendar.set(Calendar.MINUTE, (parkingEndsMinutes % 60));
+        }
 
         intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Third.class);
 
@@ -742,7 +797,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    public void confirmAndSend(){
+    public void confirmAndSend() {
 
         car.setVisibility(View.VISIBLE);
         showCar.setVisibility(View.VISIBLE);
@@ -798,7 +853,7 @@ public class HomeFragment extends Fragment {
         scan = new Scanner(currentZone).useDelimiter("\\s+");
         String color = scan.next();
         showZone.setText(color);
-        switch(currentZone){
+        switch (currentZone) {
             case Orange:
                 showZone.setTextColor(Color.parseColor("#F9A602"));
                 break;
@@ -826,7 +881,6 @@ public class HomeFragment extends Fragment {
         }
 
         send();
-
     }
 
     public void checkSMSPermissions(){
@@ -901,6 +955,10 @@ public class HomeFragment extends Fragment {
     }
 
     public long calculateTimeLeft(int parkingEndsMinutes, int hours, int minutes){
+
+        if(parkingEndsMinutes == 0){
+            parkingEndsMinutes = 24 * 60;
+        }
 
         long timeLeftInMilliseconds = (parkingEndsMinutes - (hours * 60 + minutes)) * 60000;
 
