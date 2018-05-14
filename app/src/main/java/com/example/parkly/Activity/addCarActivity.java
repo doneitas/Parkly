@@ -16,6 +16,8 @@ import com.example.parkly.DataBase.LocalUserDataSource;
 import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +39,7 @@ public class addCarActivity extends Activity {
     //Database
     private CompositeDisposable compositeDisposable;
     public LicensePlateRepository licensePlateRepository;
+    List<LicensePlate> licensePlateList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class addCarActivity extends Activity {
         setContentView(R.layout.add_car);
 
         setPopUpDimensions();
+        loadData();
         init();
     }
 
@@ -80,11 +84,6 @@ public class addCarActivity extends Activity {
     }
 
     public void init() {
-        //Init
-        compositeDisposable = new CompositeDisposable();
-        LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
-        licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
-
         btn_confirm = findViewById(R.id.btn_confirm);
         txt_plate = findViewById(R.id.txt_plate);
         txt_plate.setFilters(new InputFilter[] {new InputFilter.LengthFilter(6), filter});
@@ -94,40 +93,90 @@ public class addCarActivity extends Activity {
             public void onClick(View v) {
                 final String value = txt_plate.getText().toString().toUpperCase();
                 if(isNumberCorrect(value)) {
-                    Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
-                        @Override
-                        public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                            LicensePlate licensePlate = new LicensePlate();
-                            licensePlate.setNumber(value);
-                            if(licensePlateRepository.findDefault() == null)
-                            {
-                                licensePlate.setCurrent(true);
-                            }
-                            licensePlateRepository.insertAll(licensePlate);
-                            e.onComplete();
-                        }
-                    })
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new Consumer<Object>() {
-                                           @Override
-                                           public void accept(Object o) throws Exception {
-                                               Toast.makeText(getApplicationContext(), "License Plate added !", Toast.LENGTH_SHORT).show();
-                                           }
-                                       }, new Consumer<Throwable>() {
-                                           @Override
-                                           public void accept(Throwable throwable) throws Exception {
-                                               Toast.makeText(getApplicationContext(), "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                                           }
-                                       }
-                            );
-                    compositeDisposable.add(disposable);
-                    finish();
+                    if (!checkIfContains(value))
+                    {
+                        insertLicensePlate(value);
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "This car is already added", Toast.LENGTH_LONG).show();
+                    }
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Wrong format", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    private boolean checkIfContains(String value)
+    {
+        for (LicensePlate l:licensePlateList)
+        {
+            if (l.getNumber().equalsIgnoreCase(value))return true;
+        }
+        return false;
+    }
+
+    private void insertLicensePlate(final String value)
+    {
+        Disposable disposable = io.reactivex.Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) {
+                LicensePlate licensePlate = new LicensePlate();
+                licensePlate.setNumber(value);
+                if(licensePlateRepository.findDefault() == null)
+                {
+                    licensePlate.setCurrent(true);
+                }
+                licensePlateRepository.insertAll(licensePlate);
+                e.onComplete();
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<Object>() {
+                               @Override
+                               public void accept(Object o) {
+                                   Toast.makeText(getApplicationContext(), "License Plate added !", Toast.LENGTH_SHORT).show();
+                               }
+                           }, new Consumer<Throwable>() {
+                               @Override
+                               public void accept(Throwable throwable) {
+                                   Toast.makeText(getApplicationContext(), "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                               }
+                           }
+                );
+        compositeDisposable.add(disposable);
+        finish();
+    }
+
+    private void loadData()
+    {
+        //Init
+        compositeDisposable = new CompositeDisposable();
+        LicensePlateDatabase licensePlateDatabase = LicensePlateDatabase.getInstance(this);
+        licensePlateRepository = LicensePlateRepository.getInstance(LocalUserDataSource.getInstance(licensePlateDatabase.licensePlateDao()));
+
+        Disposable disposable = licensePlateRepository.getAll()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<LicensePlate>>() {
+                    @Override
+                    public void accept(List<LicensePlate> licensePlates) {
+                        onGetAllLicensePlateSuccess(licensePlates);
+                    }
+
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    private void onGetAllLicensePlateSuccess(List<LicensePlate> licensePlates)
+    {
+        licensePlateList.clear();
+        licensePlateList.addAll(licensePlates);
     }
 }
