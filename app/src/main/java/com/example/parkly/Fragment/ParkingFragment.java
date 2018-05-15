@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.SearchView;
@@ -42,6 +44,7 @@ public class ParkingFragment extends Fragment {
 
     private Context mContext;
     private ExpandableListView lst_zones;
+    private SearchView searchView;
     private ExpandableListAdapter adapter;
     private List<String> zoneList;
     private HashMap<String, List<String>> addressList;
@@ -55,11 +58,9 @@ public class ParkingFragment extends Fragment {
 
         //Init data
         prepareData();
-
+        View mView = view;
         mContext = this.getContext();
         adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
-
-
 
         lst_zones.setAdapter(adapter);
         lst_zones.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -92,7 +93,8 @@ public class ParkingFragment extends Fragment {
             }
         });
 
-        SearchView searchView = view.findViewById(R.id.sview_parking);
+
+        searchView = view.findViewById(R.id.sview_parking);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
               @Override
               public boolean onQueryTextSubmit(String query) {
@@ -143,6 +145,20 @@ public class ParkingFragment extends Fragment {
               }
           }
         );
+        /*mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.clearFocus();
+                searchView.onActionViewCollapsed();
+            }
+        });
+        lst_zones.setOnClickListener(new ExpandableListView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.clearFocus();
+                searchView.onActionViewCollapsed();
+            }
+        });*/
     }
 
     public String trimText(String newText)
@@ -150,7 +166,10 @@ public class ParkingFragment extends Fragment {
         return newText.trim().replaceAll(" +", " ");
     }
 
-
+    public void onBackPressed() {
+        searchView.clearFocus();
+        searchView.onActionViewCollapsed();
+    }
 
     private void prepareData()
     {
