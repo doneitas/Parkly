@@ -621,6 +621,24 @@ public class HomeFragment extends Fragment {
                 currentZone = bufferedReader.readLine();
                 currentDefaultNumber = bufferedReader.readLine();
 
+                switch (currentZone) {
+                    case Orange:
+                        showZone.setTextColor(Color.parseColor("#F9A602"));
+                        break;
+                    case Blue:
+                        showZone.setTextColor(Color.parseColor("#73C2FB"));
+                        break;
+                    case Red:
+                        showZone.setTextColor(Color.parseColor("#FF0000"));
+                        break;
+                    case Green:
+                        showZone.setTextColor(Color.parseColor("#7FFF00"));
+                        break;
+                    case Yellow:
+                        showZone.setTextColor(Color.parseColor("#FFFB00"));
+                        break;
+                }
+
                 if (!MainActivity.isTimerCreated) {
                     startParking(parkingDate);
 
@@ -853,6 +871,7 @@ public class HomeFragment extends Fragment {
         scan = new Scanner(currentZone).useDelimiter("\\s+");
         String color = scan.next();
         showZone.setText(color);
+
         switch (currentZone) {
             case Orange:
                 showZone.setTextColor(Color.parseColor("#F9A602"));
@@ -873,6 +892,7 @@ public class HomeFragment extends Fragment {
                 showZone.setTextColor(Color.parseColor("#FFFFFF"));
                 break;
         }
+
         timeEnds.setText(tempTime.getText().toString());
 
         if (chosenMinutes != -1) {
@@ -1034,11 +1054,12 @@ public class HomeFragment extends Fragment {
         timeLeftText += ":";
         if(seconds < 10) timeLeftText += "0";
         timeLeftText += seconds;
-        if(timeLeftInMinutes > 11){
+
+        if(timeLeftInMinutes >= 10){
             timeLeft.setTextColor(-1275068417);
         }
 
-        if(timeLeftInMinutes < 10 && timeLeftInMinutes > 5){
+        if(timeLeftInMinutes < 10 && timeLeftInMinutes >= 5){
             timeLeft.setTextColor(Color.parseColor("#FF0000"));
         }
 
