@@ -392,7 +392,7 @@ public class HomeFragment extends Fragment {
                 needAlert = true;
             }
             else needAlert = false;
-        } else if ( parkingEndsMinutes > (18*60) || currentTime.get(Calendar.DAY_OF_MONTH) != c.get(Calendar.DAY_OF_MONTH)) {
+        } else if ( (currentTime.get(Calendar.HOUR_OF_DAY)*60+currentTime.get(Calendar.MINUTE)) > (18*60) || currentTime.get(Calendar.DAY_OF_MONTH) != c.get(Calendar.DAY_OF_MONTH)) {
             if(c.get(Calendar.HOUR_OF_DAY) <= 18 && c.get(Calendar.HOUR_OF_DAY) >= 8) {
                 totalTime = "18:00";
                 needAlert = true;
