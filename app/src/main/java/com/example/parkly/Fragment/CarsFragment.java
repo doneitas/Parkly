@@ -119,7 +119,19 @@ public class CarsFragment extends Fragment {
                     {
                         lst_Car.clearFocus();
                         if(!selectedLicensePlateList.isEmpty()) {
-                            deleteSelectedLicensePlates();
+                            new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
+                                    .setMessage("Do you really want to remove selected cars?")
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            deleteSelectedLicensePlates();
+                                        }
+                                    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).create().show();
                         }
                         deleteClicked = false;
                         refreshAdapter(view);
