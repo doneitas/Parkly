@@ -8,7 +8,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="211dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
@@ -24,6 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
             android:layout_marginTop="16dp"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"
@@ -31,12 +32,13 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/txt_language"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginRight="6dp" />
+            tools:targetApi="honeycomb" />
 
         <TextView
             android:id="@+id/txt_language"
             android:layout_width="180dp"
             android:layout_height="40dp"
+            android:layout_marginLeft="6dp"
             android:layout_marginStart="6dp"
             android:layout_marginTop="16dp"
             android:gravity="left|center"
@@ -45,11 +47,44 @@
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="RtlHardcoded"
-            android:layout_marginLeft="6dp" />
+            tools:ignore="RtlHardcoded" />
 
         <Switch
             android:id="@+id/switch_sound"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="8dp"
+            android:checked="true"
+            android:text="@string/sound"
+            android:textColor="@color/colorText"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_language"
+            tools:targetApi="ice_cream_sandwich" />
+
+        <Switch
+            android:id="@+id/switch_notification"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="8dp"
+            android:checked="true"
+            android:text="@string/send_notifications"
+            android:textColor="@color/colorText"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_sound"
+            tools:targetApi="ice_cream_sandwich" />
+
+        <Switch
+            android:id="@+id/switch2"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginBottom="8dp"
@@ -57,15 +92,16 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="8dp"
             android:checked="true"
-            android:text="Sound"
+            android:text="@string/accept_sms_notifications"
             android:textColor="@color/colorText"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_language"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/switch_notification"
+            app:layout_constraintVertical_bias="0.055"
+            tools:targetApi="ice_cream_sandwich" />
 
     </android.support.constraint.ConstraintLayout>
 
