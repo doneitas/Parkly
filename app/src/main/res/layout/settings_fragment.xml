@@ -31,7 +31,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/txt_language"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:targetApi="honeycomb" />
 
         <TextView
             android:id="@+id/txt_language"
@@ -56,13 +57,14 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="8dp"
             android:checked="true"
-            android:text="Sound"
+            android:text="@string/sound"
             android:textColor="@color/colorText"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_language" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_language"
+            tools:targetApi="ice_cream_sandwich" />
 
         <Switch
             android:id="@+id/switch_notification"
@@ -72,13 +74,14 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="8dp"
             android:checked="true"
-            android:text="Send notifications"
+            android:text="@string/send_notifications"
             android:textColor="@color/colorText"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch_sound" />
+            app:layout_constraintTop_toBottomOf="@+id/switch_sound"
+            tools:targetApi="ice_cream_sandwich" />
 
         <Switch
             android:id="@+id/switch2"
@@ -89,7 +92,7 @@
             android:layout_marginStart="6dp"
             android:layout_marginTop="8dp"
             android:checked="true"
-            android:text="Accept SMS notifications"
+            android:text="@string/accept_sms_notifications"
             android:textColor="@color/colorText"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -97,7 +100,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/switch_notification"
-            app:layout_constraintVertical_bias="0.055" />
+            app:layout_constraintVertical_bias="0.055"
+            tools:targetApi="ice_cream_sandwich" />
 
     </android.support.constraint.ConstraintLayout>
 
