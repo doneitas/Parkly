@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.telephony.SmsManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -700,9 +701,10 @@ public class HomeFragment extends Fragment {
                                         checkSMSPermissions();
                                         if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
                                                 == PackageManager.PERMISSION_GRANTED) {
+                                            String styledText = "<font color='red'>!!! ATTENTION !!!</font> Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?";
                                             if (needAlert) {
                                                 new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                                        .setMessage("!!! ATTENTION !!! Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?")
+                                                        .setMessage(Html.fromHtml(styledText))
                                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
@@ -900,7 +902,7 @@ public class HomeFragment extends Fragment {
             tempTime.setText(parkingEnds);
         }
 
-        send();
+        //send();
     }
 
     public void checkSMSPermissions(){

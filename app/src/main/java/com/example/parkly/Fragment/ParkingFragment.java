@@ -14,7 +14,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.SearchView;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.SearchView;
@@ -46,6 +49,7 @@ public class ParkingFragment extends Fragment {
     private List<String> zoneList;
     private HashMap<String, List<String>> addressList;
     private int searchTextLength = 0;
+    SearchView search;
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
@@ -59,7 +63,13 @@ public class ParkingFragment extends Fragment {
         mContext = this.getContext();
         adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
 
-
+        search = view.findViewById(R.id.sview_parking);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search.setIconified(false);
+            }
+        });
 
         lst_zones.setAdapter(adapter);
         lst_zones.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -70,7 +80,7 @@ public class ParkingFragment extends Fragment {
                     int childPosition = ExpandableListView.getPackedPositionChild(id);
 
                     final String address = addressList.get(zoneList.get(groupPosition)).get(childPosition);
-                    new AlertDialog.Builder(getActivity())
+                    new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
                             .setMessage("Do you really want to get the location of " + address + " ?")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override

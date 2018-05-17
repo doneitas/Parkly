@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listDataChild;
+    private String parkingTime[] = {"<font color='#175261'>8-18h</font>","<font color='#175261'>8-18h</font>","<font color='#175261'>8-18h</font>","<font color='#175261'>8-18h</font>","<font color='#175261'>8-24h</font>"};
+    private String parkingDays[] = {"<font color='#175261'>I-V</font>", "<font color='#175261'>I-V</font>", "<font color='#175261'>I-V</font>", "<font color='#175261'>I-V</font>", "<font color='#175261'>I-VII</font>"};
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,HashMap<String, List<String>> listChildData)
     {
@@ -78,12 +81,20 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_group, null);
+            convertView = infalInflater.inflate(R.layout.listview_layout, null);
         }
 
-        TextView lblListHeader = convertView.findViewById(R.id.lblListHeader);
+        TextView lblListHeader = convertView.findViewById(R.id.txt_zones);
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
+
+        TextView time = convertView.findViewById(R.id.txt_time);
+        time.setTypeface(null, Typeface.BOLD);
+        time.setText(Html.fromHtml(parkingTime[groupPosition]));
+
+        TextView days = convertView.findViewById(R.id.txt_days);
+        days.setTypeface(null, Typeface.BOLD);
+        days.setText(Html.fromHtml(parkingDays[groupPosition]));
 
         return convertView;
     }
