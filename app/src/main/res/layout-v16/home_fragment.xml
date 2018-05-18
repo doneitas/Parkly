@@ -152,11 +152,11 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="120dp"
+        android:layout_width="118dp"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/contrail_one"
         android:gravity="left|center"
         android:text="@string/selected_car"
         android:textColor="@color/colorText"

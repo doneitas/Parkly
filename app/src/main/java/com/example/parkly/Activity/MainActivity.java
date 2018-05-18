@@ -1,5 +1,9 @@
 package com.example.parkly.Activity;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -10,9 +14,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.example.parkly.Fragment.CarsFragment;
 import com.example.parkly.Fragment.HistoryFragment;
@@ -20,6 +29,8 @@ import com.example.parkly.Fragment.HomeFragment;
 import com.example.parkly.Fragment.ParkingFragment;
 import com.example.parkly.Fragment.SettingsFragment;
 import com.example.parkly.R;
+
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -32,6 +43,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
 
         loadFragment(new HomeFragment(), "HOME_FRAGMENT");
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -85,9 +98,27 @@ public class MainActivity extends AppCompatActivity
             }
         }
         else {
-            finish();
-            System.exit(0);
+            new AlertDialog.Builder(this)
+                    .setMessage("Do you really want to close the application?")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                            System.exit(0);
+                        }
+                    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create().show();
         }
+    }
+
+    public void hideKeyboard(){
+        View view = this.getCurrentFocus();
+        InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -104,18 +135,23 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             selectedFragment = new HomeFragment();
             fragmentTag = "HOME_FRAGMENT";
+            hideKeyboard();
             isCurrentFragmentIsHomeFragment = true;
         } else if (id == R.id.nav_cars) {
             selectedFragment = new CarsFragment();
+            hideKeyboard();
             fragmentTag = "CARS_FRAGMENT";
         } else if (id == R.id.nav_parking) {
             selectedFragment = new ParkingFragment();
+            hideKeyboard();
             fragmentTag = "PARKING_FRAGMENT";
-        } else if (id == R.id.nav_budget) {
+        /*} else if (id == R.id.nav_budget) {
             selectedFragment = new HistoryFragment();
-            fragmentTag = "HISTORY_FRAGMENT";
+            hideKeyboard();
+            fragmentTag = "HISTORY_FRAGMENT";*/
         } else if (id == R.id.nav_settings) {
             selectedFragment = new SettingsFragment();
+            hideKeyboard();
             fragmentTag = "SETTINGS_FRAGMENT";
         } else if (id == R.id.nav_aboutUs) {
 
@@ -130,5 +166,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
+
     }
 }
