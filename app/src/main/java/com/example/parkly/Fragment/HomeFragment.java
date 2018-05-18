@@ -210,58 +210,59 @@ public class HomeFragment extends Fragment {
 
                 listTime.clearChoices();
 
+                String h = getString(R.string.hour);
 
                 switch (chosenZone){
                     case Green:{
                         time.removeAll(time);
-                        time.add("1  h  0 min");
-                        time.add("2  h  0 min");
-                        time.add("3  h  0 min");
-                        time.add("4  h  0 min");
-                        time.add("5  h  0 min");
-                        time.add("6  h  0 min");
-                        time.add("7  h  0 min");
-                        time.add("8  h  0 min");
-                        time.add("9  h  0 min");
-                        time.add("10 h  0 min");
+                        time.add("1  " + h + "   0 min");
+                        time.add("2  " + h + "   0 min");
+                        time.add("3  " + h + "   0 min");
+                        time.add("4  " + h + "   0 min");
+                        time.add("5  " + h + "   0 min");
+                        time.add("6  " + h + "   0 min");
+                        time.add("7  " + h + "   0 min");
+                        time.add("8  " + h + "   0 min");
+                        time.add("9  " + h + "   0 min");
+                        time.add("10 " + h + "  0 min");
                         chosenMinutes = -1;
                         break;
                     }
                     case Blue:{
                         time.removeAll(time);
-                        time.add("0  h 30 min");
-                        time.add("1  h  0 min");
-                        time.add("1  h 30 min");
-                        time.add("2  h  0 min");
-                        time.add("3  h  0 min");
-                        time.add("4  h  0 min");
-                        time.add("5  h  0 min");
-                        time.add("6  h  0 min");
-                        time.add("7  h  0 min");
-                        time.add("8  h  0 min");
-                        time.add("9  h  0 min");
-                        time.add("10 h  0 min");
+                        time.add("0  " + h + " 30 min");
+                        time.add("1  " + h + "   0 min");
+                        time.add("1  " + h + " 30 min");
+                        time.add("2  " + h + "   0 min");
+                        time.add("3  " + h + "   0 min");
+                        time.add("4  " + h + "   0 min");
+                        time.add("5  " + h + "   0 min");
+                        time.add("6  " + h + "   0 min");
+                        time.add("7  " + h + "   0 min");
+                        time.add("8  " + h + "   0 min");
+                        time.add("9  " + h + "   0 min");
+                        time.add("10 " + h + "  0 min");
                         chosenMinutes = -1;
                         break;
                     }
                     default:
                     {
                         time.removeAll(time);
-                        time.add("0  h 15 min");
-                        time.add("0  h 30 min");
-                        time.add("0  h 45 min");
-                        time.add("1  h  0 min");
-                        time.add("1  h 15 min");
-                        time.add("1  h 30 min");
-                        time.add("2  h  0 min");
-                        time.add("3  h  0 min");
-                        time.add("4  h  0 min");
-                        time.add("5  h  0 min");
-                        time.add("6  h  0 min");
-                        time.add("7  h  0 min");
-                        time.add("8  h  0 min");
-                        time.add("9  h  0 min");
-                        time.add("10 h  0 min");
+                        time.add("0  " + h + " 15 min");
+                        time.add("0  " + h + " 30 min");
+                        time.add("0  " + h + " 45 min");
+                        time.add("1  " + h + "   0 min");
+                        time.add("1  " + h + " 15 min");
+                        time.add("1  " + h + " 30 min");
+                        time.add("2  " + h + "   0 min");
+                        time.add("3  " + h + "   0 min");
+                        time.add("4  " + h + "   0 min");
+                        time.add("5  " + h + "   0 min");
+                        time.add("6  " + h + "   0 min");
+                        time.add("7  " + h + "   0 min");
+                        time.add("8  " + h + "   0 min");
+                        time.add("9  " + h + "   0 min");
+                        time.add("10 " + h + " 0 min");
                         chosenMinutes = -1;
                         break;
                     }
@@ -415,7 +416,8 @@ public class HomeFragment extends Fragment {
             {
                 if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
                 {
-                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
+                    String toastNotification = getString(R.string.toastFreeTime);
+                    Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
                     return true;
                 }
                 break;
@@ -427,11 +429,13 @@ public class HomeFragment extends Fragment {
             {
                 //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
                 if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
-                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE today", Toast.LENGTH_LONG).show();
+                    String toastNotification = getString(R.string.toastFreeDay);
+                    Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
                     return true;
                 }
                 else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
-                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
+                    String toastNotification = getString(R.string.toastFreeTime);
+                    Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
                     return true;
                 }
                 break;
@@ -483,7 +487,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 boolean notSelected = false;
-                if(licensePlateList.get(0).toString().compareTo("Not selected") == 0) notSelected = true;
+                String notSelectedText = getString(R.string.not_selected);
+                if(licensePlateList.get(0).toString().compareTo(notSelectedText) == 0) notSelected = true;
                 for(int j=0; j < tempLicensePlate.size(); j++) {
                     if (tempLicensePlate.get(j).getNumber().compareTo(spin_DefaultCar.getSelectedItem().toString()) == 0) {
                         setDefault(tempLicensePlate.get(j));
@@ -546,7 +551,8 @@ public class HomeFragment extends Fragment {
         licensePlateList.clear();
 
         if(!isDefaultSelected){
-            licensePlateList.add("Not selected");
+            String notSelectedText = getString(R.string.not_selected);
+            licensePlateList.add(notSelectedText);
             chosenDefaultNumber = "";
         }
 
