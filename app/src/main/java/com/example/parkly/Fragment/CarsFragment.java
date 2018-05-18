@@ -331,8 +331,7 @@ public class CarsFragment extends Fragment {
                     txt_defaultCar.setText(licensePlate.getNumber());
                 }
                 else if (licensePlateList.size() != 0){
-                    String notSelectedText = getString(R.string.not_selected);
-                    txt_defaultCar.setText(notSelectedText);
+                    txt_defaultCar.setText("Not selected");
                 }
                 else txt_defaultCar.setText("List is empty");
 

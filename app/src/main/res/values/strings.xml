@@ -52,5 +52,4 @@
     <string name="hour">h</string>
     <string name="toastFreeTime">Parking in chosen zone is FREE at this time of the day</string>
     <string name="toastFreeDay">Parking in chosen zone is FREE today</string>
-    <string name="not_selected">Not selected</string>
 </resources>

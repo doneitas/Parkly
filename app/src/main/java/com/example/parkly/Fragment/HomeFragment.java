@@ -487,8 +487,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 boolean notSelected = false;
-                String notSelectedText = getString(R.string.not_selected);
-                if(licensePlateList.get(0).toString().compareTo(notSelectedText) == 0) notSelected = true;
+                if(licensePlateList.get(0).toString().compareTo("Not selected") == 0) notSelected = true;
                 for(int j=0; j < tempLicensePlate.size(); j++) {
                     if (tempLicensePlate.get(j).getNumber().compareTo(spin_DefaultCar.getSelectedItem().toString()) == 0) {
                         setDefault(tempLicensePlate.get(j));
@@ -551,8 +550,7 @@ public class HomeFragment extends Fragment {
         licensePlateList.clear();
 
         if(!isDefaultSelected){
-            String notSelectedText = getString(R.string.not_selected);
-            licensePlateList.add(notSelectedText);
+            licensePlateList.add("Not selected");
             chosenDefaultNumber = "";
         }
 
