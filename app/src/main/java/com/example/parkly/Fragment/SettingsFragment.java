@@ -428,6 +428,8 @@ public class SettingsFragment extends Fragment {
                     }
                 }
 
+                refreshNotificationsTextValues();
+
                 modifyLanguageInFile();
 
             }
@@ -438,6 +440,12 @@ public class SettingsFragment extends Fragment {
             }
 
         });
+    }
+
+    public void refreshNotificationsTextValues(){
+        MainActivity.contextTitle = getString(R.string.notification_context_title);
+        MainActivity.contextText = getString(R.string.notification_context_text);
+        MainActivity.contextTextEnded = getString(R.string.notification_context_text_ended);
     }
 
     public void modifyLanguageInFile(){
