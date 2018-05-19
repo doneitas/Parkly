@@ -1,20 +1,25 @@
 package com.example.parkly.Fragment;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 
+import com.example.parkly.Activity.MainActivity;
 import com.example.parkly.R;
 
 import java.io.BufferedReader;
@@ -23,6 +28,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Marius on 2018-03-12.
@@ -31,6 +39,11 @@ import java.io.InputStreamReader;
 public class SettingsFragment extends Fragment {
 
     Switch aSwitch;
+
+    Spinner spinLanguage;
+    ArrayAdapter<String> spinAdapter;
+    List<String> languageList = new ArrayList<String>();
+    public static String selectedLanguage;
 
     @Nullable
     @Override
@@ -43,7 +56,9 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         aSwitch = view.findViewById(R.id.switch_sound);
+        spinLanguage = view.findViewById(R.id.spin_Language);
 
+        changeLanguage();
         checkState();
         onSoundClick();
     }
@@ -76,6 +91,7 @@ public class SettingsFragment extends Fragment {
 
     public void onSoundClick()
     {
+
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 modifySound();
@@ -144,4 +160,82 @@ public class SettingsFragment extends Fragment {
             mAlramMAnager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
         }
     }
+
+    public void changeLanguage(){
+        spinAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_layout, languageList);
+        registerForContextMenu(spinLanguage);
+        spinLanguage.setAdapter(spinAdapter);
+
+        languageList.add("Default");
+        languageList.add("LT");
+        languageList.add("EN");
+
+        if(selectedLanguage.compareTo("lt") == 0){
+            spinLanguage.setSelection(1);
+        }
+        else if(selectedLanguage.compareTo("en") == 0){
+            spinLanguage.setSelection(2);
+        }
+        else if(selectedLanguage.compareTo("not-set") == 0){
+            spinLanguage.setSelection(0);
+        }
+
+        spinAdapter.notifyDataSetChanged();
+
+        spinLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+
+                if(spinLanguage.getSelectedItem().toString().compareTo("LT") == 0){
+                    selectedLanguage = "lt";
+                    setLanguageForApp();
+                }
+                else if(spinLanguage.getSelectedItem().toString().compareTo("EN") == 0){
+                    selectedLanguage = "en";
+                    setLanguageForApp();
+                }
+                else if(spinLanguage.getSelectedItem().toString().compareTo("Default") == 0){
+                    selectedLanguage = "not-set";
+                    setLanguageForApp();
+                }
+
+                modifyLanguageInFile();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                //do nothing
+            }
+
+        });
+    }
+
+    public void modifyLanguageInFile(){
+        String fileName = "languageFile";
+        try {
+            FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+            fileOutputStream.write(selectedLanguage.getBytes());
+            fileOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setLanguageForApp(){
+        Locale locale;
+        if(selectedLanguage.equals("not-set")){ //use any value for default
+            locale = MainActivity.defaultDeviceLocale;
+        }
+        else {
+            locale = new Locale(selectedLanguage);
+        }
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
+    }
+
 }

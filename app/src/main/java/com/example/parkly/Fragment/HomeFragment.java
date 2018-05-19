@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 import io.reactivex.ObservableEmitter;
@@ -129,6 +131,7 @@ public class HomeFragment extends Fragment {
         checkCarRegistration();
         confirmParking(view);
         showPriceAndParkingEnding(view);
+
     }
 
     public void init(View view){
@@ -691,13 +694,16 @@ public class HomeFragment extends Fragment {
         }
 
         confirm.setOnClickListener(new View.OnClickListener() {
+
+            String confirmParkingMessage = getString(R.string.confirm_parking_message);
+
             @Override
             public void onClick(View view) {
                 Calendar currentTime = GregorianCalendar.getInstance();
                 if(!needsPopUp(chosenZone, currentTime)) {
                     if(isDefaultSelected) {
                         new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                .setMessage("Do you really want to confirm this parking?")
+                                .setMessage(confirmParkingMessage)
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -705,8 +711,11 @@ public class HomeFragment extends Fragment {
                                         if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
                                                 == PackageManager.PERMISSION_GRANTED) {
                                             if (needAlert) {
+
+                                                String attentionConfirmMessage = getString(R.string.attention_confirm_message);
+
                                                 new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                                        .setMessage("!!! ATTENTION !!! Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?")
+                                                        .setMessage(attentionConfirmMessage)
                                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
@@ -737,7 +746,10 @@ public class HomeFragment extends Fragment {
                             }
                         }).create().show();
                     }
-                    else Toast.makeText(getActivity(), "Please select a default car", Toast.LENGTH_LONG).show();
+                    else {
+                        String pleaseSelectDefault = getString(R.string.please_select_default);
+                        Toast.makeText(getActivity(), pleaseSelectDefault, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -930,7 +942,8 @@ public class HomeFragment extends Fragment {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 confirmAndSend();
             } else{
-                Toast.makeText(getActivity(), "Permission was not granted", Toast.LENGTH_SHORT).show();
+                String permissionNotGranted = getString(R.string.permission_not_granted);
+                Toast.makeText(getActivity(), permissionNotGranted, Toast.LENGTH_SHORT).show();
             }
 
         } else {
@@ -975,7 +988,9 @@ public class HomeFragment extends Fragment {
 
         sms.sendTextMessage("+37063694869", null, message, null, null);
 
-        Toast.makeText(getActivity(), "Parking confirmed successfully", Toast.LENGTH_SHORT).show();
+        String confirmedSuccesfully = getString(R.string.confirmed_successfully);
+
+        Toast.makeText(getActivity(), confirmedSuccesfully, Toast.LENGTH_SHORT).show();
     }
 
     public long calculateTimeLeft(int parkingEndsMinutes, int hours, int minutes){
@@ -1077,4 +1092,5 @@ public class HomeFragment extends Fragment {
         }
         timeLeft.setText(timeLeftText);
     }
+
 }

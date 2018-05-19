@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -21,14 +22,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.parkly.Fragment.CarsFragment;
-import com.example.parkly.Fragment.HistoryFragment;
 import com.example.parkly.Fragment.HomeFragment;
 import com.example.parkly.Fragment.ParkingFragment;
 import com.example.parkly.Fragment.SettingsFragment;
 import com.example.parkly.R;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
@@ -39,10 +53,18 @@ public class MainActivity extends AppCompatActivity
     public static boolean isTimerCreated = false;
     public static CountDownTimer countDownTimer;
 
+    public static Locale defaultDeviceLocale;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        defaultDeviceLocale = Locale.getDefault();
+        checkSelectedLanguage();
+        setLanguageForApp();
+
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
 
@@ -145,10 +167,6 @@ public class MainActivity extends AppCompatActivity
             selectedFragment = new ParkingFragment();
             hideKeyboard();
             fragmentTag = "PARKING_FRAGMENT";
-        /*} else if (id == R.id.nav_budget) {
-            selectedFragment = new HistoryFragment();
-            hideKeyboard();
-            fragmentTag = "HISTORY_FRAGMENT";*/
         } else if (id == R.id.nav_settings) {
             selectedFragment = new SettingsFragment();
             hideKeyboard();
@@ -166,7 +184,44 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-
-
     }
+
+    public void checkSelectedLanguage(){
+
+        String selectedLanguageTemp = null;
+
+        try {
+            FileInputStream fileInputStream = openFileInput("languageFile");
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            if ((selectedLanguageTemp = bufferedReader.readLine()) != null) {
+                SettingsFragment.selectedLanguage = selectedLanguageTemp;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setLanguageForApp(){
+
+        Locale locale;
+
+        if(SettingsFragment.selectedLanguage == null){
+            SettingsFragment.selectedLanguage = "not-set";
+        }
+        if(SettingsFragment.selectedLanguage.equals("not-set")){ //use any value for default
+            locale = defaultDeviceLocale;
+        }
+        else {
+            locale = new Locale(SettingsFragment.selectedLanguage);
+        }
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+    }
+
 }
