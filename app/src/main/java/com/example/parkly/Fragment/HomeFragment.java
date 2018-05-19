@@ -99,11 +99,11 @@ public class HomeFragment extends Fragment {
     private int parkingEndsMinutes = -1;
     private boolean needAlert = false;
 
-    private final String Green = "Green 0.3€/h";
-    private final String Blue = "Blue 0.6€/h";
-    private final String Red = "Red 1.2€/h";
-    private final String Yellow = "Yellow 2€/h";
-    private final String Orange = "Orange 2€/h";
+    private String Green;
+    private String Blue;
+    private String Red;
+    private String Yellow;
+    private String Orange;
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -125,6 +125,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setZonesValues();
         init(view);
         database(view);
         loadData();
@@ -132,6 +133,14 @@ public class HomeFragment extends Fragment {
         confirmParking(view);
         showPriceAndParkingEnding(view);
 
+    }
+
+    public void setZonesValues(){
+        Green = getString(R.string.green_zone_home);
+        Blue = getString(R.string.blue_zone_home);
+        Red = getString(R.string.red_zone_home);
+        Yellow = getString(R.string.yellow_zone_home);
+        Orange = getString(R.string.orange_zone_home);
     }
 
     public void init(View view){
@@ -215,64 +224,54 @@ public class HomeFragment extends Fragment {
 
                 String h = getString(R.string.hour);
 
-                switch (chosenZone){
-                    case Green:{
-                        time.removeAll(time);
-                        time.add("1  " + h + "   0 min");
-                        time.add("2  " + h + "   0 min");
-                        time.add("3  " + h + "   0 min");
-                        time.add("4  " + h + "   0 min");
-                        time.add("5  " + h + "   0 min");
-                        time.add("6  " + h + "   0 min");
-                        time.add("7  " + h + "   0 min");
-                        time.add("8  " + h + "   0 min");
-                        time.add("9  " + h + "   0 min");
-                        time.add("10 " + h + "  0 min");
-                        chosenMinutes = -1;
-                        break;
-                    }
-                    case Blue:{
-                        time.removeAll(time);
-                        time.add("0  " + h + " 30 min");
-                        time.add("1  " + h + "   0 min");
-                        time.add("1  " + h + " 30 min");
-                        time.add("2  " + h + "   0 min");
-                        time.add("3  " + h + "   0 min");
-                        time.add("4  " + h + "   0 min");
-                        time.add("5  " + h + "   0 min");
-                        time.add("6  " + h + "   0 min");
-                        time.add("7  " + h + "   0 min");
-                        time.add("8  " + h + "   0 min");
-                        time.add("9  " + h + "   0 min");
-                        time.add("10 " + h + "  0 min");
-                        chosenMinutes = -1;
-                        break;
-                    }
-                    default:
-                    {
-                        time.removeAll(time);
-                        time.add("0  " + h + " 15 min");
-                        time.add("0  " + h + " 30 min");
-                        time.add("0  " + h + " 45 min");
-                        time.add("1  " + h + "   0 min");
-                        time.add("1  " + h + " 15 min");
-                        time.add("1  " + h + " 30 min");
-                        time.add("2  " + h + "   0 min");
-                        time.add("3  " + h + "   0 min");
-                        time.add("4  " + h + "   0 min");
-                        time.add("5  " + h + "   0 min");
-                        time.add("6  " + h + "   0 min");
-                        time.add("7  " + h + "   0 min");
-                        time.add("8  " + h + "   0 min");
-                        time.add("9  " + h + "   0 min");
-                        time.add("10 " + h + " 0 min");
-                        chosenMinutes = -1;
-                        break;
-                    }
-                    case "": {
-                        time.removeAll(time);
-                        break;
-                    }
+                if(chosenZone.compareTo(Green) == 0){
+                    time.removeAll(time);
+                    time.add("1  " + h + "   0 min");
+                    time.add("2  " + h + "   0 min");
+                    time.add("3  " + h + "   0 min");
+                    time.add("4  " + h + "   0 min");
+                    time.add("5  " + h + "   0 min");
+                    time.add("6  " + h + "   0 min");
+                    time.add("7  " + h + "   0 min");
+                    time.add("8  " + h + "   0 min");
+                    time.add("9  " + h + "   0 min");
+                    time.add("10 " + h + "  0 min");
+                    chosenMinutes = -1;
+                } else if(chosenZone.compareTo(Blue) == 0){
+                    time.removeAll(time);
+                    time.add("0  " + h + " 30 min");
+                    time.add("1  " + h + "   0 min");
+                    time.add("1  " + h + " 30 min");
+                    time.add("2  " + h + "   0 min");
+                    time.add("3  " + h + "   0 min");
+                    time.add("4  " + h + "   0 min");
+                    time.add("5  " + h + "   0 min");
+                    time.add("6  " + h + "   0 min");
+                    time.add("7  " + h + "   0 min");
+                    time.add("8  " + h + "   0 min");
+                    time.add("9  " + h + "   0 min");
+                    time.add("10 " + h + "  0 min");
+                    chosenMinutes = -1;
+                } else if(chosenZone.compareTo("") == 0) {
+                    time.removeAll(time);
+                } else {
+                    time.removeAll(time);
+                    time.add("0  " + h + " 15 min");
+                    time.add("0  " + h + " 30 min");
+                    time.add("0  " + h + " 45 min");
+                    time.add("1  " + h + "   0 min");
+                    time.add("1  " + h + " 15 min");
+                    time.add("1  " + h + " 30 min");
+                    time.add("2  " + h + "   0 min");
+                    time.add("3  " + h + "   0 min");
+                    time.add("4  " + h + "   0 min");
+                    time.add("5  " + h + "   0 min");
+                    time.add("6  " + h + "   0 min");
+                    time.add("7  " + h + "   0 min");
+                    time.add("8  " + h + "   0 min");
+                    time.add("9  " + h + "   0 min");
+                    time.add("10 " + h + " 0 min");
+                    chosenMinutes = -1;
                 }
 
                 timeAdapter.notifyDataSetChanged();
@@ -326,44 +325,23 @@ public class HomeFragment extends Fragment {
     {
         double total;
         double price = 0;
-        switch(color)
-        {
-            case Orange:
-            {
-                price = 2 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case Yellow:
-            {
-                price = 2 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case Blue:
-            {
-                price = 0.6 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case Red:
-            {
-                price = 1.2 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case Green:
-            {
-                price = 0.3 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            default:
-            {
-                total = 0;
-                break;
-            }
-        }
+
+        if(color.compareTo(Green) == 0){
+            price = 0.3 / 60d;
+            total = ((chosenHour*60) + chosenMinute) * price;
+        } else if(color.compareTo(Blue) == 0){
+            price = 0.6 / 60d;
+            total = ((chosenHour*60) + chosenMinute) * price;
+        } else if(color.compareTo(Red) == 0) {
+            price = 1.2 / 60d;
+            total = ((chosenHour*60) + chosenMinute) * price;
+        } else if(color.compareTo(Yellow) == 0) {
+            price = 2 / 60d;
+            total = ((chosenHour*60) + chosenMinute) * price;
+        } else if(color.compareTo(Orange) == 0) {
+            price = 2 / 60d;
+            total = ((chosenHour*60) + chosenMinute) * price;
+        } else total = 0;
 
         String totalString = String.valueOf(total) + "0" + " \u20ac";
         return totalString;
@@ -413,39 +391,25 @@ public class HomeFragment extends Fragment {
         //perkelti data i calla
         //Calendar currentTime = GregorianCalendar.getInstance();
         //currentTime.setTime(new Date());
-        switch(color)
-        {
-            case Orange:
+
+        if(color.compareTo(Orange) == 0){
+            if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
             {
-                if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
-                {
-                    String toastNotification = getString(R.string.toastFreeTime);
-                    Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                break;
+                String toastNotification = getString(R.string.toastFreeTime);
+                Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
+                return true;
             }
-            case Green:
-            case Blue:
-            case Red:
-            case Yellow:
-            {
-                //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
-                if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
-                    String toastNotification = getString(R.string.toastFreeDay);
-                    Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
-                    String toastNotification = getString(R.string.toastFreeTime);
-                    Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                break;
+        } else if(color.compareTo(Green) == 0 || color.compareTo(Blue) == 0 || color.compareTo(Red) == 0 || color.compareTo(Yellow) == 0) {
+            //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
+            if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
+                String toastNotification = getString(R.string.toastFreeDay);
+                Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
+                return true;
             }
-            default:
-            {
-                break;
+            else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
+                String toastNotification = getString(R.string.toastFreeTime);
+                Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
+                return true;
             }
         }
         return false;
@@ -628,22 +592,28 @@ public class HomeFragment extends Fragment {
                 currentZone = bufferedReader.readLine();
                 currentDefaultNumber = bufferedReader.readLine();
 
-                switch (currentZone) {
-                    case Orange:
-                        showZone.setTextColor(Color.parseColor("#F9A602"));
-                        break;
-                    case Blue:
-                        showZone.setTextColor(Color.parseColor("#73C2FB"));
-                        break;
-                    case Red:
-                        showZone.setTextColor(Color.parseColor("#FF0000"));
-                        break;
-                    case Green:
-                        showZone.setTextColor(Color.parseColor("#7FFF00"));
-                        break;
-                    case Yellow:
-                        showZone.setTextColor(Color.parseColor("#FFFB00"));
-                        break;
+                if(currentZone.compareTo("Z") == 0){
+                    currentZone = Green;
+                } else if(currentZone.compareTo("M") == 0){
+                    currentZone = Blue;
+                } else if(currentZone.compareTo("R") == 0) {
+                    currentZone = Red;
+                } else if(currentZone.compareTo("G") == 0) {
+                    currentZone = Yellow;
+                } else if(currentZone.compareTo("A") == 0) {
+                    currentZone = Orange;
+                }
+
+                if(currentZone.compareTo(Green) == 0){
+                    showZone.setTextColor(Color.parseColor("#7FFF00"));
+                } else if(currentZone.compareTo(Blue) == 0){
+                    showZone.setTextColor(Color.parseColor("#73C2FB"));
+                } else if(currentZone.compareTo(Red) == 0) {
+                    showZone.setTextColor(Color.parseColor("#FF0000"));
+                } else if(currentZone.compareTo(Yellow) == 0) {
+                    showZone.setTextColor(Color.parseColor("#FFFB00"));
+                } else if(currentZone.compareTo(Orange) == 0) {
+                    showZone.setTextColor(Color.parseColor("#F9A602"));
                 }
 
                 if (!MainActivity.isTimerCreated) {
@@ -862,13 +832,27 @@ public class HomeFragment extends Fragment {
 
         String fileName = "Countdown";
 
+        String chosenZoneTemp = "";
+
+        if(chosenZone.compareTo(Green) == 0){
+            chosenZoneTemp = "Z";
+        } else if(chosenZone.compareTo(Blue) == 0){
+            chosenZoneTemp = "M";
+        } else if(chosenZone.compareTo(Red) == 0) {
+            chosenZoneTemp = "R";
+        } else if(chosenZone.compareTo(Yellow) == 0) {
+            chosenZoneTemp = "G";
+        } else if(chosenZone.compareTo(Orange) == 0) {
+            chosenZoneTemp = "A";
+        }
+
         try {
             FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
             fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
             fileOutputStream.write("\n".getBytes());
             fileOutputStream.write(formattedDate.getBytes());
             fileOutputStream.write("\n".getBytes());
-            fileOutputStream.write(chosenZone.getBytes());
+            fileOutputStream.write(chosenZoneTemp.getBytes());
             fileOutputStream.write("\n".getBytes());
             fileOutputStream.write(chosenDefaultNumber.getBytes());
             fileOutputStream.close();
@@ -888,26 +872,17 @@ public class HomeFragment extends Fragment {
         String color = scan.next();
         showZone.setText(color);
 
-        switch (currentZone) {
-            case Orange:
-                showZone.setTextColor(Color.parseColor("#F9A602"));
-                break;
-            case Blue:
-                showZone.setTextColor(Color.parseColor("#73C2FB"));
-                break;
-            case Red:
-                showZone.setTextColor(Color.parseColor("#FF0000"));
-                break;
-            case Green:
-                showZone.setTextColor(Color.parseColor("#7FFF00"));
-                break;
-            case Yellow:
-                showZone.setTextColor(Color.parseColor("#FFFB00"));
-                break;
-            default:
-                showZone.setTextColor(Color.parseColor("#FFFFFF"));
-                break;
-        }
+        if(currentZone.compareTo(Green) == 0){
+            showZone.setTextColor(Color.parseColor("#7FFF00"));
+        } else if(currentZone.compareTo(Blue) == 0){
+            showZone.setTextColor(Color.parseColor("#73C2FB"));
+        } else if(currentZone.compareTo(Red) == 0) {
+            showZone.setTextColor(Color.parseColor("#FF0000"));
+        } else if(currentZone.compareTo(Yellow) == 0) {
+            showZone.setTextColor(Color.parseColor("#FFFB00"));
+        } else if(currentZone.compareTo(Orange) == 0) {
+            showZone.setTextColor(Color.parseColor("#F9A602"));
+        } else showZone.setTextColor(Color.parseColor("#FFFFFF"));
 
         timeEnds.setText(tempTime.getText().toString());
 
@@ -956,23 +931,16 @@ public class HomeFragment extends Fragment {
 
         String zone = "";
 
-        switch(currentZone){
-            case Green:
-                zone = "Z";
-                break;
-            case Blue:
-                zone = "M";
-                break;
-            case Red:
-                zone = "R";
-                break;
-            case Yellow:
-                zone = "G";
-                break;
-            case Orange:
-                zone = "A";
-                break;
-
+        if(currentZone.compareTo(Green) == 0){
+            zone = "Z";
+        } else if(currentZone.compareTo(Blue) == 0){
+            zone = "M";
+        } else if(currentZone.compareTo(Red) == 0) {
+            zone = "R";
+        } else if(currentZone.compareTo(Yellow) == 0) {
+            zone = "G";
+        } else if(currentZone.compareTo(Orange) == 0) {
+            zone = "A";
         }
 
         int hour = chosenMinutes / 60;

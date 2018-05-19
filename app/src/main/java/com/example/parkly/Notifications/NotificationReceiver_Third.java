@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
+import com.example.parkly.Activity.MainActivity;
 import com.example.parkly.R;
 
 /**
@@ -28,8 +29,8 @@ public class NotificationReceiver_Third extends BroadcastReceiver {
                 .setSound(alarmSound)
                 .setSmallIcon(android.R.drawable.ic_popup_reminder)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
-                .setContentTitle("Information about parking")
-                .setContentText("Your parking time has ended")
+                .setContentTitle(MainActivity.contextTitle)
+                .setContentText(MainActivity.contextTextEnded)
                 .setAutoCancel(true);
 
         notificationManager.notify(100, builder.build());

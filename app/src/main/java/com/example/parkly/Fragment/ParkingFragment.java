@@ -166,11 +166,11 @@ public class ParkingFragment extends Fragment {
         List<String> yellowZones = new ArrayList<>();
         List<String> orangeZones = new ArrayList<>();
 
-        String Green = getString(R.string.green_zone);
-        String Blue = getString(R.string.blue_zone);
-        String Red = getString(R.string.red_zone);
-        String Yellow = getString(R.string.yellow_zone);
-        String Orange = getString(R.string.orange_zone);
+        String Green = getString(R.string.green_zone_areas);
+        String Blue = getString(R.string.blue_zone_areas);
+        String Red = getString(R.string.red_zone_areas);
+        String Yellow = getString(R.string.yellow_zone_areas);
+        String Orange = getString(R.string.orange_zone_areas);
 
         zoneList.add(Green);
         zoneList.add(Blue);

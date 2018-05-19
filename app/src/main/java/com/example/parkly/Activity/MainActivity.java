@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -26,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.parkly.Fragment.CarsFragment;
 import com.example.parkly.Fragment.HomeFragment;
@@ -55,6 +57,16 @@ public class MainActivity extends AppCompatActivity
 
     public static Locale defaultDeviceLocale;
 
+    public static String contextTitle;
+    public static String contextText;
+    public static String contextTextEnded;
+    public static MenuItem homeLabel;
+    public static MenuItem carsLabel;
+    public static MenuItem parkingAreasLabel;
+    public static MenuItem settingsLabel;
+    public static MenuItem informationLabel;
+    public static MenuItem aboutLabel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,17 +74,37 @@ public class MainActivity extends AppCompatActivity
         defaultDeviceLocale = Locale.getDefault();
         checkSelectedLanguage();
         setLanguageForApp();
+        setNotificationText();
 
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
 
+        setNavigationLabelsValues();
+
         loadFragment(new HomeFragment(), "HOME_FRAGMENT");
         NavigationView navigationView = findViewById(R.id.nav_view);
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_home);
         navigationView.setCheckedItem(item.getItemId());
         navigation();
+    }
+
+    public void setNavigationLabelsValues(){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        homeLabel = menu.findItem(R.id.nav_home);
+        carsLabel = menu.findItem(R.id.nav_cars);
+        parkingAreasLabel = menu.findItem(R.id.nav_parking);
+        settingsLabel = menu.findItem(R.id.nav_settings);
+        informationLabel = menu.findItem(R.id.information);
+        aboutLabel = menu.findItem(R.id.nav_aboutUs);
+    }
+
+    public void setNotificationText(){
+        contextTitle = getString(R.string.notification_context_title);
+        contextText = getString(R.string.notification_context_text);
+        contextTextEnded = getString(R.string.notification_context_text_ended);
     }
 
     public void loadFragment(Fragment loadingFragment, String loadingFragmentTag){

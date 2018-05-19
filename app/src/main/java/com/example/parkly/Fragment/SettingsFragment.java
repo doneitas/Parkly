@@ -2,10 +2,12 @@ package com.example.parkly.Fragment;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.ContextMenu;
@@ -19,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.parkly.Activity.MainActivity;
 import com.example.parkly.R;
@@ -34,6 +37,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 
 /**
  * Created by Marius on 2018-03-12.
@@ -55,6 +59,7 @@ public class SettingsFragment extends Fragment {
     TextView zoneLabel;
     TextView endsLabel;
     TextView remainingLabel;
+    TextView zoneShowLabel;
 
     @Nullable
     @Override
@@ -73,10 +78,12 @@ public class SettingsFragment extends Fragment {
         soundLabel = view.findViewById(R.id.switch_sound);
         notificationsLabel = view.findViewById(R.id.switch_notification);
         SMSnotificationsLabel = view.findViewById(R.id.switch2);
-        carLabel = view.findViewById(R.id.car);
-        zoneLabel = view.findViewById(R.id.color);
-        endsLabel = view.findViewById(R.id.ends);
-        remainingLabel = view.findViewById(R.id.remaining);
+        carLabel = getActivity().findViewById(R.id.car);
+        zoneLabel = getActivity().findViewById(R.id.color);
+        endsLabel = getActivity().findViewById(R.id.ends);
+        remainingLabel = getActivity().findViewById(R.id.remaining);
+        zoneShowLabel = getActivity().findViewById(R.id.colorText);
+
 
 
         changeLanguage();
@@ -208,37 +215,217 @@ public class SettingsFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
                 if(spinLanguage.getSelectedItem().toString().compareTo("LT") == 0){
+
                     selectedLanguage = "lt";
+
+                    try {
+
+                        FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
+                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        bufferedReader.readLine();
+                        bufferedReader.readLine();
+                        String chosenZone = bufferedReader.readLine();
+                        fileInputStream.close();
+
+                        if(chosenZone.compareTo("Z") == 0){
+                            zoneShowLabel.setText("Žalia");
+                        }
+                        else if(chosenZone.compareTo("M") == 0){
+                            zoneShowLabel.setText("Mėlyna");
+                        }
+                        else if(chosenZone.compareTo("R") == 0){
+                            zoneShowLabel.setText("Raudona");
+                        }
+                        else if(chosenZone.compareTo("G") == 0){
+                            zoneShowLabel.setText("Geltona");
+                        }
+                        else if(chosenZone.compareTo("A") == 0){
+                            zoneShowLabel.setText("Oranžinė");
+                        }
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     setLanguageForApp();
+
+
                     languageLabel.setText("Kalba");
                     soundLabel.setText("Garso efektai");
                     notificationsLabel.setText("Pranešimai apie stovėjimo laiką");
                     SMSnotificationsLabel.setText("SMS apie stovėjimo laiką");
-                    carLabel.setText("Auto");
-                    zoneLabel.setText("Zona");
-                    endsLabel.setText("Baigiasi");
-                    remainingLabel.setText("Liko");
-
+                    carLabel.setText("Auto:");
+                    zoneLabel.setText("Zona:");
+                    endsLabel.setText("Pabaiga:");
+                    remainingLabel.setText("Liko:");
+                    MainActivity.homeLabel.setTitle("Pagrindinis");
+                    MainActivity.carsLabel.setTitle("Automobiliai");
+                    MainActivity.parkingAreasLabel.setTitle("Stovėjimo zonos");
+                    MainActivity.settingsLabel.setTitle("Nustatymai");
+                    MainActivity.informationLabel.setTitle("Informacija");
+                    MainActivity.aboutLabel.setTitle("Apie");
                 }
                 else if(spinLanguage.getSelectedItem().toString().compareTo("EN") == 0){
+
                     selectedLanguage = "en";
+
+                    try {
+
+                        FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
+                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        bufferedReader.readLine();
+                        bufferedReader.readLine();
+                        String chosenZone = bufferedReader.readLine();
+                        fileInputStream.close();
+
+                        if(chosenZone.compareTo("Z") == 0){
+                            zoneShowLabel.setText("Green");
+                        }
+                        else if(chosenZone.compareTo("M") == 0){
+                            zoneShowLabel.setText("Blue");
+                        }
+                        else if(chosenZone.compareTo("R") == 0){
+                            zoneShowLabel.setText("Red");
+                        }
+                        else if(chosenZone.compareTo("G") == 0){
+                            zoneShowLabel.setText("Yellow");
+                        }
+                        else if(chosenZone.compareTo("A") == 0){
+                            zoneShowLabel.setText("Orange");
+                        }
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     setLanguageForApp();
+
                     languageLabel.setText("Language");
                     soundLabel.setText("Sound effects");
                     notificationsLabel.setText("Parking time notifications");
                     SMSnotificationsLabel.setText("SMS parking time notifications");
-                    carLabel.setText("Car");
-                    zoneLabel.setText("Zone");
-                    endsLabel.setText("Ends");
-                    remainingLabel.setText("Remaining");
+                    carLabel.setText("Car:");
+                    zoneLabel.setText("Zone:");
+                    endsLabel.setText("Ends:");
+                    remainingLabel.setText("Remaining:");
+                    MainActivity.homeLabel.setTitle("Home");
+                    MainActivity.carsLabel.setTitle("Cars");
+                    MainActivity.parkingAreasLabel.setTitle("Parking areas");
+                    MainActivity.settingsLabel.setTitle("Settings");
+                    MainActivity.informationLabel.setTitle("Information");
+                    MainActivity.aboutLabel.setTitle("About");
                 }
                 else if(spinLanguage.getSelectedItem().toString().compareTo("Default") == 0){
                     selectedLanguage = "not-set";
                     setLanguageForApp();
-                    /*languageLabel.setText("Language");
-                    soundLabel.setText("Sound effects");
-                    notificationsLabel.setText("Parking time notifications");
-                    SMSnotificationsLabel.setText("SMS parking time notifications");*/
+
+                    if(getString(R.string.confirm).compareTo("Patvirtinti") == 0){
+                        try {
+
+                            FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
+                            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                            bufferedReader.readLine();
+                            bufferedReader.readLine();
+                            String chosenZone = bufferedReader.readLine();
+                            fileInputStream.close();
+
+                            if(chosenZone.compareTo("Z") == 0){
+                                zoneShowLabel.setText("Žalia");
+                            }
+                            else if(chosenZone.compareTo("M") == 0){
+                                zoneShowLabel.setText("Mėlyna");
+                            }
+                            else if(chosenZone.compareTo("R") == 0){
+                                zoneShowLabel.setText("Raudona");
+                            }
+                            else if(chosenZone.compareTo("G") == 0){
+                                zoneShowLabel.setText("Geltona");
+                            }
+                            else if(chosenZone.compareTo("A") == 0){
+                                zoneShowLabel.setText("Oranžinė");
+                            }
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        setLanguageForApp();
+
+
+                        languageLabel.setText("Kalba");
+                        soundLabel.setText("Garso efektai");
+                        notificationsLabel.setText("Pranešimai apie stovėjimo laiką");
+                        SMSnotificationsLabel.setText("SMS apie stovėjimo laiką");
+                        carLabel.setText("Auto:");
+                        zoneLabel.setText("Zona:");
+                        endsLabel.setText("Pabaiga:");
+                        remainingLabel.setText("Liko:");
+                        MainActivity.homeLabel.setTitle("Pagrindinis");
+                        MainActivity.carsLabel.setTitle("Automobiliai");
+                        MainActivity.parkingAreasLabel.setTitle("Stovėjimo zonos");
+                        MainActivity.settingsLabel.setTitle("Nustatymai");
+                        MainActivity.informationLabel.setTitle("Informacija");
+                        MainActivity.aboutLabel.setTitle("Apie");
+                    } else {
+
+                        try {
+
+                            FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
+                            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                            bufferedReader.readLine();
+                            bufferedReader.readLine();
+                            String chosenZone = bufferedReader.readLine();
+                            fileInputStream.close();
+
+                            if(chosenZone.compareTo("Z") == 0){
+                                zoneShowLabel.setText("Green");
+                            }
+                            else if(chosenZone.compareTo("M") == 0){
+                                zoneShowLabel.setText("Blue");
+                            }
+                            else if(chosenZone.compareTo("R") == 0){
+                                zoneShowLabel.setText("Red");
+                            }
+                            else if(chosenZone.compareTo("G") == 0){
+                                zoneShowLabel.setText("Yellow");
+                            }
+                            else if(chosenZone.compareTo("A") == 0){
+                                zoneShowLabel.setText("Orange");
+                            }
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        setLanguageForApp();
+
+                        languageLabel.setText("Language");
+                        soundLabel.setText("Sound effects");
+                        notificationsLabel.setText("Parking time notifications");
+                        SMSnotificationsLabel.setText("SMS parking time notifications");
+                        carLabel.setText("Car:");
+                        zoneLabel.setText("Zone:");
+                        endsLabel.setText("Ends:");
+                        remainingLabel.setText("Remaining:");
+                        MainActivity.homeLabel.setTitle("Home");
+                        MainActivity.carsLabel.setTitle("Cars");
+                        MainActivity.parkingAreasLabel.setTitle("Parking areas");
+                        MainActivity.settingsLabel.setTitle("Settings");
+                        MainActivity.informationLabel.setTitle("Information");
+                        MainActivity.aboutLabel.setTitle("About");
+                    }
                 }
 
                 modifyLanguageInFile();
