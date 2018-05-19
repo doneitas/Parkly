@@ -18,9 +18,12 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.parkly.Activity.MainActivity;
 import com.example.parkly.R;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -44,6 +47,14 @@ public class SettingsFragment extends Fragment {
     ArrayAdapter<String> spinAdapter;
     List<String> languageList = new ArrayList<String>();
     public static String selectedLanguage;
+    TextView languageLabel;
+    TextView soundLabel;
+    TextView notificationsLabel;
+    TextView SMSnotificationsLabel;
+    TextView carLabel;
+    TextView zoneLabel;
+    TextView endsLabel;
+    TextView remainingLabel;
 
     @Nullable
     @Override
@@ -56,7 +67,17 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         aSwitch = view.findViewById(R.id.switch_sound);
+
         spinLanguage = view.findViewById(R.id.spin_Language);
+        languageLabel = view.findViewById(R.id.txt_language);
+        soundLabel = view.findViewById(R.id.switch_sound);
+        notificationsLabel = view.findViewById(R.id.switch_notification);
+        SMSnotificationsLabel = view.findViewById(R.id.switch2);
+        carLabel = view.findViewById(R.id.car);
+        zoneLabel = view.findViewById(R.id.color);
+        endsLabel = view.findViewById(R.id.ends);
+        remainingLabel = view.findViewById(R.id.remaining);
+
 
         changeLanguage();
         checkState();
@@ -189,14 +210,35 @@ public class SettingsFragment extends Fragment {
                 if(spinLanguage.getSelectedItem().toString().compareTo("LT") == 0){
                     selectedLanguage = "lt";
                     setLanguageForApp();
+                    languageLabel.setText("Kalba");
+                    soundLabel.setText("Garso efektai");
+                    notificationsLabel.setText("Pranešimai apie stovėjimo laiką");
+                    SMSnotificationsLabel.setText("SMS apie stovėjimo laiką");
+                    carLabel.setText("Auto");
+                    zoneLabel.setText("Zona");
+                    endsLabel.setText("Baigiasi");
+                    remainingLabel.setText("Liko");
+
                 }
                 else if(spinLanguage.getSelectedItem().toString().compareTo("EN") == 0){
                     selectedLanguage = "en";
                     setLanguageForApp();
+                    languageLabel.setText("Language");
+                    soundLabel.setText("Sound effects");
+                    notificationsLabel.setText("Parking time notifications");
+                    SMSnotificationsLabel.setText("SMS parking time notifications");
+                    carLabel.setText("Car");
+                    zoneLabel.setText("Zone");
+                    endsLabel.setText("Ends");
+                    remainingLabel.setText("Remaining");
                 }
                 else if(spinLanguage.getSelectedItem().toString().compareTo("Default") == 0){
                     selectedLanguage = "not-set";
                     setLanguageForApp();
+                    /*languageLabel.setText("Language");
+                    soundLabel.setText("Sound effects");
+                    notificationsLabel.setText("Parking time notifications");
+                    SMSnotificationsLabel.setText("SMS parking time notifications");*/
                 }
 
                 modifyLanguageInFile();
