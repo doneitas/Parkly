@@ -693,7 +693,7 @@ public class HomeFragment extends Fragment {
                                                 == PackageManager.PERMISSION_GRANTED) {
                                             if (needAlert) {
 
-                                                String attentonWord = "<font color='red'>" + getString(R.string.attention_word) + "</font>" ;
+                                                String attentonWord = getString(R.string.attention_word);
                                                 String attentionConfirmMessage = getString(R.string.attention_confirm_message);
                                                 String finalWord = attentonWord + attentionConfirmMessage;
 
