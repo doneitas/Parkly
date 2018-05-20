@@ -544,7 +544,7 @@ public class SettingsFragment extends Fragment {
         String fileName = "SMSnotificationFile";
         try {
             FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
-            fileOutputStream.write(String.valueOf(MainActivity.isNotificationsOn).getBytes());
+            fileOutputStream.write(String.valueOf(MainActivity.isSmsNotifiationsOn).getBytes());
             fileOutputStream.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

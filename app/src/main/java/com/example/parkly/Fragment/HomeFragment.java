@@ -746,6 +746,21 @@ public class HomeFragment extends Fragment {
     public void setNotifications(){
 
         if(!MainActivity.isNotificationsOn || MainActivity.isSmsNotifiationsOn){
+
+            Intent intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_First.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+
+            intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Second.class);
+            pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+
+            intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Third.class);
+            pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
             return;
         }
 
@@ -758,7 +773,7 @@ public class HomeFragment extends Fragment {
         if(parkingEndsMinutes == 0){
                 notificationTime = ((parkingEndsMinutes + ((23 * 60) + 59)) * 60000) - (10 * 60000);
         }
-        else notificationTime = (parkingEndsMinutes * 60000) - (14 * 60000);
+        else notificationTime = (parkingEndsMinutes * 60000) - (10 * 60000);
         int hours = (int) notificationTime / 3600000;
         int minutes = (int) (notificationTime % 3600000) / 60000;
 
