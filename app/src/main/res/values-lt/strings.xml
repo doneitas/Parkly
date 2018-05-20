@@ -89,8 +89,4 @@
     <string name="yellow_zone_areas">Geltona (2€/h)</string>
     <string name="orange_zone_areas">Oranžinė (2€/h)</string>
     <string name="get_location_alert">Ar tikrai norite sužinoti vietą žemėlapyje</string>
-    <!-- Notification Receiver -->
-    <string name="notification_context_title">Info apie stovėjimą</string>
-    <string name="notification_context_text">Laikas pasibaigs už</string>
-    <string name="notification_context_text_ended">Stovėjimo laikas baigėsi</string>
 </resources>

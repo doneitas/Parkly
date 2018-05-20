@@ -57,9 +57,6 @@ public class MainActivity extends AppCompatActivity
 
     public static Locale defaultDeviceLocale;
 
-    public static String contextTitle;
-    public static String contextText;
-    public static String contextTextEnded;
     public static MenuItem homeLabel;
     public static MenuItem carsLabel;
     public static MenuItem parkingAreasLabel;
@@ -77,7 +74,6 @@ public class MainActivity extends AppCompatActivity
         defaultDeviceLocale = Locale.getDefault();
         checkSelectedLanguage();
         setLanguageForApp();
-        setNotificationText();
 
         setContentView(R.layout.activity_main);
 
@@ -159,12 +155,6 @@ public class MainActivity extends AppCompatActivity
         settingsLabel = menu.findItem(R.id.nav_settings);
         informationLabel = menu.findItem(R.id.information);
         aboutLabel = menu.findItem(R.id.nav_aboutUs);
-    }
-
-    public void setNotificationText(){
-        contextTitle = getString(R.string.notification_context_title);
-        contextText = getString(R.string.notification_context_text);
-        contextTextEnded = getString(R.string.notification_context_text_ended);
     }
 
     public void loadFragment(Fragment loadingFragment, String loadingFragmentTag){

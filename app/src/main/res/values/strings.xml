@@ -88,8 +88,4 @@
     <string name="yellow_zone_areas">Yellow (2€/h)</string>
     <string name="orange_zone_areas">Orange (2€/h)</string>
     <string name="get_location_alert">Do you really want to get the location of</string>
-    <!-- Notification Receiver -->
-    <string name="notification_context_title">Parking information</string>
-    <string name="notification_context_text">Parking ends after</string>
-    <string name="notification_context_text_ended">Parking time has ended</string>
 </resources>

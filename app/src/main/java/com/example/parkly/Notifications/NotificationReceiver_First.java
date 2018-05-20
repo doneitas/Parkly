@@ -21,14 +21,12 @@ public class NotificationReceiver_First extends BroadcastReceiver{
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        String contextTextTemp = MainActivity.contextText + " 10 min";
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSound(alarmSound)
                 .setSmallIcon(android.R.drawable.ic_popup_reminder)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
-                .setContentTitle(MainActivity.contextTitle)
-                .setContentText(contextTextTemp)
+                .setContentTitle("Parking information")
+                .setContentText("Parking ends after 10 min")
                 .setAutoCancel(true);
 
         notificationManager.notify(100, builder.build());

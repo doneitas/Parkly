@@ -31,6 +31,12 @@
 
         <receiver android:name=".Notifications.NotificationReceiver_Third"/>
 
+        <receiver android:name=".Notifications_lt.NotificationReceiver_First_Lt"/>
+
+        <receiver android:name=".Notifications_lt.NotificationReceiver_Second_Lt"/>
+
+        <receiver android:name=".Notifications_lt.NotificationReceiver_Third_Lt"/>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
