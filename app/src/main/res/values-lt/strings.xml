@@ -43,7 +43,7 @@
     <string name="car">Auto:</string>
     <string name="color">Zona:</string>
     <string name="hour">val</string>
-    <string name="toastFreeTime">Šiuo paros metu stovėjimas yra NEMOKAMAS</string>
+    <string name="toastFreeTime">Šiuo paros metu šioje zonoje stovėjimas yra NEMOKAMAS</string>
     <string name="toastFreeDay">Šiandien stovėjimas yra NEMOKAMAS</string>
     <string name="confirm_parking_message">Ar tikrai norite patvirtinti šį stovėjimo laiką?</string>
     <string name="attention_confirm_message">!!! DĖMESIO !!! Nemokamas stovėjimo laikas prasidės 18:00 (arba 00:00 jeigu esate pasirinkęs Oranžinę zoną). Turėsite sumokėti už tokią trukmę, kokią esate pasirinkę, net jeigu ir mokamas stovėjimo laikas pasibaigia anksčiau. Ar vis dar norite patvirtinti pasirinktą stovėjimo trukmę?</string>
@@ -55,6 +55,7 @@
     <string name="red_zone_home">Raudona\n1.2€/h</string>
     <string name="yellow_zone_home">Geltona\n2€/h</string>
     <string name="orange_zone_home">Oranžinė\n2€/h</string>
+    <string name="close_app_alert">Ar tikrai norite uždaryti programėlę?</string>
     <!-- Navigation drawer -->
     <string name="home">Pagrindinis</string>
     <string name="cars">Automobiliai</string>
@@ -74,18 +75,19 @@
     <string name="list_empty">Sąrašas tuščias</string>
     <string name="car_already_added">Šis automobilis jau yra sąraše</string>
     <string name="wrong_format">Blogas formatas</string>
-    <string name="get_location_alert">Ar tikrai norite sužinoti šios gatvės vietą žemėlapyje?:</string>
     <!-- Settings Tab -->
     <string name="select_your_language">Kalba</string>
     <string name="sound">Garso efektai</string>
     <string name="send_notifications">Pranešimai apie stovėjimo laiką</string>
     <string name="accept_sms_notifications">SMS apie stovėjimo laiką</string>
+    <string name="sms_notification_alert">Jeigu įjungsite SMS pranešimus, programėlės pranešimai (push notifications) bus išjungti.</string>
     <!-- Parking areas Tab -->
     <string name="green_zone_areas">Žalia (0.30€/h)</string>
     <string name="blue_zone_areas">Mėlyna (0.60€/h)</string>
     <string name="red_zone_areas">Raudona (1.20€/h)</string>
     <string name="yellow_zone_areas">Geltona (2€/h)</string>
     <string name="orange_zone_areas">Oranžinė (2€/h)</string>
+    <string name="get_location_alert">Ar tikrai norite sužinoti vietą žemėlapyje</string>
     <!-- Notification Receiver -->
     <string name="notification_context_title">Info apie stovėjimą</string>
     <string name="notification_context_text">Laikas pasibaigs už</string>

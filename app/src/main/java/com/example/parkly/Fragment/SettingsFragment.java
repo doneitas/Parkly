@@ -1,6 +1,7 @@
 package com.example.parkly.Fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.AudioManager;
@@ -10,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,6 +63,9 @@ public class SettingsFragment extends Fragment {
     TextView remainingLabel;
     TextView zoneShowLabel;
 
+    Switch notificationSwitch;
+    Switch notificationSMSswitch;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -84,11 +89,17 @@ public class SettingsFragment extends Fragment {
         remainingLabel = getActivity().findViewById(R.id.remaining);
         zoneShowLabel = getActivity().findViewById(R.id.colorText);
 
-
+        notificationSwitch = getActivity().findViewById(R.id.switch_notification);
+        notificationSMSswitch = getActivity().findViewById(R.id.switch2);
 
         changeLanguage();
+
         checkState();
         onSoundClick();
+
+        checkNotificationsState();
+        changeNotificationSetting();
+        changeSMSnotificationSetting();
     }
 
     @Override
@@ -101,6 +112,8 @@ public class SettingsFragment extends Fragment {
         menu.add(Menu.NONE, 1, Menu.NONE, "Delete");
         //menu.add(Menu.NONE, 0, Menu.NONE, "DELETE");
     }
+
+    //--------------------------------------Sound setting-beginning--------------------------------------------------------------------------
 
     public void modifySound()
     {
@@ -189,6 +202,11 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    //--------------------------------------Sound setting-ending--------------------------------------------------------------------------
+
+
+    //--------------------------------------Language setting-beginning--------------------------------------------------------------------
+
     public void changeLanguage(){
         spinAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_layout, languageList);
         registerForContextMenu(spinLanguage);
@@ -214,40 +232,42 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
+                String chosenZone = "";
+
+                try {
+
+                    FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
+                    InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    bufferedReader.readLine();
+                    bufferedReader.readLine();
+                    chosenZone = bufferedReader.readLine();
+                    fileInputStream.close();
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 if(spinLanguage.getSelectedItem().toString().compareTo("LT") == 0){
 
                     selectedLanguage = "lt";
 
-                    try {
-
-                        FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
-                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                        bufferedReader.readLine();
-                        bufferedReader.readLine();
-                        String chosenZone = bufferedReader.readLine();
-                        fileInputStream.close();
-
-                        if(chosenZone.compareTo("Z") == 0){
-                            zoneShowLabel.setText("Žalia");
-                        }
-                        else if(chosenZone.compareTo("M") == 0){
-                            zoneShowLabel.setText("Mėlyna");
-                        }
-                        else if(chosenZone.compareTo("R") == 0){
-                            zoneShowLabel.setText("Raudona");
-                        }
-                        else if(chosenZone.compareTo("G") == 0){
-                            zoneShowLabel.setText("Geltona");
-                        }
-                        else if(chosenZone.compareTo("A") == 0){
-                            zoneShowLabel.setText("Oranžinė");
-                        }
-
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if(chosenZone.compareTo("Z") == 0){
+                        zoneShowLabel.setText("Žalia");
+                    }
+                    else if(chosenZone.compareTo("M") == 0){
+                        zoneShowLabel.setText("Mėlyna");
+                    }
+                    else if(chosenZone.compareTo("R") == 0){
+                        zoneShowLabel.setText("Raudona");
+                    }
+                    else if(chosenZone.compareTo("G") == 0){
+                        zoneShowLabel.setText("Geltona");
+                    }
+                    else if(chosenZone.compareTo("A") == 0) {
+                        zoneShowLabel.setText("Oranžinė");
                     }
 
                     setLanguageForApp();
@@ -268,40 +288,21 @@ public class SettingsFragment extends Fragment {
                     MainActivity.informationLabel.setTitle("Informacija");
                     MainActivity.aboutLabel.setTitle("Apie");
                 }
-                else if(spinLanguage.getSelectedItem().toString().compareTo("EN") == 0){
+                else if(spinLanguage.getSelectedItem().toString().compareTo("EN") == 0) {
 
                     selectedLanguage = "en";
 
-                    try {
 
-                        FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
-                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                        bufferedReader.readLine();
-                        bufferedReader.readLine();
-                        String chosenZone = bufferedReader.readLine();
-                        fileInputStream.close();
-
-                        if(chosenZone.compareTo("Z") == 0){
-                            zoneShowLabel.setText("Green");
-                        }
-                        else if(chosenZone.compareTo("M") == 0){
-                            zoneShowLabel.setText("Blue");
-                        }
-                        else if(chosenZone.compareTo("R") == 0){
-                            zoneShowLabel.setText("Red");
-                        }
-                        else if(chosenZone.compareTo("G") == 0){
-                            zoneShowLabel.setText("Yellow");
-                        }
-                        else if(chosenZone.compareTo("A") == 0){
-                            zoneShowLabel.setText("Orange");
-                        }
-
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (chosenZone.compareTo("Z") == 0) {
+                        zoneShowLabel.setText("Green");
+                    } else if (chosenZone.compareTo("M") == 0) {
+                        zoneShowLabel.setText("Blue");
+                    } else if (chosenZone.compareTo("R") == 0) {
+                        zoneShowLabel.setText("Red");
+                    } else if (chosenZone.compareTo("G") == 0) {
+                        zoneShowLabel.setText("Yellow");
+                    } else if (chosenZone.compareTo("A") == 0) {
+                        zoneShowLabel.setText("Orange");
                     }
 
                     setLanguageForApp();
@@ -325,37 +326,18 @@ public class SettingsFragment extends Fragment {
                     selectedLanguage = "not-set";
                     setLanguageForApp();
 
-                    if(getString(R.string.confirm).compareTo("Patvirtinti") == 0){
-                        try {
+                    if(getString(R.string.confirm).compareTo("Patvirtinti") == 0) {
 
-                            FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
-                            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                            bufferedReader.readLine();
-                            bufferedReader.readLine();
-                            String chosenZone = bufferedReader.readLine();
-                            fileInputStream.close();
-
-                            if(chosenZone.compareTo("Z") == 0){
-                                zoneShowLabel.setText("Žalia");
-                            }
-                            else if(chosenZone.compareTo("M") == 0){
-                                zoneShowLabel.setText("Mėlyna");
-                            }
-                            else if(chosenZone.compareTo("R") == 0){
-                                zoneShowLabel.setText("Raudona");
-                            }
-                            else if(chosenZone.compareTo("G") == 0){
-                                zoneShowLabel.setText("Geltona");
-                            }
-                            else if(chosenZone.compareTo("A") == 0){
-                                zoneShowLabel.setText("Oranžinė");
-                            }
-
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (chosenZone.compareTo("Z") == 0) {
+                            zoneShowLabel.setText("Žalia");
+                        } else if (chosenZone.compareTo("M") == 0) {
+                            zoneShowLabel.setText("Mėlyna");
+                        } else if (chosenZone.compareTo("R") == 0) {
+                            zoneShowLabel.setText("Raudona");
+                        } else if (chosenZone.compareTo("G") == 0) {
+                            zoneShowLabel.setText("Geltona");
+                        } else if (chosenZone.compareTo("A") == 0) {
+                            zoneShowLabel.setText("Oranžinė");
                         }
 
                         setLanguageForApp();
@@ -377,36 +359,16 @@ public class SettingsFragment extends Fragment {
                         MainActivity.aboutLabel.setTitle("Apie");
                     } else {
 
-                        try {
-
-                            FileInputStream fileInputStream = getActivity().openFileInput("Countdown");
-                            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                            bufferedReader.readLine();
-                            bufferedReader.readLine();
-                            String chosenZone = bufferedReader.readLine();
-                            fileInputStream.close();
-
-                            if(chosenZone.compareTo("Z") == 0){
-                                zoneShowLabel.setText("Green");
-                            }
-                            else if(chosenZone.compareTo("M") == 0){
-                                zoneShowLabel.setText("Blue");
-                            }
-                            else if(chosenZone.compareTo("R") == 0){
-                                zoneShowLabel.setText("Red");
-                            }
-                            else if(chosenZone.compareTo("G") == 0){
-                                zoneShowLabel.setText("Yellow");
-                            }
-                            else if(chosenZone.compareTo("A") == 0){
-                                zoneShowLabel.setText("Orange");
-                            }
-
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (chosenZone.compareTo("Z") == 0) {
+                            zoneShowLabel.setText("Green");
+                        } else if (chosenZone.compareTo("M") == 0) {
+                            zoneShowLabel.setText("Blue");
+                        } else if (chosenZone.compareTo("R") == 0) {
+                            zoneShowLabel.setText("Red");
+                        } else if (chosenZone.compareTo("G") == 0) {
+                            zoneShowLabel.setText("Yellow");
+                        } else if (chosenZone.compareTo("A") == 0) {
+                            zoneShowLabel.setText("Orange");
                         }
 
                         setLanguageForApp();
@@ -474,5 +436,124 @@ public class SettingsFragment extends Fragment {
         config.locale = locale;
         getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
     }
+
+    //--------------------------------------Language setting-ending---------------------------------------------------------------------------
+
+
+
+    //--------------------------------------Notifications setting-beginning--------------------------------------------------------------------
+
+    public void checkNotificationsState() {
+
+        if(MainActivity.isNotificationsOn){
+            notificationSwitch.setChecked(true);
+            notificationSMSswitch.setEnabled(true);
+
+            if(MainActivity.isSmsNotifiationsOn){
+                notificationSMSswitch.setChecked(true);
+            } else notificationSMSswitch.setChecked(false);
+
+        } else {
+            notificationSwitch.setChecked(false);
+            notificationSMSswitch.setChecked(false);
+            notificationSMSswitch.setEnabled(false);
+        }
+
+    }
+
+    public void changeNotificationSetting(){
+
+        notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked)
+                {
+                    setNotifications(true);
+                    notificationSMSswitch.setEnabled(true);
+                }
+                else
+                {
+                    setNotifications(false);
+                    setSMSnotifications(false);
+                    notificationSMSswitch.setChecked(false);
+                    notificationSMSswitch.setEnabled(false);
+                }
+            }
+        });
+
+    }
+
+    public void changeSMSnotificationSetting(){
+
+        notificationSMSswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked)
+                {
+
+                    String SMSnotificationsAlert  = getString(R.string.sms_notification_alert);
+
+                    new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
+                            .setMessage(SMSnotificationsAlert)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    setSMSnotifications(true);
+
+                                }
+                            }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            setSMSnotifications(false);
+                            notificationSMSswitch.setChecked(false);
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+                }
+                else
+                {
+                    setSMSnotifications(false);
+                }
+
+            }
+        });
+
+    }
+
+    public void setNotifications(boolean setting){
+
+        MainActivity.isNotificationsOn = setting;
+
+        String fileName = "notificationFile";
+        try {
+            FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+            fileOutputStream.write(String.valueOf(MainActivity.isNotificationsOn).getBytes());
+            fileOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setSMSnotifications(boolean setting){
+
+        MainActivity.isSmsNotifiationsOn = setting;
+
+        String fileName = "SMSnotificationFile";
+        try {
+            FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+            fileOutputStream.write(String.valueOf(MainActivity.isNotificationsOn).getBytes());
+            fileOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //--------------------------------------Notifications setting-ending-----------------------------------------------------------------------
+
 
 }

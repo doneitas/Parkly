@@ -54,6 +54,7 @@
     <string name="red_zone_home">Red\n1.2€/h</string>
     <string name="yellow_zone_home">Yellow\n2€/h</string>
     <string name="orange_zone_home">Orange\n2€/h</string>
+    <string name="close_app_alert">Do you really want to close the application?</string>
     <!-- Navigation drawer -->
     <string name="home">Home</string>
     <string name="cars">Cars</string>
@@ -73,18 +74,19 @@
     <string name="list_empty">List is empty</string>
     <string name="car_already_added">This car is already added</string>
     <string name="wrong_format">Wrong format</string>
-    <string name="get_location_alert">Do you really want to get the location of</string>
     <!-- Settings Tab -->
     <string name="select_your_language">Language</string>
     <string name="sound">Sound effects</string>
     <string name="send_notifications">Parking time notifications</string>
     <string name="accept_sms_notifications">SMS parking time notifications</string>
+    <string name="sms_notification_alert">If SMS notifications is enabled, app push notifications turns off.</string>
     <!-- Parking areas Tab -->
     <string name="green_zone_areas">Green (0.30€/h)</string>
     <string name="blue_zone_areas">Blue (0.60€/h)</string>
     <string name="red_zone_areas">Red (1.20€/h)</string>
     <string name="yellow_zone_areas">Yellow (2€/h)</string>
     <string name="orange_zone_areas">Orange (2€/h)</string>
+    <string name="get_location_alert">Do you really want to get the location of</string>
     <!-- Notification Receiver -->
     <string name="notification_context_title">Parking information</string>
     <string name="notification_context_text">Parking ends after</string>

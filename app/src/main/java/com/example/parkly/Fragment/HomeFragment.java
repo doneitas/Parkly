@@ -130,7 +130,7 @@ public class HomeFragment extends Fragment {
         database(view);
         loadData();
         checkCarRegistration();
-        confirmParking(view);
+        confirmParking();
         showPriceAndParkingEnding(view);
 
     }
@@ -454,7 +454,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 boolean notSelected = false;
-                if(licensePlateList.get(0).toString().compareTo("Not selected") == 0) notSelected = true;
+
+                String notSelectedText = getString(R.string.not_selected);
+
+                if(licensePlateList.get(0).toString().compareTo(notSelectedText) == 0) notSelected = true;
                 for(int j=0; j < tempLicensePlate.size(); j++) {
                     if (tempLicensePlate.get(j).getNumber().compareTo(spin_DefaultCar.getSelectedItem().toString()) == 0) {
                         setDefault(tempLicensePlate.get(j));
@@ -517,7 +520,11 @@ public class HomeFragment extends Fragment {
         licensePlateList.clear();
 
         if(!isDefaultSelected){
-            licensePlateList.add("Not selected");
+
+            if(getActivity().getString(R.string.confirm).compareTo("Patvirtinti") == 0){
+                licensePlateList.add("Nepasirinktas");
+            } else licensePlateList.add("Not selected");
+
             chosenDefaultNumber = "";
         }
 
@@ -568,7 +575,7 @@ public class HomeFragment extends Fragment {
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    private void confirmParking(View view){
+    private void confirmParking(){
 
         car = getActivity().findViewById(R.id.car);
         showCar = getActivity().findViewById(R.id.carText);
@@ -733,6 +740,10 @@ public class HomeFragment extends Fragment {
 
     public void setNotifications(){
 
+        if(!MainActivity.isNotificationsOn || MainActivity.isSmsNotifiationsOn){
+            return;
+        }
+
         Calendar calendar = Calendar.getInstance();
 
         long notificationTime;
@@ -742,7 +753,7 @@ public class HomeFragment extends Fragment {
         if(parkingEndsMinutes == 0){
                 notificationTime = ((parkingEndsMinutes + ((23 * 60) + 59)) * 60000) - (10 * 60000);
         }
-        else notificationTime = (parkingEndsMinutes * 60000) - (10 * 60000);
+        else notificationTime = (parkingEndsMinutes * 60000) - (14 * 60000);
         int hours = (int) notificationTime / 3600000;
         int minutes = (int) (notificationTime % 3600000) / 60000;
 
@@ -952,7 +963,8 @@ public class HomeFragment extends Fragment {
 
         String parkingTime = minute == 0 ? String.valueOf(hour) : String.valueOf(hour) + "." + String.valueOf(minute);
 
-        String message = "PK " + parkingTime + " " + zone + " " + currentDefaultNumber;
+        String smsNotifications =  !MainActivity.isSmsNotifiationsOn ? " NP" : "";
+        String message = "PK " + parkingTime + " " + zone + " " + currentDefaultNumber + smsNotifications;
 
         sms.sendTextMessage("+37063694869", null, message, null, null);
 

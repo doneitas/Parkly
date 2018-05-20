@@ -67,6 +67,9 @@ public class MainActivity extends AppCompatActivity
     public static MenuItem informationLabel;
     public static MenuItem aboutLabel;
 
+    public static boolean isNotificationsOn;
+    public static boolean isSmsNotifiationsOn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,12 +85,69 @@ public class MainActivity extends AppCompatActivity
         toolbar.setTitle("");
 
         setNavigationLabelsValues();
+        setNotificationSettingsValues();
 
         loadFragment(new HomeFragment(), "HOME_FRAGMENT");
         NavigationView navigationView = findViewById(R.id.nav_view);
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_home);
         navigationView.setCheckedItem(item.getItemId());
         navigation();
+    }
+
+    public void setNotificationSettingsValues(){
+
+        isNotificationsOn = true;
+        isSmsNotifiationsOn = false;
+
+        try {
+            FileInputStream fileInputStream = openFileInput("notificationFile");
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            String state = "";
+
+            if ((state = bufferedReader.readLine()) != null) {
+
+                if (Boolean.valueOf(state))
+                {
+                    isNotificationsOn = true;
+                }
+                else
+                {
+                    isNotificationsOn = false;
+                    isSmsNotifiationsOn = false;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            FileInputStream fileInputStream = openFileInput("SMSnotificationFile");
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            String state = "";
+
+            if ((state = bufferedReader.readLine()) != null) {
+
+                if (Boolean.valueOf(state))
+                {
+                    isSmsNotifiationsOn = true;
+                }
+                else
+                {
+                    isSmsNotifiationsOn = false;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void setNavigationLabelsValues(){
@@ -152,8 +212,11 @@ public class MainActivity extends AppCompatActivity
             }
         }
         else {
+
+            String closeAppAlertText = getString(R.string.close_app_alert);
+
             new AlertDialog.Builder(this)
-                    .setMessage("Do you really want to close the application?")
+                    .setMessage(closeAppAlertText)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
