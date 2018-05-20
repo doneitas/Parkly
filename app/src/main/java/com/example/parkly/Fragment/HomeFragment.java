@@ -98,6 +98,7 @@ public class HomeFragment extends Fragment {
     private String currentZone = "";
     private int parkingEndsMinutes = -1;
     private boolean needAlert = false;
+    private String confirmButtonLabel;
 
     private String Green;
     private String Blue;
@@ -430,6 +431,8 @@ public class HomeFragment extends Fragment {
     private void loadData()
     {
 
+        confirmButtonLabel = getString(R.string.confirm);
+
         Disposable disposable = licensePlateRepository.getAll()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -521,7 +524,7 @@ public class HomeFragment extends Fragment {
 
         if(!isDefaultSelected){
 
-            if(getActivity().getString(R.string.confirm).compareTo("Patvirtinti") == 0){
+            if(confirmButtonLabel.compareTo("Patvirtinti") == 0){
                 licensePlateList.add("Nepasirinktas");
             } else licensePlateList.add("Not selected");
 
@@ -689,10 +692,12 @@ public class HomeFragment extends Fragment {
                                                 == PackageManager.PERMISSION_GRANTED) {
                                             if (needAlert) {
 
+                                                String attentonWord = "<font color='red'>" + getString(R.string.attention_word) + "</font>" ;
                                                 String attentionConfirmMessage = getString(R.string.attention_confirm_message);
+                                                String finalWord = attentonWord + attentionConfirmMessage;
 
                                                 new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                                        .setMessage(attentionConfirmMessage)
+                                                        .setMessage(finalWord)
                                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
