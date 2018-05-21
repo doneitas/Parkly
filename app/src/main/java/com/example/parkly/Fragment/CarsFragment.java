@@ -119,7 +119,19 @@ public class CarsFragment extends Fragment {
                     {
                         lst_Car.clearFocus();
                         if(!selectedLicensePlateList.isEmpty()) {
-                            deleteSelectedLicensePlates();
+                            new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
+                                    .setMessage("Do you really want to remove selected cars?")
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            deleteSelectedLicensePlates();
+                                        }
+                                    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).create().show();
                         }
                         deleteClicked = false;
                         refreshAdapter(view);
@@ -234,6 +246,7 @@ public class CarsFragment extends Fragment {
 
         menu.setHeaderTitle(selectAction);
         menu.add(Menu.NONE, 0, Menu.NONE, markDefault);
+        menu.add(Menu.NONE, 1, Menu.NONE, "Remove");
     }
 
     @Override
@@ -255,6 +268,23 @@ public class CarsFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 setDefault(licensePlate);
+                            }
+                        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
+            }
+            break;
+            case 1:
+            {
+                new AlertDialog.Builder(getActivity())
+                        .setMessage("Do you want to remove "+licensePlate.getNumber()+" ?")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteLicensePlate(licensePlate);
                             }
                         }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override

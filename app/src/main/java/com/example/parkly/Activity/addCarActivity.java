@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.parkly.DataBase.LicensePlateDatabase;
@@ -36,6 +37,7 @@ import io.reactivex.schedulers.Schedulers;
 public class addCarActivity extends Activity {
     EditText txt_plate;
     Button btn_confirm;
+    ImageButton closeButton;
     //Database
     private CompositeDisposable compositeDisposable;
     public LicensePlateRepository licensePlateRepository;
@@ -112,7 +114,18 @@ public class addCarActivity extends Activity {
                 }
             }
         });
+        closeButton = findViewById(R.id.btn_exit);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                finish();
+            }
+        });
     }
+
+
 
     private boolean checkIfContains(String value)
     {
