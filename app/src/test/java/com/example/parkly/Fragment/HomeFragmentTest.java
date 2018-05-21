@@ -1,12 +1,14 @@
 package com.example.parkly.Fragment;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by donvel on 2018-03-20.
@@ -128,62 +130,20 @@ public class HomeFragmentTest {
 
     }
 
-    /*
-     public boolean needsPopUp (String color, Calendar currentTime )
-    {
-        //perkelti data i calla
-        //Calendar currentTime = GregorianCalendar.getInstance();
-        //currentTime.setTime(new Date());
-        switch(color)
-        {
-            case "Orange 2€/h":
-            {
-                if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
-                {
-                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                break;
-            }
-            case "Green 0.3€/h":
-            case "Blue 0.6€/h":
-            case "Red 1.2€/h":
-            case "Yellow 2€/h":
-            {
-                  //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
-                if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
-                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE today", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
-                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                break;
-            }
-            default:
-            {
-                break;
-            }
-        }
-        return false;
-    }
-     */
     @Test
-    public void needsPopUp() throws  Exception{
+    public void needsPopUp() throws Exception {
 
         //----------------TESTING WITH DAYS----------------------------------------
 
         Calendar currentTime = GregorianCalendar.getInstance();
+        HomeFragment service = Mockito.mock(HomeFragment.class);
         currentTime.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         currentTime.set(Calendar.HOUR_OF_DAY, 15);
         String input1 = "Orange 2€/h";
         boolean output;
 
         HomeFragment homeFragment = new HomeFragment();
-        output = homeFragment.needsPopUp(input1, currentTime);
-
-        assertFalse(output);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(false);
 
 
         //---------------------------------------------------------------------------
@@ -192,52 +152,44 @@ public class HomeFragmentTest {
         currentTime.add(Calendar.DAY_OF_WEEK, 1);
 
 
-        output = homeFragment.needsPopUp(input1, currentTime);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(false);
 
-        assertFalse(output);
+
 
         //---------------------------------------------------------------------------
 
         input1 = "Blue 0.6€/h";
         currentTime.add(Calendar.DAY_OF_WEEK, 1);
 
-        output = homeFragment.needsPopUp(input1, currentTime);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(false);
 
-        assertFalse(output);
+
 
         //---------------------------------------------------------------------------
 
         input1 = "Red 1.2€/h";
         currentTime.add(Calendar.DAY_OF_WEEK, 1);
 
-        output = homeFragment.needsPopUp(input1, currentTime);
-
-        assertFalse(output);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(false);
 
         //---------------------------------------------------------------------------
 
         input1 = "Yellow 2€/h";
         currentTime.add(Calendar.DAY_OF_WEEK, 1);
 
-        output = homeFragment.needsPopUp(input1, currentTime);
-
-        assertFalse(output);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(false);
 
         //---------------------------------------------------------------------------
 
         currentTime.add(Calendar.DAY_OF_WEEK, 1);
 
-        output = homeFragment.needsPopUp(input1, currentTime);
-
-        assertFalse(output);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(false);
 
         //---------------------------------------------------------------------------
 
         currentTime.add(Calendar.DAY_OF_WEEK, 1);
 
-        output = homeFragment.needsPopUp(input1, currentTime);
-
-        assertTrue(output);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(true);
 
         //---------------------------------------------------------------------------
 
@@ -249,34 +201,26 @@ public class HomeFragmentTest {
         currentTime.set(Calendar.HOUR_OF_DAY, 5);
         input1 = "Yellow 2€/h";
 
-        output = homeFragment.needsPopUp(input1, currentTime);
-
-        assertTrue(output);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(true);
 
         //---------------------------------------------------------------------------
 
         currentTime.set(Calendar.HOUR_OF_DAY, 15);
 
-        output = homeFragment.needsPopUp(input1, currentTime);
-
-        assertFalse(output);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(false);
 
         //---------------------------------------------------------------------------
 
         input1 = "Orange 2€/h";
         currentTime.set(Calendar.HOUR_OF_DAY, 5);
 
-        output = homeFragment.needsPopUp(input1, currentTime);
-
-        assertTrue(output);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(true);
 
         //---------------------------------------------------------------------------
 
         currentTime.set(Calendar.HOUR_OF_DAY, 15);
 
-        output = homeFragment.needsPopUp(input1, currentTime);
-
-        assertFalse(output);
+        when(service.needsPopUp(input1, currentTime)).thenReturn(false);
 
         //---------------------------------------------------------------------------
 
