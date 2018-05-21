@@ -46,8 +46,7 @@
     <string name="toastFreeTime">Šiuo paros metu šioje zonoje stovėjimas yra NEMOKAMAS</string>
     <string name="toastFreeDay">Šiandien stovėjimas yra NEMOKAMAS</string>
     <string name="confirm_parking_message">Ar tikrai norite patvirtinti šį stovėjimo laiką?</string>
-    <string name="attention_word">!!! DĖMESIO !!!" "</string>
-    <string name="attention_confirm_message">Nemokamas stovėjimo laikas prasidės 18:00 (arba 00:00 jeigu esate pasirinkęs Oranžinę zoną). Turėsite sumokėti už tokią trukmę, kokią esate pasirinkę, net jeigu ir mokamas stovėjimo laikas pasibaigia anksčiau. Ar vis dar norite patvirtinti pasirinktą stovėjimo trukmę?</string>
+    <string name="attention_confirm_message"><font fgcolor='#FF0000'>!!! DĖMESIO !!!</font> Nemokamas stovėjimo laikas prasidės 18:00 (arba 00:00 jeigu esate pasirinkęs Oranžinę zoną). Turėsite sumokėti už tokią trukmę, kokią esate pasirinkę, net jeigu ir mokamas stovėjimo laikas pasibaigia anksčiau. Ar vis dar norite patvirtinti pasirinktą stovėjimo trukmę?</string>
     <string name="please_select_default">Prašau pasirinkti naudojamą automobilį</string>
     <string name="permission_not_granted">Leidimas nebuvo suteiktas</string>
     <string name="confirmed_successfully">Sėkmingai patvirtinote stovėjimą</string>
@@ -76,6 +75,9 @@
     <string name="list_empty">Sąrašas tuščias</string>
     <string name="car_already_added">Šis automobilis jau yra sąraše</string>
     <string name="wrong_format">Blogas formatas</string>
+    <string name="remove_selected_alert">Ar tikrai norite pašalinti pažymėtus automobilius?</string>
+    <string name="remove_car_alert">Ar tikrai norite pašalinti automobilį, kurio valstybinis numeris -" "</string>
+    <string name="type_your_car_number">Įveskite\nautomobilio valstybinį numerį</string>
     <!-- Settings Tab -->
     <string name="select_your_language">Kalba</string>
     <string name="sound">Garso efektai</string>

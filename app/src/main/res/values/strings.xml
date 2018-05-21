@@ -45,8 +45,7 @@
     <string name="toastFreeTime">Parking in chosen zone is FREE at this time of the day</string>
     <string name="toastFreeDay">Parking in chosen zone is FREE today</string>
     <string name="confirm_parking_message">Do you really want to confirm this parking?</string>
-    <string name="attention_word">!!! ATTENTION !!!" "</string>
-    <string name="attention_confirm_message">Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?</string>
+    <string name="attention_confirm_message"><font fgcolor='#FF0000'>!!! ATTENTION !!!</font> Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?</string>
     <string name="please_select_default">Please select a default car</string>
     <string name="permission_not_granted">Permission was not granted</string>
     <string name="confirmed_successfully">Parking confirmed successfully</string>
@@ -75,6 +74,9 @@
     <string name="list_empty">List is empty</string>
     <string name="car_already_added">This car is already added</string>
     <string name="wrong_format">Wrong format</string>
+    <string name="remove_selected_alert">Do you really want to remove selected cars?</string>
+    <string name="remove_car_alert">Do you want to remove" "</string>
+    <string name="type_your_car_number">Type your license plate number</string>
     <!-- Settings Tab -->
     <string name="select_your_language">Language</string>
     <string name="sound">Sound effects</string>

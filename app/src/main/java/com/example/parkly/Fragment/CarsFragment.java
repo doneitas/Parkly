@@ -119,8 +119,11 @@ public class CarsFragment extends Fragment {
                     {
                         lst_Car.clearFocus();
                         if(!selectedLicensePlateList.isEmpty()) {
+
+                            String removeSelectedAlert = getString(R.string.remove_selected_alert);
+
                             new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                    .setMessage("Do you really want to remove selected cars?")
+                                    .setMessage(removeSelectedAlert)
                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -243,10 +246,11 @@ public class CarsFragment extends Fragment {
 
         String selectAction = getString(R.string.select_action);
         String markDefault = getString(R.string.mark_default);
+        String removeCar = getString(R.string.remove);
 
         menu.setHeaderTitle(selectAction);
         menu.add(Menu.NONE, 0, Menu.NONE, markDefault);
-        menu.add(Menu.NONE, 1, Menu.NONE, "Remove");
+        menu.add(Menu.NONE, 1, Menu.NONE, removeCar);
     }
 
     @Override
@@ -279,8 +283,11 @@ public class CarsFragment extends Fragment {
             break;
             case 1:
             {
+
+                String removeCarAlert = getString(R.string.remove_car_alert);
+
                 new AlertDialog.Builder(getActivity())
-                        .setMessage("Do you want to remove "+licensePlate.getNumber()+" ?")
+                        .setMessage(removeCarAlert+licensePlate.getNumber()+" ?")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

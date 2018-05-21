@@ -694,12 +694,11 @@ public class HomeFragment extends Fragment {
                                                 == PackageManager.PERMISSION_GRANTED) {
                                             if (needAlert) {
 
-                                                String attentonWord = getString(R.string.attention_word);
-                                                String attentionConfirmMessage = getString(R.string.attention_confirm_message);
-                                                String finalWord = attentonWord + attentionConfirmMessage;
+                                                //Padaryti ATTENTION raudoną, nes neveikia dabar dar
+                                                String attentionConfirmMessage = getResources().getString(R.string.attention_confirm_message);
 
                                                 new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                                        .setMessage(finalWord)
+                                                        .setMessage(Html.fromHtml(attentionConfirmMessage))
                                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
