@@ -33,5 +33,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sview_parking" />
 
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/expl_parking"
+        app:layout_constraintEnd_toEndOf="@+id/expl_parking"
+        app:layout_constraintStart_toStartOf="@+id/expl_parking"
+        app:layout_constraintTop_toTopOf="@+id/expl_parking">
+
+
+        <FrameLayout
+            android:id="@+id/touchInterceptor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="0dp"
+            android:visibility="invisible">
+
+        </FrameLayout>
+    </RelativeLayout>
+
 
 </android.support.constraint.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,12 +14,14 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -50,6 +53,7 @@ public class ParkingFragment extends Fragment {
     private HashMap<String, List<String>> addressList;
     private int searchTextLength = 0;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -58,7 +62,7 @@ public class ParkingFragment extends Fragment {
 
         //Init data
         prepareData();
-        View mView = view;
+        final View mView = view;
         mContext = this.getContext();
         adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
 
@@ -145,6 +149,27 @@ public class ParkingFragment extends Fragment {
               }
           }
         );
+        FrameLayout touchInterceptor = view.findViewById(R.id.touchInterceptor);
+        touchInterceptor.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    if (searchView.isFocused())
+                    {
+                        Rect outRect = new Rect();
+                        searchView.getGlobalVisibleRect(outRect);
+                        if (!outRect.contains((int)event.getRawX(), (int)event.getRawY()))
+                        {
+                            searchView.clearFocus();
+                            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                        }
+                    }
+                }
+                return false;
+            }
+        });
         /*mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
