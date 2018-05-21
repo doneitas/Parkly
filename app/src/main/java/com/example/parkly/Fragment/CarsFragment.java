@@ -230,6 +230,7 @@ public class CarsFragment extends Fragment {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle("Select action:");
         menu.add(Menu.NONE, 0, Menu.NONE, "Mark as default");
+        menu.add(Menu.NONE, 1, Menu.NONE, "Remove");
     }
 
     @Override
@@ -247,6 +248,23 @@ public class CarsFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 setDefault(licensePlate);
+                            }
+                        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create().show();
+            }
+            break;
+            case 1:
+            {
+                new AlertDialog.Builder(getActivity())
+                        .setMessage("Do you want to remove "+licensePlate.getNumber()+" ?")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteLicensePlate(licensePlate);
                             }
                         }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
