@@ -100,11 +100,17 @@ public class addCarActivity extends Activity {
                         insertLicensePlate(value);
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "This car is already added", Toast.LENGTH_LONG).show();
+
+                        String carAlreadyAdded = getString(R.string.car_already_added);
+
+                        Toast.makeText(getApplicationContext(), carAlreadyAdded, Toast.LENGTH_LONG).show();
                     }
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Wrong format", Toast.LENGTH_LONG).show();
+
+                    String wrongFormat = getString(R.string.wrong_format);
+
+                    Toast.makeText(getApplicationContext(), wrongFormat, Toast.LENGTH_LONG).show();
                 }
             }
         });

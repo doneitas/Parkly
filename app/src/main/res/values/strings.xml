@@ -11,49 +11,83 @@
     <string name="nav_home">Home</string>
     <string name="nav_cars">Cars</string>
     <string name="nav_parking_areas">Parking Areas</string>
-    <string name="nav_budget">History</string>
     <string name="nav_settings">Settings</string>
 
-    <string name="nav_about_us">About Us</string>
-    <string name="nav_contact_us">Contact Us</string>
+    <string name="nav_about_us">About</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
         <item>Cars</item>
         <item>Parking Areas</item>
-        <item>Budget</item>
         <item>Settings</item>
     </string-array>
 
-    <string name="activity_title_about_us">About Us</string>
-    <string name="activity_title_privacy_policy">Contact Us</string>
-
-    <string name="action_settings">Settings</string>
+    <string name="activity_title_about_us">About</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="time">-</string>
+    <string name="time2">-</string>
+    <!-- Home Fragment -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="parking_zone">Parking\nzone</string>
     <string name="confirm">Confirm</string>
     <string name="parking_duration">Parking\nduration</string>
     <string name="price">Price</string>
     <string name="parking_ends">Parking ends</string>
+    <string name="selected_car">Default car:</string>
+    <string name="remaining">Remaining:</string>
+    <string name="ends">Ends:</string>
+    <string name="car">Car:</string>
+    <string name="color">Zone:</string>
+    <string name="hour">h</string>
+    <string name="toastFreeTime">Parking in chosen zone is FREE at this time of the day</string>
+    <string name="toastFreeDay">Parking in chosen zone is FREE today</string>
+    <string name="confirm_parking_message">Do you really want to confirm this parking?</string>
+    <string name="attention_confirm_message"><font fgcolor='#FF0000'>!!! ATTENTION !!!</font> Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?</string>
+    <string name="please_select_default">Please select a default car</string>
+    <string name="permission_not_granted">Permission was not granted</string>
+    <string name="confirmed_successfully">Parking confirmed successfully</string>
+    <string name="green_zone_home">Green\n0.3€/h</string>
+    <string name="blue_zone_home">Blue\n0.6€/h</string>
+    <string name="red_zone_home">Red\n1.2€/h</string>
+    <string name="yellow_zone_home">Yellow\n2€/h</string>
+    <string name="orange_zone_home">Orange\n2€/h</string>
+    <string name="close_app_alert">Do you really want to close the application?</string>
+    <!-- Navigation drawer -->
     <string name="home">Home</string>
     <string name="cars">Cars</string>
     <string name="parking_areas">Parking areas</string>
-    <string name="budget">History</string>
     <string name="settings">Settings</string>
     <string name="information">Information</string>
-    <string name="about_us">About us</string>
-    <string name="selected_car">Default car:</string>
+    <string name="about_us">About</string>
+    <!-- Cars Tab -->
     <string name="add_car">Add Car</string>
     <string name="remove">Remove</string>
     <string name="default_car">Default car:</string>
-    <string name="select_your_language">Select your language</string>
-    <string name="time">-</string>
-    <string name="time2">-</string>
-    <string name="remaining">Remaining:" "</string>
-    <string name="ends">Ends:" "</string>
-    <string name="car">Car:</string>
-    <string name="color">Zone:</string>
+    <string name="select_action">Select action:</string>
+    <string name="mark_default">Mark as default</string>
+    <string name="set_default1">Do you want to set</string>
+    <string name="set_default2">as default car?</string>
+    <string name="not_selected">Not selected</string>
+    <string name="list_empty">List is empty</string>
+    <string name="car_already_added">This car is already added</string>
+    <string name="wrong_format">Wrong format</string>
+    <string name="remove_selected_alert">Do you really want to remove selected cars?</string>
+    <string name="remove_car_alert">Do you want to remove" "</string>
+    <string name="type_your_car_number">Type your license plate number</string>
+    <!-- Settings Tab -->
+    <string name="select_your_language">Language</string>
+    <string name="sound">Sound effects</string>
+    <string name="send_notifications">Parking time notifications</string>
+    <string name="accept_sms_notifications">SMS parking time notifications</string>
+    <string name="sms_notification_alert">If SMS notifications is enabled, app push notifications turns off.</string>
+    <!-- Parking areas Tab -->
+    <string name="green_zone_areas">Green (0.30€/h)</string>
+    <string name="blue_zone_areas">Blue (0.60€/h)</string>
+    <string name="red_zone_areas">Red (1.20€/h)</string>
+    <string name="yellow_zone_areas">Yellow (2€/h)</string>
+    <string name="orange_zone_areas">Orange (2€/h)</string>
+    <string name="get_location_alert">Do you really want to get the location of</string>
 </resources>

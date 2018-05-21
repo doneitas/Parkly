@@ -80,8 +80,11 @@ public class ParkingFragment extends Fragment {
                     int childPosition = ExpandableListView.getPackedPositionChild(id);
 
                     final String address = addressList.get(zoneList.get(groupPosition)).get(childPosition);
+
+                    String getLocationAlert = getString(R.string.get_location_alert);
+
                     new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                            .setMessage("Do you really want to get the location of " + address + " ?")
+                            .setMessage(getLocationAlert + " " + address + " ?")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -173,11 +176,17 @@ public class ParkingFragment extends Fragment {
         List<String> yellowZones = new ArrayList<>();
         List<String> orangeZones = new ArrayList<>();
 
-        zoneList.add("Green (0.30€/h)");
-        zoneList.add("Blue (0.60€/h)");
-        zoneList.add("Red (1.20€/h)");
-        zoneList.add("Yellow (2€/h)");
-        zoneList.add("Orange (2€/h)");
+        String Green = getString(R.string.green_zone_areas);
+        String Blue = getString(R.string.blue_zone_areas);
+        String Red = getString(R.string.red_zone_areas);
+        String Yellow = getString(R.string.yellow_zone_areas);
+        String Orange = getString(R.string.orange_zone_areas);
+
+        zoneList.add(Green);
+        zoneList.add(Blue);
+        zoneList.add(Red);
+        zoneList.add(Yellow);
+        zoneList.add(Orange);
 
         greenZones.add("Kaunakiemio g.");
         greenZones.add("Šiaulių g.");
