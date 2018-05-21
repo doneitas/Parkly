@@ -73,7 +73,7 @@
     <string name="not_selected">Not selected</string>
     <string name="list_empty">List is empty</string>
     <string name="car_already_added">This car is already added</string>
-    <string name="wrong_format">Wrong format</string>
+    <string name="wrong_format">Wrong licence plate number [use: YYYXXXX (Y - Letter, X - Number)]</string>
     <string name="remove_selected_alert">Do you really want to remove selected cars?</string>
     <string name="remove_car_alert">Do you want to remove" "</string>
     <string name="type_your_car_number">Type your license plate number</string>

@@ -108,7 +108,7 @@ public class addCarActivity extends Activity {
                 }
                 else {
 
-                    String wrongFormat = getString(R.string.wrong_format);
+                        String wrongFormat = getString(R.string.wrong_format);
 
                     Toast.makeText(getApplicationContext(), wrongFormat, Toast.LENGTH_LONG).show();
                 }
