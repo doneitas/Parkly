@@ -9,21 +9,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.SearchView;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.parkly.Adapters.ExpandableListAdapter;
 import com.example.parkly.R;
@@ -64,11 +56,11 @@ public class ParkingFragment extends Fragment {
         mContext = this.getContext();
         adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
 
-        search = view.findViewById(R.id.sview_parking);
-        search.setOnClickListener(new View.OnClickListener() {
+        searchView = view.findViewById(R.id.sview_parking);
+        searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search.setIconified(false);
+                searchView.setIconified(false);
             }
         });
 

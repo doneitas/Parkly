@@ -1,9 +1,7 @@
 package com.example.parkly.Activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -21,13 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.parkly.Fragment.CarsFragment;
 import com.example.parkly.Fragment.HomeFragment;
@@ -36,17 +28,11 @@ import com.example.parkly.Fragment.SettingsFragment;
 import com.example.parkly.R;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-
-import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -77,7 +63,7 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
 
         setNavigationLabelsValues();
@@ -129,14 +115,7 @@ public class MainActivity extends AppCompatActivity
 
             if ((state = bufferedReader.readLine()) != null) {
 
-                if (Boolean.valueOf(state))
-                {
-                    isSmsNotifiationsOn = true;
-                }
-                else
-                {
-                    isSmsNotifiationsOn = false;
-                }
+                isSmsNotifiationsOn = Boolean.valueOf(state);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -147,7 +126,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setNavigationLabelsValues(){
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
         homeLabel = menu.findItem(R.id.nav_home);
         carsLabel = menu.findItem(R.id.nav_cars);
