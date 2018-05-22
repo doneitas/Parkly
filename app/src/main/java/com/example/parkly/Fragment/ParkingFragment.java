@@ -62,7 +62,6 @@ public class ParkingFragment extends Fragment {
 
         //Init data
         prepareData();
-        final View mView = view;
         mContext = this.getContext();
         adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
 
@@ -100,7 +99,6 @@ public class ParkingFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 searchView.clearFocus();
-                //searchView.onActionViewCollapsed();
                 InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(),0);
             }
@@ -110,7 +108,6 @@ public class ParkingFragment extends Fragment {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 searchView.clearFocus();
-                //searchView.onActionViewCollapsed();
                 InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(),0);
                 return false;
@@ -121,7 +118,6 @@ public class ParkingFragment extends Fragment {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 searchView.clearFocus();
-                //searchView.onActionViewCollapsed();
                 InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(),0);
                 return false;
@@ -180,46 +176,6 @@ public class ParkingFragment extends Fragment {
               }
           }
         );
-
-
-
-        /*FrameLayout touchInterceptor = view.findViewById(R.id.touchInterceptor);
-        touchInterceptor.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN)
-                {
-                    if (searchView.isFocused())
-                    {
-                        Rect outRect = new Rect();
-                        searchView.getGlobalVisibleRect(outRect);
-                        if (!outRect.contains((int)event.getRawX(), (int)event.getRawY()))
-                        {
-                            searchView.clearFocus();
-                            searchView.onActionViewCollapsed();
-                            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(v.getWindowToken(),0);
-                        }
-                    }
-                }
-                return false;
-            }
-        });*/
-        /*mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchView.clearFocus();
-                searchView.onActionViewCollapsed();
-            }
-        });
-        lst_zones.setOnClickListener(new ExpandableListView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchView.clearFocus();
-                searchView.onActionViewCollapsed();
-            }
-        });*/
-
     }
 
     public String trimText(String newText)
