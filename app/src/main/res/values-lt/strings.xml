@@ -74,7 +74,7 @@
     <string name="not_selected">Nepasirinktas</string>
     <string name="list_empty">Sąrašas tuščias</string>
     <string name="car_already_added">Šis automobilis jau yra sąraše</string>
-    <string name="wrong_format">Blogas valstybinių numerių formatas [naudoti: XXXYYY (Y - Raidė, X - Skaičius)]</string>
+    <string name="wrong_format">Blogas valstybinių numerių formatas [naudoti: XXXYYY (X - Raidė, Y - Skaičius)]</string>
     <string name="remove_selected_alert">Ar tikrai norite pašalinti pažymėtus automobilius?</string>
     <string name="remove_car_alert">Ar tikrai norite pašalinti automobilį, kurio valstybinis numeris -" "</string>
     <string name="type_your_car_number">Įveskite\nautomobilio valstybinį numerį</string>
