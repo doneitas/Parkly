@@ -9,19 +9,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.SearchView;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.parkly.Adapters.ExpandableListAdapter;
 import com.example.parkly.R;
@@ -45,11 +39,11 @@ public class ParkingFragment extends Fragment {
 
     private Context mContext;
     private ExpandableListView lst_zones;
+    SearchView searchView;
     private ExpandableListAdapter adapter;
     private List<String> zoneList;
     private HashMap<String, List<String>> addressList;
     private int searchTextLength = 0;
-    SearchView search;
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
@@ -63,11 +57,11 @@ public class ParkingFragment extends Fragment {
         mContext = this.getContext();
         adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
 
-        search = view.findViewById(R.id.sview_parking);
-        search.setOnClickListener(new View.OnClickListener() {
+        searchView = view.findViewById(R.id.sview_parking);
+        searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search.setIconified(false);
+                searchView.setIconified(false);
             }
         });
 
@@ -105,7 +99,7 @@ public class ParkingFragment extends Fragment {
             }
         });
 
-        SearchView searchView = view.findViewById(R.id.sview_parking);
+        searchView = view.findViewById(R.id.sview_parking);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
               @Override
               public boolean onQueryTextSubmit(String query) {
@@ -156,6 +150,35 @@ public class ParkingFragment extends Fragment {
               }
           }
         );
+
+        lst_zones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                searchView.clearFocus();
+                InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+            }
+        });
+
+        lst_zones.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                searchView.clearFocus();
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                return false;
+            }
+        });
+
+        lst_zones.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                searchView.clearFocus();
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                return false;
+            }
+        });
     }
 
     public String trimText(String newText)
