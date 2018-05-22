@@ -96,6 +96,37 @@ public class ParkingFragment extends Fragment {
                 return false;
             }
         });
+        lst_zones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                searchView.clearFocus();
+                //searchView.onActionViewCollapsed();
+                InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+            }
+        });
+
+        lst_zones.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                searchView.clearFocus();
+                //searchView.onActionViewCollapsed();
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                return false;
+            }
+        });
+
+        lst_zones.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                searchView.clearFocus();
+                //searchView.onActionViewCollapsed();
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+                return false;
+            }
+        });
 
 
         searchView = view.findViewById(R.id.sview_parking);
