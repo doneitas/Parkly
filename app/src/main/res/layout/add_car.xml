@@ -14,15 +14,18 @@
         android:layout_alignParentRight="false"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Type your license plate number"
+        android:shadowColor="@color/colorText"
+        android:text="@string/type_your_car_number"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/txt_plate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_exit" />
 
     <EditText
         android:id="@+id/txt_plate"
@@ -52,9 +55,23 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/buttonshape4"
-        android:text="Confirm"
+        android:text="@string/confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_plate" />
+
+    <ImageButton
+        android:id="@+id/btn_exit"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/buttonshape5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_close_black_24dp"
+        android:layout_marginRight="16dp"
+        tools:ignore="VectorDrawableCompat" />
+
 </android.support.constraint.ConstraintLayout>

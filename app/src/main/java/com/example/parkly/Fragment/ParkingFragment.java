@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,12 +15,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.SearchView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -53,7 +53,6 @@ public class ParkingFragment extends Fragment {
     private HashMap<String, List<String>> addressList;
     private int searchTextLength = 0;
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -65,6 +64,14 @@ public class ParkingFragment extends Fragment {
         mContext = this.getContext();
         adapter = new ExpandableListAdapter(mContext,zoneList,addressList);
 
+        search = view.findViewById(R.id.sview_parking);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search.setIconified(false);
+            }
+        });
+
         lst_zones.setAdapter(adapter);
         lst_zones.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -74,8 +81,11 @@ public class ParkingFragment extends Fragment {
                     int childPosition = ExpandableListView.getPackedPositionChild(id);
 
                     final String address = addressList.get(zoneList.get(groupPosition)).get(childPosition);
-                    new AlertDialog.Builder(getActivity())
-                            .setMessage("Do you really want to get the location of " + address + " ?")
+
+                    String getLocationAlert = getString(R.string.get_location_alert);
+
+                    new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
+                            .setMessage(getLocationAlert + " " + address + " ?")
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -183,10 +193,7 @@ public class ParkingFragment extends Fragment {
         return newText.trim().replaceAll(" +", " ");
     }
 
-    public void onBackPressed() {
-        searchView.clearFocus();
-        searchView.onActionViewCollapsed();
-    }
+
 
     private void prepareData()
     {
@@ -199,11 +206,17 @@ public class ParkingFragment extends Fragment {
         List<String> yellowZones = new ArrayList<>();
         List<String> orangeZones = new ArrayList<>();
 
-        zoneList.add("Green (0.30€/h)");
-        zoneList.add("Blue (0.60€/h)");
-        zoneList.add("Red (1.20€/h)");
-        zoneList.add("Yellow (2€/h)");
-        zoneList.add("Orange (2€/h)");
+        String Green = getString(R.string.green_zone_areas);
+        String Blue = getString(R.string.blue_zone_areas);
+        String Red = getString(R.string.red_zone_areas);
+        String Yellow = getString(R.string.yellow_zone_areas);
+        String Orange = getString(R.string.orange_zone_areas);
+
+        zoneList.add(Green);
+        zoneList.add(Blue);
+        zoneList.add(Red);
+        zoneList.add(Yellow);
+        zoneList.add(Orange);
 
         greenZones.add("Kaunakiemio g.");
         greenZones.add("Šiaulių g.");

@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.telephony.SmsManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +35,11 @@ import com.example.parkly.DataBase.LicensePlateRepository;
 import com.example.parkly.DataBase.LocalUserDataSource;
 import com.example.parkly.DataBase.Tables.LicensePlate;
 import com.example.parkly.Notifications.NotificationReceiver_First;
+import com.example.parkly.Notifications_lt.NotificationReceiver_First_Lt;
 import com.example.parkly.Notifications.NotificationReceiver_Second;
+import com.example.parkly.Notifications_lt.NotificationReceiver_Second_Lt;
 import com.example.parkly.Notifications.NotificationReceiver_Third;
+import com.example.parkly.Notifications_lt.NotificationReceiver_Third_Lt;
 import com.example.parkly.R;
 
 import java.io.BufferedReader;
@@ -96,12 +100,13 @@ public class HomeFragment extends Fragment {
     private String currentZone = "";
     private int parkingEndsMinutes = -1;
     private boolean needAlert = false;
+    private String confirmButtonLabel;
 
-    private final String Green = "Green 0.3€/h";
-    private final String Blue = "Blue 0.6€/h";
-    private final String Red = "Red 1.2€/h";
-    private final String Yellow = "Yellow 2€/h";
-    private final String Orange = "Orange 2€/h";
+    private String Green;
+    private String Blue;
+    private String Red;
+    private String Yellow;
+    private String Orange;
 
     //Adapter
     private Spinner spin_DefaultCar;
@@ -123,12 +128,22 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setZonesValues();
         init(view);
         database(view);
         loadData();
         checkCarRegistration();
-        confirmParking(view);
+        confirmParking();
         showPriceAndParkingEnding(view);
+
+    }
+
+    public void setZonesValues(){
+        Green = getString(R.string.green_zone_home);
+        Blue = getString(R.string.blue_zone_home);
+        Red = getString(R.string.red_zone_home);
+        Yellow = getString(R.string.yellow_zone_home);
+        Orange = getString(R.string.orange_zone_home);
     }
 
     public void init(View view){
@@ -210,65 +225,56 @@ public class HomeFragment extends Fragment {
 
                 listTime.clearChoices();
 
+                String h = getString(R.string.hour);
 
-                switch (chosenZone){
-                    case Green:{
-                        time.removeAll(time);
-                        time.add("1  h  0 min");
-                        time.add("2  h  0 min");
-                        time.add("3  h  0 min");
-                        time.add("4  h  0 min");
-                        time.add("5  h  0 min");
-                        time.add("6  h  0 min");
-                        time.add("7  h  0 min");
-                        time.add("8  h  0 min");
-                        time.add("9  h  0 min");
-                        time.add("10 h  0 min");
-                        chosenMinutes = -1;
-                        break;
-                    }
-                    case Blue:{
-                        time.removeAll(time);
-                        time.add("0  h 30 min");
-                        time.add("1  h  0 min");
-                        time.add("1  h 30 min");
-                        time.add("2  h  0 min");
-                        time.add("3  h  0 min");
-                        time.add("4  h  0 min");
-                        time.add("5  h  0 min");
-                        time.add("6  h  0 min");
-                        time.add("7  h  0 min");
-                        time.add("8  h  0 min");
-                        time.add("9  h  0 min");
-                        time.add("10 h  0 min");
-                        chosenMinutes = -1;
-                        break;
-                    }
-                    default:
-                    {
-                        time.removeAll(time);
-                        time.add("0  h 15 min");
-                        time.add("0  h 30 min");
-                        time.add("0  h 45 min");
-                        time.add("1  h  0 min");
-                        time.add("1  h 15 min");
-                        time.add("1  h 30 min");
-                        time.add("2  h  0 min");
-                        time.add("3  h  0 min");
-                        time.add("4  h  0 min");
-                        time.add("5  h  0 min");
-                        time.add("6  h  0 min");
-                        time.add("7  h  0 min");
-                        time.add("8  h  0 min");
-                        time.add("9  h  0 min");
-                        time.add("10 h  0 min");
-                        chosenMinutes = -1;
-                        break;
-                    }
-                    case "": {
-                        time.removeAll(time);
-                        break;
-                    }
+                if(chosenZone.compareTo(Green) == 0){
+                    time.removeAll(time);
+                    time.add("1  " + h + "   0 min");
+                    time.add("2  " + h + "   0 min");
+                    time.add("3  " + h + "   0 min");
+                    time.add("4  " + h + "   0 min");
+                    time.add("5  " + h + "   0 min");
+                    time.add("6  " + h + "   0 min");
+                    time.add("7  " + h + "   0 min");
+                    time.add("8  " + h + "   0 min");
+                    time.add("9  " + h + "   0 min");
+                    time.add("10 " + h + "  0 min");
+                    chosenMinutes = -1;
+                } else if(chosenZone.compareTo(Blue) == 0){
+                    time.removeAll(time);
+                    time.add("0  " + h + " 30 min");
+                    time.add("1  " + h + "   0 min");
+                    time.add("1  " + h + " 30 min");
+                    time.add("2  " + h + "   0 min");
+                    time.add("3  " + h + "   0 min");
+                    time.add("4  " + h + "   0 min");
+                    time.add("5  " + h + "   0 min");
+                    time.add("6  " + h + "   0 min");
+                    time.add("7  " + h + "   0 min");
+                    time.add("8  " + h + "   0 min");
+                    time.add("9  " + h + "   0 min");
+                    time.add("10 " + h + "  0 min");
+                    chosenMinutes = -1;
+                } else if(chosenZone.compareTo("") == 0) {
+                    time.removeAll(time);
+                } else {
+                    time.removeAll(time);
+                    time.add("0  " + h + " 15 min");
+                    time.add("0  " + h + " 30 min");
+                    time.add("0  " + h + " 45 min");
+                    time.add("1  " + h + "   0 min");
+                    time.add("1  " + h + " 15 min");
+                    time.add("1  " + h + " 30 min");
+                    time.add("2  " + h + "   0 min");
+                    time.add("3  " + h + "   0 min");
+                    time.add("4  " + h + "   0 min");
+                    time.add("5  " + h + "   0 min");
+                    time.add("6  " + h + "   0 min");
+                    time.add("7  " + h + "   0 min");
+                    time.add("8  " + h + "   0 min");
+                    time.add("9  " + h + "   0 min");
+                    time.add("10 " + h + " 0 min");
+                    chosenMinutes = -1;
                 }
 
                 timeAdapter.notifyDataSetChanged();
@@ -322,44 +328,23 @@ public class HomeFragment extends Fragment {
     {
         double total;
         double price = 0;
-        switch(color)
-        {
-            case Orange:
-            {
-                price = 2 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case Yellow:
-            {
-                price = 2 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case Blue:
-            {
-                price = 0.6 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case Red:
-            {
-                price = 1.2 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            case Green:
-            {
-                price = 0.3 / 60d;
-                total = ((chosenHour*60) + chosenMinute) * price;
-                break;
-            }
-            default:
-            {
-                total = 0;
-                break;
-            }
-        }
+
+        if(color.compareTo(Green) == 0){
+            price = 0.3 / 60d;
+            total = ((chosenHour*60) + chosenMinute) * price;
+        } else if(color.compareTo(Blue) == 0){
+            price = 0.6 / 60d;
+            total = ((chosenHour*60) + chosenMinute) * price;
+        } else if(color.compareTo(Red) == 0) {
+            price = 1.2 / 60d;
+            total = ((chosenHour*60) + chosenMinute) * price;
+        } else if(color.compareTo(Yellow) == 0) {
+            price = 2 / 60d;
+            total = ((chosenHour*60) + chosenMinute) * price;
+        } else if(color.compareTo(Orange) == 0) {
+            price = 2 / 60d;
+            total = ((chosenHour*60) + chosenMinute) * price;
+        } else total = 0;
 
         String totalString = String.valueOf(total) + "0" + " \u20ac";
         return totalString;
@@ -409,36 +394,25 @@ public class HomeFragment extends Fragment {
         //perkelti data i calla
         //Calendar currentTime = GregorianCalendar.getInstance();
         //currentTime.setTime(new Date());
-        switch(color)
-        {
-            case Orange:
+
+        if(color.compareTo(Orange) == 0){
+            if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
             {
-                if (currentTime.get(Calendar.HOUR_OF_DAY) >= 24 || currentTime.get(Calendar.HOUR_OF_DAY) < 8)
-                {
-                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                break;
+                String toastNotification = getString(R.string.toastFreeTime);
+                Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
+                return true;
             }
-            case Green:
-            case Blue:
-            case Red:
-            case Yellow:
-            {
-                //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
-                if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
-                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE today", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
-                    Toast.makeText(getActivity(), "Parking in chosen zone is FREE at this time of the day", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                break;
+        } else if(color.compareTo(Green) == 0 || color.compareTo(Blue) == 0 || color.compareTo(Red) == 0 || color.compareTo(Yellow) == 0) {
+            //https://coderanch.com/t/491207/certification/Confusion-understanding-DAY-WEEK
+            if (currentTime.get(Calendar.DAY_OF_WEEK) == 7 || currentTime.get(Calendar.DAY_OF_WEEK) == 1) {
+                String toastNotification = getString(R.string.toastFreeDay);
+                Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
+                return true;
             }
-            default:
-            {
-                break;
+            else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
+                String toastNotification = getString(R.string.toastFreeTime);
+                Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
+                return true;
             }
         }
         return false;
@@ -458,6 +432,8 @@ public class HomeFragment extends Fragment {
 
     private void loadData()
     {
+
+        confirmButtonLabel = getString(R.string.confirm);
 
         Disposable disposable = licensePlateRepository.getAll()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -483,7 +459,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 boolean notSelected = false;
-                if(licensePlateList.get(0).toString().compareTo("Not selected") == 0) notSelected = true;
+
+                String notSelectedText = getString(R.string.not_selected);
+
+                if(licensePlateList.get(0).toString().compareTo(notSelectedText) == 0) notSelected = true;
                 for(int j=0; j < tempLicensePlate.size(); j++) {
                     if (tempLicensePlate.get(j).getNumber().compareTo(spin_DefaultCar.getSelectedItem().toString()) == 0) {
                         setDefault(tempLicensePlate.get(j));
@@ -546,7 +525,11 @@ public class HomeFragment extends Fragment {
         licensePlateList.clear();
 
         if(!isDefaultSelected){
-            licensePlateList.add("Not selected");
+
+            if(confirmButtonLabel.compareTo("Patvirtinti") == 0){
+                licensePlateList.add("Nepasirinktas");
+            } else licensePlateList.add("Not selected");
+
             chosenDefaultNumber = "";
         }
 
@@ -597,7 +580,7 @@ public class HomeFragment extends Fragment {
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    private void confirmParking(View view){
+    private void confirmParking(){
 
         car = getActivity().findViewById(R.id.car);
         showCar = getActivity().findViewById(R.id.carText);
@@ -621,22 +604,28 @@ public class HomeFragment extends Fragment {
                 currentZone = bufferedReader.readLine();
                 currentDefaultNumber = bufferedReader.readLine();
 
-                switch (currentZone) {
-                    case Orange:
-                        showZone.setTextColor(Color.parseColor("#F9A602"));
-                        break;
-                    case Blue:
-                        showZone.setTextColor(Color.parseColor("#73C2FB"));
-                        break;
-                    case Red:
-                        showZone.setTextColor(Color.parseColor("#FF0000"));
-                        break;
-                    case Green:
-                        showZone.setTextColor(Color.parseColor("#7FFF00"));
-                        break;
-                    case Yellow:
-                        showZone.setTextColor(Color.parseColor("#FFFB00"));
-                        break;
+                if(currentZone.compareTo("Z") == 0){
+                    currentZone = Green;
+                } else if(currentZone.compareTo("M") == 0){
+                    currentZone = Blue;
+                } else if(currentZone.compareTo("R") == 0) {
+                    currentZone = Red;
+                } else if(currentZone.compareTo("G") == 0) {
+                    currentZone = Yellow;
+                } else if(currentZone.compareTo("A") == 0) {
+                    currentZone = Orange;
+                }
+
+                if(currentZone.compareTo(Green) == 0){
+                    showZone.setTextColor(Color.parseColor("#7FFF00"));
+                } else if(currentZone.compareTo(Blue) == 0){
+                    showZone.setTextColor(Color.parseColor("#73C2FB"));
+                } else if(currentZone.compareTo(Red) == 0) {
+                    showZone.setTextColor(Color.parseColor("#FF0000"));
+                } else if(currentZone.compareTo(Yellow) == 0) {
+                    showZone.setTextColor(Color.parseColor("#FFFB00"));
+                } else if(currentZone.compareTo(Orange) == 0) {
+                    showZone.setTextColor(Color.parseColor("#F9A602"));
                 }
 
                 if (!MainActivity.isTimerCreated) {
@@ -687,13 +676,16 @@ public class HomeFragment extends Fragment {
         }
 
         confirm.setOnClickListener(new View.OnClickListener() {
+
+            String confirmParkingMessage = getString(R.string.confirm_parking_message);
+
             @Override
             public void onClick(View view) {
                 Calendar currentTime = GregorianCalendar.getInstance();
                 if(!needsPopUp(chosenZone, currentTime)) {
                     if(isDefaultSelected) {
                         new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                .setMessage("Do you really want to confirm this parking?")
+                                .setMessage(confirmParkingMessage)
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -701,8 +693,12 @@ public class HomeFragment extends Fragment {
                                         if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
                                                 == PackageManager.PERMISSION_GRANTED) {
                                             if (needAlert) {
+
+                                                //Padaryti ATTENTION raudoną, nes neveikia dabar dar
+                                                String attentionConfirmMessage = getResources().getString(R.string.attention_confirm_message);
+
                                                 new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                                        .setMessage("!!! ATTENTION !!! Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?")
+                                                        .setMessage(Html.fromHtml(attentionConfirmMessage))
                                                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
@@ -733,7 +729,10 @@ public class HomeFragment extends Fragment {
                             }
                         }).create().show();
                     }
-                    else Toast.makeText(getActivity(), "Please select a default car", Toast.LENGTH_LONG).show();
+                    else {
+                        String pleaseSelectDefault = getString(R.string.please_select_default);
+                        Toast.makeText(getActivity(), pleaseSelectDefault, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -746,6 +745,42 @@ public class HomeFragment extends Fragment {
     }
 
     public void setNotifications(){
+
+        Intent intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_First.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Second.class);
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Third.class);
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_First_Lt.class);
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);;
+
+        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Second_Lt.class);
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Third_Lt.class);
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+
+
+        if(!MainActivity.isNotificationsOn || MainActivity.isSmsNotifiationsOn){
+            return;
+        }
 
         Calendar calendar = Calendar.getInstance();
 
@@ -763,12 +798,11 @@ public class HomeFragment extends Fragment {
         calendar.set(Calendar.HOUR_OF_DAY, hours);
         calendar.set(Calendar.MINUTE, minutes);
 
-        Intent intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_First.class);
+        intent = new Intent(getActivity().getApplicationContext(), getString(R.string.confirm).compareTo("Patvirtinti") == 0 ? NotificationReceiver_First_Lt.class : NotificationReceiver_First.class);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -785,12 +819,11 @@ public class HomeFragment extends Fragment {
         calendar.set(Calendar.HOUR_OF_DAY, hours);
         calendar.set(Calendar.MINUTE, minutes);
 
-        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Second.class);
+        intent = new Intent(getActivity().getApplicationContext(), getString(R.string.confirm).compareTo("Patvirtinti") == 0 ? NotificationReceiver_Second_Lt.class : NotificationReceiver_Second.class);
 
         pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -805,12 +838,11 @@ public class HomeFragment extends Fragment {
             calendar.set(Calendar.MINUTE, (parkingEndsMinutes % 60));
         }
 
-        intent = new Intent(getActivity().getApplicationContext(), NotificationReceiver_Third.class);
+        intent = new Intent(getActivity().getApplicationContext(), getString(R.string.confirm).compareTo("Patvirtinti") == 0 ? NotificationReceiver_Third_Lt.class : NotificationReceiver_Third.class);
 
         pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
     }
@@ -846,13 +878,27 @@ public class HomeFragment extends Fragment {
 
         String fileName = "Countdown";
 
+        String chosenZoneTemp = "";
+
+        if(chosenZone.compareTo(Green) == 0){
+            chosenZoneTemp = "Z";
+        } else if(chosenZone.compareTo(Blue) == 0){
+            chosenZoneTemp = "M";
+        } else if(chosenZone.compareTo(Red) == 0) {
+            chosenZoneTemp = "R";
+        } else if(chosenZone.compareTo(Yellow) == 0) {
+            chosenZoneTemp = "G";
+        } else if(chosenZone.compareTo(Orange) == 0) {
+            chosenZoneTemp = "A";
+        }
+
         try {
             FileOutputStream fileOutputStream = getActivity().openFileOutput(fileName, Context.MODE_APPEND);
             fileOutputStream.write(String.valueOf(parkingEndsMinutes).getBytes());
             fileOutputStream.write("\n".getBytes());
             fileOutputStream.write(formattedDate.getBytes());
             fileOutputStream.write("\n".getBytes());
-            fileOutputStream.write(chosenZone.getBytes());
+            fileOutputStream.write(chosenZoneTemp.getBytes());
             fileOutputStream.write("\n".getBytes());
             fileOutputStream.write(chosenDefaultNumber.getBytes());
             fileOutputStream.close();
@@ -872,26 +918,17 @@ public class HomeFragment extends Fragment {
         String color = scan.next();
         showZone.setText(color);
 
-        switch (currentZone) {
-            case Orange:
-                showZone.setTextColor(Color.parseColor("#F9A602"));
-                break;
-            case Blue:
-                showZone.setTextColor(Color.parseColor("#73C2FB"));
-                break;
-            case Red:
-                showZone.setTextColor(Color.parseColor("#FF0000"));
-                break;
-            case Green:
-                showZone.setTextColor(Color.parseColor("#7FFF00"));
-                break;
-            case Yellow:
-                showZone.setTextColor(Color.parseColor("#FFFB00"));
-                break;
-            default:
-                showZone.setTextColor(Color.parseColor("#FFFFFF"));
-                break;
-        }
+        if(currentZone.compareTo(Green) == 0){
+            showZone.setTextColor(Color.parseColor("#7FFF00"));
+        } else if(currentZone.compareTo(Blue) == 0){
+            showZone.setTextColor(Color.parseColor("#73C2FB"));
+        } else if(currentZone.compareTo(Red) == 0) {
+            showZone.setTextColor(Color.parseColor("#FF0000"));
+        } else if(currentZone.compareTo(Yellow) == 0) {
+            showZone.setTextColor(Color.parseColor("#FFFB00"));
+        } else if(currentZone.compareTo(Orange) == 0) {
+            showZone.setTextColor(Color.parseColor("#F9A602"));
+        } else showZone.setTextColor(Color.parseColor("#FFFFFF"));
 
         timeEnds.setText(tempTime.getText().toString());
 
@@ -926,7 +963,8 @@ public class HomeFragment extends Fragment {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 confirmAndSend();
             } else{
-                Toast.makeText(getActivity(), "Permission was not granted", Toast.LENGTH_SHORT).show();
+                String permissionNotGranted = getString(R.string.permission_not_granted);
+                Toast.makeText(getActivity(), permissionNotGranted, Toast.LENGTH_SHORT).show();
             }
 
         } else {
@@ -939,23 +977,16 @@ public class HomeFragment extends Fragment {
 
         String zone = "";
 
-        switch(currentZone){
-            case Green:
-                zone = "Z";
-                break;
-            case Blue:
-                zone = "M";
-                break;
-            case Red:
-                zone = "R";
-                break;
-            case Yellow:
-                zone = "G";
-                break;
-            case Orange:
-                zone = "A";
-                break;
-
+        if(currentZone.compareTo(Green) == 0){
+            zone = "Z";
+        } else if(currentZone.compareTo(Blue) == 0){
+            zone = "M";
+        } else if(currentZone.compareTo(Red) == 0) {
+            zone = "R";
+        } else if(currentZone.compareTo(Yellow) == 0) {
+            zone = "G";
+        } else if(currentZone.compareTo(Orange) == 0) {
+            zone = "A";
         }
 
         int hour = chosenMinutes / 60;
@@ -967,11 +998,14 @@ public class HomeFragment extends Fragment {
 
         String parkingTime = minute == 0 ? String.valueOf(hour) : String.valueOf(hour) + "." + String.valueOf(minute);
 
-        String message = "PK " + parkingTime + " " + zone + " " + currentDefaultNumber;
+        String smsNotifications =  !MainActivity.isSmsNotifiationsOn ? " NP" : "";
+        String message = "PK " + parkingTime + " " + zone + " " + currentDefaultNumber + smsNotifications;
 
         sms.sendTextMessage("+37063694869", null, message, null, null);
 
-        Toast.makeText(getActivity(), "Parking confirmed successfully", Toast.LENGTH_SHORT).show();
+        String confirmedSuccesfully = getString(R.string.confirmed_successfully);
+
+        Toast.makeText(getActivity(), confirmedSuccesfully, Toast.LENGTH_SHORT).show();
     }
 
     public long calculateTimeLeft(int parkingEndsMinutes, int hours, int minutes){
@@ -1073,4 +1107,5 @@ public class HomeFragment extends Fragment {
         }
         timeLeft.setText(timeLeftText);
     }
+
 }
