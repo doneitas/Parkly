@@ -149,7 +149,10 @@ public class ParkingFragment extends Fragment {
               }
           }
         );
-        FrameLayout touchInterceptor = view.findViewById(R.id.touchInterceptor);
+
+
+
+        /*FrameLayout touchInterceptor = view.findViewById(R.id.touchInterceptor);
         touchInterceptor.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -162,6 +165,7 @@ public class ParkingFragment extends Fragment {
                         if (!outRect.contains((int)event.getRawX(), (int)event.getRawY()))
                         {
                             searchView.clearFocus();
+                            searchView.onActionViewCollapsed();
                             InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(v.getWindowToken(),0);
                         }
@@ -169,7 +173,7 @@ public class ParkingFragment extends Fragment {
                 }
                 return false;
             }
-        });
+        });*/
         /*mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,6 +188,7 @@ public class ParkingFragment extends Fragment {
                 searchView.onActionViewCollapsed();
             }
         });*/
+
     }
 
     public String trimText(String newText)
