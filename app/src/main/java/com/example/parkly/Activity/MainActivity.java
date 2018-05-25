@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity
 
             String closeAppAlertText = getString(R.string.close_app_alert);
 
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this, R.style.AlertDialog)
                     .setMessage(closeAppAlertText)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override

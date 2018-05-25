@@ -286,7 +286,7 @@ public class CarsFragment extends Fragment {
 
                 String removeCarAlert = getString(R.string.remove_car_alert);
 
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
                         .setMessage(removeCarAlert+licensePlate.getNumber()+" ?")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
