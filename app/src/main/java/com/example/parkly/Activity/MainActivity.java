@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.parkly.Fragment.AboutFragment;
 import com.example.parkly.Fragment.CarsFragment;
 import com.example.parkly.Fragment.HomeFragment;
 import com.example.parkly.Fragment.ParkingFragment;
@@ -257,7 +258,9 @@ public class MainActivity extends AppCompatActivity
             hideKeyboard();
             fragmentTag = "SETTINGS_FRAGMENT";
         } else if (id == R.id.nav_aboutUs) {
-
+            selectedFragment = new AboutFragment();
+            hideKeyboard();
+            fragmentTag = "ABOUT_FRAGMENT";
         }
 
         Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
