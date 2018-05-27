@@ -1,4 +1,4 @@
-package com.example.parkly.Notifications;
+package com.example.parkly.Notifications_lt;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -9,14 +9,13 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
-import com.example.parkly.Activity.MainActivity;
 import com.example.parkly.R;
 
 /**
- * Created by donvel on 2018-05-07.
+ * Created by donvel on 2018-05-20.
  */
 
-public class NotificationReceiver_Second extends BroadcastReceiver {
+public class NotificationReceiver_Third_Lt extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -29,8 +28,8 @@ public class NotificationReceiver_Second extends BroadcastReceiver {
                 .setSound(alarmSound)
                 .setSmallIcon(android.R.drawable.ic_popup_reminder)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
-                .setContentTitle("Parking information")
-                .setContentText("Parking ends after 5 min")
+                .setContentTitle("Info apie stovėjimą")
+                .setContentText("Stovėjimo laikas baigėsi")
                 .setAutoCancel(true);
 
         notificationManager.notify(100, builder.build());
