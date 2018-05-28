@@ -917,6 +917,11 @@ public class HomeFragment extends Fragment {
 
         if(currentTimeInMinutes != choosingZoneAndTimeClockInMinutes){
             parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60 + (currentTimeInMinutes - choosingZoneAndTimeClockInMinutes);
+
+            currentTime.add(Calendar.HOUR_OF_DAY, chosenMinutes / 60);
+            currentTime.add(Calendar.MINUTE, chosenMinutes % 60);
+
+            tempTime.setText((currentTime.get(Calendar.HOUR_OF_DAY) < 10? ("0"+currentTime.get(Calendar.HOUR_OF_DAY)) : currentTime.get(Calendar.HOUR_OF_DAY)) + ":" + (currentTime.get(Calendar.MINUTE) < 10? ("0"+currentTime.get(Calendar.MINUTE)) : currentTime.get(Calendar.MINUTE)));
         } else parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
 
         Date c = Calendar.getInstance().getTime();
