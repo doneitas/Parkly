@@ -915,7 +915,7 @@ public class HomeFragment extends Fragment {
 
         int currentTimeInMinutes = currentTime.get(Calendar.HOUR_OF_DAY) * 60 + currentTime.get(Calendar.MINUTE);
 
-        if(currentTimeInMinutes != choosingZoneAndTimeClockInMinutes){
+        if(currentTimeInMinutes != choosingZoneAndTimeClockInMinutes && tempTime.getText().toString() != "0:00"){
             parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60 + (currentTimeInMinutes - choosingZoneAndTimeClockInMinutes);
 
             currentTime.add(Calendar.HOUR_OF_DAY, chosenMinutes / 60);
