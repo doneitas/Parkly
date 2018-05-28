@@ -697,7 +697,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
 
                 Calendar currentTime = GregorianCalendar.getInstance();
-                if(/*!needsPopUp(chosenZone, currentTime)*/true) {
+                if(!needsPopUp(chosenZone, currentTime)) {
                     if(isDefaultSelected) {
                         currentTime = GregorianCalendar.getInstance();
                         currentTime.setTime(new Date());
