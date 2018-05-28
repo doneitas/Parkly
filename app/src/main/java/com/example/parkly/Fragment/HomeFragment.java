@@ -697,7 +697,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
 
                 Calendar currentTime = GregorianCalendar.getInstance();
-                if(!needsPopUp(chosenZone, currentTime)) {
+                if(/*!needsPopUp(chosenZone, currentTime)*/true) {
                     if(isDefaultSelected) {
                         currentTime = GregorianCalendar.getInstance();
                         currentTime.setTime(new Date());
@@ -707,8 +707,10 @@ public class HomeFragment extends Fragment {
                         if(currentTimeInMinutes != choosingZoneAndTimeClockInMinutes && tempTime.getText().toString() != "0:00" && tempTime.getText().toString() != "18:00" && !(chosenZone.compareTo(currentZone) == 0 && chosenDefaultNumber.compareTo(currentDefaultNumber) == 0)){
 
 
+                            String unfortunatelyMessage = getResources().getString(R.string.unfortunately_message);
+
                             new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                    .setMessage("Apgailestaujame, tačiau dėl uždelsto 'Patvirtinti' mygtuko paspaudimo tikrasis stovėjimo pabaigos laikas gali skirtis nuo šiuo metu rodomo, jeigu norite pamatyti tikslų stovėjimo pabaigos laiką, atšaukite patvirtinimą ir stovėjimo trukmę pasirinkite iš naujo.")
+                                    .setMessage(unfortunatelyMessage)
                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {

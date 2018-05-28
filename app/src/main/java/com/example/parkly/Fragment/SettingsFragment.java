@@ -286,7 +286,7 @@ public class SettingsFragment extends Fragment {
                     MainActivity.parkingAreasLabel.setTitle("Stovėjimo zonos");
                     MainActivity.settingsLabel.setTitle("Nustatymai");
                     MainActivity.informationLabel.setTitle("Informacija");
-                    MainActivity.aboutLabel.setTitle("Apie");
+                    MainActivity.aboutLabel.setTitle("DUK");
                 }
                 else if(spinLanguage.getSelectedItem().toString().compareTo("EN") == 0) {
 
@@ -320,7 +320,7 @@ public class SettingsFragment extends Fragment {
                     MainActivity.parkingAreasLabel.setTitle("Parking areas");
                     MainActivity.settingsLabel.setTitle("Settings");
                     MainActivity.informationLabel.setTitle("Information");
-                    MainActivity.aboutLabel.setTitle("About");
+                    MainActivity.aboutLabel.setTitle("FAQ");
                 }
                 else if(spinLanguage.getSelectedItem().toString().compareTo("Default") == 0){
                     selectedLanguage = "not-set";
@@ -356,7 +356,7 @@ public class SettingsFragment extends Fragment {
                         MainActivity.parkingAreasLabel.setTitle("Stovėjimo zonos");
                         MainActivity.settingsLabel.setTitle("Nustatymai");
                         MainActivity.informationLabel.setTitle("Informacija");
-                        MainActivity.aboutLabel.setTitle("Apie");
+                        MainActivity.aboutLabel.setTitle("DUK");
                     } else {
 
                         if (chosenZone.compareTo("Z") == 0) {
@@ -386,7 +386,7 @@ public class SettingsFragment extends Fragment {
                         MainActivity.parkingAreasLabel.setTitle("Parking areas");
                         MainActivity.settingsLabel.setTitle("Settings");
                         MainActivity.informationLabel.setTitle("Information");
-                        MainActivity.aboutLabel.setTitle("About");
+                        MainActivity.aboutLabel.setTitle("FAQ");
                     }
                 }
 
