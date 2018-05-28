@@ -82,7 +82,7 @@
     <!-- Settings Tab -->
     <string name="select_your_language">Kalba</string>
     <string name="sound">Garso efektai</string>
-    <string name="send_notifications">Pranešimai apie stovėjimo laiką</string>
+    <string name="send_notifications">Visi pranešimai apie stovėjimo laiką</string>
     <string name="accept_sms_notifications">SMS apie stovėjimo laiką</string>
     <string name="sms_notification_alert">Jeigu įjungsite SMS pranešimus, programėlės pranešimai (push notifications) bus išjungti.</string>
     <!-- Parking areas Tab -->
