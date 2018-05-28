@@ -101,6 +101,7 @@ public class HomeFragment extends Fragment {
     private int parkingEndsMinutes = -1;
     private boolean needAlert = false;
     private String confirmButtonLabel;
+    private int choosingZoneAndTimeClockInMinutes = -1;
 
     private String Green;
     private String Blue;
