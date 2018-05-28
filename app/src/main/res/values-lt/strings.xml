@@ -14,7 +14,7 @@
     <string name="nav_parking_areas">Stovėjimo zonos</string>
     <string name="nav_settings">Nustatymai</string>
 
-    <string name="nav_about_us">Apie</string>
+    <string name="nav_about_us">DUK</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
@@ -24,7 +24,7 @@
         <item>Nustatymai</item>
     </string-array>
 
-    <string name="activity_title_about_us">Apie</string>
+    <string name="activity_title_about_us">DUK</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
@@ -46,7 +46,7 @@
     <string name="toastFreeTime">Šiuo paros metu šioje zonoje stovėjimas yra NEMOKAMAS</string>
     <string name="toastFreeDay">Šiandien stovėjimas yra NEMOKAMAS</string>
     <string name="confirm_parking_message">Ar tikrai norite patvirtinti šį stovėjimo laiką?</string>
-    <string name="attention_confirm_message"><![CDATA[<b><font color=#FF0000>!!! DĖMESIO !!!</font></b>]]> Nemokamas stovėjimo laikas prasidės 18:00 (arba 00:00 jeigu esate pasirinkęs Oranžinę zoną). Turėsite sumokėti už tokią trukmę, kokią esate pasirinkę, net jeigu ir mokamas stovėjimo laikas pasibaigia anksčiau. Ar vis dar norite patvirtinti pasirinktą stovėjimo trukmę?</string>
+    <string name="attention_confirm_message"><![CDATA[<b><font color=#FF0000>!!! DĖMESIO !!!</font></b>]]> Nemokamas stovėjimo laikas prasidės 18:00 (arba 00:00 jeigu esate pasirinkęs Oranžinę zoną). Reali kaina gali būti mažesnė nei šiuo metu rodoma. Ar vis dar norite patvirtinti pasirinktą stovėjimo trukmę?</string>
     <string name="please_select_default">Prašau pasirinkti naudojamą automobilį</string>
     <string name="permission_not_granted">Leidimas nebuvo suteiktas</string>
     <string name="confirmed_successfully">Sėkmingai patvirtinote stovėjimą</string>
@@ -56,6 +56,7 @@
     <string name="yellow_zone_home">Geltona\n2€/h</string>
     <string name="orange_zone_home">Oranžinė\n2€/h</string>
     <string name="close_app_alert">Ar tikrai norite uždaryti programėlę?</string>
+    <string name="unfortunately_message">Apgailestaujame, tačiau dėl uždelsto PATVIRTINTI mygtuko paspaudimo tikrasis stovėjimo pabaigos laikas gali skirtis nuo šiuo metu rodomo, jeigu norite pamatyti tikslų stovėjimo pabaigos laiką, atšaukite patvirtinimą ir stovėjimo trukmę pasirinkite iš naujo.</string>
     <!-- Navigation drawer -->
     <string name="home">Pagrindinis</string>
     <string name="cars">Automobiliai</string>
