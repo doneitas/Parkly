@@ -81,7 +81,7 @@
     <!-- Settings Tab -->
     <string name="select_your_language">Language</string>
     <string name="sound">Sound effects</string>
-    <string name="send_notifications">Parking time notifications</string>
+    <string name="send_notifications">All parking time notifications</string>
     <string name="accept_sms_notifications">SMS parking time notifications</string>
     <string name="sms_notification_alert">If SMS notifications is enabled, app push notifications turns off.</string>
     <!-- Parking areas Tab -->
