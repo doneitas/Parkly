@@ -92,4 +92,23 @@
     <string name="orange_zone_areas">Orange (2€/h)</string>
     <string name="get_location_alert">Do you really want to get the location of</string>
     <string name="search_text">Search</string>
+    <!-- FAQ Tab -->
+    <string name="Question1">What PARKLY app is used for?</string>
+    <string name="Question2">How is the payment made for parking?</string>
+    <string name="Question3">In which cities can I use this app?</string>
+    <string name="Question4">How to select a default car?</string>
+    <string name="Question5">How can I see the actual location of the street in the map gadget?</string>
+    <string name="Question6">How can I remove license plates from the list?</string>
+    <string name="Question7">How can I check free hours of specific parking zone?</string>
+    <string name="Question8">How to adjust notifications of the upcoming end of the parking?</string>
+    <string name="Question9">What is the format of automatically generated message?</string>
+    <string name="Answer1">PARKLY is used for easier parking payments. This app automatically generates text message and sends it to make parking confirmation.</string>
+    <string name="Answer2">Payment is made right after you press CONFIRM button. After that the message is generated automatically and sent via SMS to the number 1332, where the payment is paid from users mobile account.</string>
+    <string name="Answer3">At the moment you can only use it in Kaunas city.</string>
+    <string name="Answer4">There are two ways to select which car you want to use:\n\n1. Open CARS tab, click and hold on the plate which you want to select and click MARK AS DEFAULT.\n\n2. Open home tab and select your default car in dropdown menu.</string>
+    <string name="Answer5">In order to see the actual location of the street on the map, you will need to open section called PARKING ZONES, click and hold on the desired street name and choose the map application, which you want to use (you can choose only when you have multiple map applications).</string>
+    <string name="Answer6">There are two ways to remove license plates:\n\n1. Open a tab called CARS, click and hold on the desired license plate and select REMOVE in the options menu.\n\n2. Open a tab called CARS, click the REMOVE button and select the license plates that you want to remove.</string>
+    <string name="Answer7">All you have to do is just to open a tab named PARKING ZONES - there you can check week days and hours when parking is free.</string>
+    <string name="Answer8">You can adjust notifications in SETTINGS tab, there are 2 different switches, one (first switch) turns off all the notifications about the end of parking time, the second one is to turn off text messages or push notifications coming from the application. Text messages and application push notifications cannot be turned on both at the same time, if one is turned on the other one turns off.</string>
+    <string name="Answer9">PK L H XXX000\n\nPK – parking payments in Kaunas city;\n\nL – parking duration in hours and minutes:\n0.15 – 15 min; 0.3 – 30 min;\n0.45 – 45 min; 1 – 1 h;\n1.15 – 1 h 15 min etc.\n\nH – parking zone:\n\nG – yellow zone.\nA – orange zone,\nR – red zone,\nM – blue zone,\nZ – green zone;\n\nXXX000 – license plate number (it is written without spaces).</string>
 </resources>
