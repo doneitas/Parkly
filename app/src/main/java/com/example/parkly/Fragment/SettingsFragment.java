@@ -309,7 +309,7 @@ public class SettingsFragment extends Fragment {
 
                     languageLabel.setText("Language");
                     soundLabel.setText("Sound effects");
-                    notificationsLabel.setText("Parking time notifications");
+                    notificationsLabel.setText("All parking time notifications");
                     SMSnotificationsLabel.setText("SMS parking time notifications");
                     carLabel.setText("Car:");
                     zoneLabel.setText("Zone:");
@@ -375,7 +375,7 @@ public class SettingsFragment extends Fragment {
 
                         languageLabel.setText("Language");
                         soundLabel.setText("Sound effects");
-                        notificationsLabel.setText("Parking time notifications");
+                        notificationsLabel.setText("All parking time notifications");
                         SMSnotificationsLabel.setText("SMS parking time notifications");
                         carLabel.setText("Car:");
                         zoneLabel.setText("Zone:");

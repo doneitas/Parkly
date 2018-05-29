@@ -46,7 +46,7 @@
     <string name="toastFreeTime">Šiuo paros metu šioje zonoje stovėjimas yra NEMOKAMAS</string>
     <string name="toastFreeDay">Šiandien stovėjimas yra NEMOKAMAS</string>
     <string name="confirm_parking_message">Ar tikrai norite patvirtinti šį stovėjimo laiką?</string>
-    <string name="attention_confirm_message"><![CDATA[<b><font color=#FF0000>!!! DĖMESIO !!!</font></b>]]> Nemokamas stovėjimo laikas prasidės 18:00 (arba 00:00 jeigu esate pasirinkęs Oranžinę zoną). Reali kaina gali būti mažesnė nei šiuo metu rodoma. Ar vis dar norite patvirtinti pasirinktą stovėjimo trukmę?</string>
+    <string name="attention_confirm_message"><![CDATA[<b><font color=#FF0000>!!! DĖMESIO !!!</font></b>]]> Nemokamas stovėjimo laikas prasidės 18:00 (arba 00:00 jeigu esate pasirinkę Oranžinę zoną). Reali kaina gali būti mažesnė nei šiuo metu rodoma. Ar vis dar norite patvirtinti pasirinktą stovėjimo trukmę?</string>
     <string name="please_select_default">Prašau pasirinkti naudojamą automobilį</string>
     <string name="permission_not_granted">Leidimas nebuvo suteiktas</string>
     <string name="confirmed_successfully">Sėkmingai patvirtinote stovėjimą</string>
@@ -93,4 +93,23 @@
     <string name="orange_zone_areas">Oranžinė (2€/h)</string>
     <string name="get_location_alert">Ar tikrai norite sužinoti vietą žemėlapyje</string>
     <string name="search_text">Paieška</string>
+    <!-- FAQ Tab -->
+    <string name="Question1">Kam yra skirta PARKLY programėlė?</string>
+    <string name="Question2">Kaip yra vykdomas apmokėjimas už stovėjimą?</string>
+    <string name="Question3">Kokiuose miestuose galiu naudotis šia programėle?</string>
+    <string name="Question4">Kaip nustatyti automobilį naudojamu?</string>
+    <string name="Question5">Kaip galiu pamatyti gatvės realią vietą žemėlapių programėlėje?</string>
+    <string name="Question6">Kaip galiu pašalinti įvestus automobilių valstybinius numerius?</string>
+    <string name="Question7">Kaip sužinoti tam tikros stovėjimo zonos nemokamą stovėjimo laiką?</string>
+    <string name="Question8">Kaip reguliuoti pranešimus apie artėjančią stovėjimo pabaigą?</string>
+    <string name="Question9">Koks yra automatiškai generuojamos žinutės formatas?</string>
+    <string name="Answer1">PARKLY programėlė skirta atsiskaitymo už stovėjimą palengvinimui t.y. programėlė pati sugeneruoja ir reikiamu numeriu išsiunčia SMS žinutę, patvirtinančią ir apmokančią stovėjimą.</string>
+    <string name="Answer2">Apmokėjimas yra vykdomas paspaudus PATVIRTINTI mygtuką, tai padarius yra automatiškai išsiunčiama sugeneruota SMS žinutė numeriu 1332 ir stovėjimas yra apmokamas iš vartotojo mobiliojo ryšio sąskaitos.</string>
+    <string name="Answer3">Šiuo metu programėlė yra skirta tik Kauno miesto teritorijai.</string>
+    <string name="Answer4">Norint nustatyti automobilį naudojamu galima rinktis vieną iš dviejų kelių:\n\n1. Atverti skiltį pavadinimu AUTOMOBILIAI, paspausti ir palaikyti ant norimo automobilio valstybinio numerio ir spustelti NUSTATYTI KAIP NAUDOJAMĄ.\n\n2. Atverti skiltį pavadinimu PAGRINDINIS ir pasirinkti norimą automobilį, išskleidus jų sąrašą.</string>
+    <string name="Answer5">Norint pamatyti realią gatvės vietą žemėlapių programėlėje, tereikia atverti skiltį pavadinimu STOVĖJIMO ZONOS, paspausti ir palaikyti ant norimos gatvės pavadinimo ir pasirinkti žemėlapių programėlę, kurią norima naudoti (Pasirinkti galima tik tada, kai telefone yra įdiegta daugiau nei viena žemėlapių programėlė).</string>
+    <string name="Answer6">Norint pašalinti automobilių valstybinius numerius, galima rinktis vieną iš dviejų kelių:\n\n1. Atverti skiltį pavadinimu AUTOMOBILIAI, paspausti ir palaikyti ant pasirinkto automobilio ir spustelti PAŠALINTI.\n\n2. Atverti skiltį pavadinimu AUTOMOBILIAI, paspausti mygtuką PAŠALINTI ir pažymėti automobilių valstybinius numerius, kuriuos norima pašalinti.</string>
+    <string name="Answer7">Norint sužinoti stovėjimo zonos nemokamą stovėjimo laiką, tereikia atverti skiltį pavadinimu STOVĖJIMO ZONOS - šalia kiekvienos stovėjimo zonos galima matyti savaitės dienas ir laiką, kada stovėjimas yra mokamas.</string>
+    <string name="Answer8">Reguliuoti pranešimus galima skiltyje pavadinimu NUSTATYMAI, pranešimams yra skirti du jungikliai, vienas (pirmasis) išjungia visus pranešimus apie artėjančią stovėjimo pabaigą, o kitas (antrasis) yra skirtas įjungti/išjungti SMS pranešimus arba pranešimus, ateinančius iš pačios programėlės (push notifications). SMS ir programėlės pranešimai vienu metu įjungti būti negali, jeigu įjungtas vienas, kitas išsijungia, ir atvirkščiai.</string>
+    <string name="Answer9">PK L H XXX000\n\nPK – rinkliavos apmokėjimas Kauno mieste;\n\nL – Stovėjimo trukmė valandomis ir minutėmis:\n0.15 – 15 min.; 0.3 – 30 min.;\n0.45 – 45 min.; 1 – 1 val.;\n1.15 – 1 val. 15 min. ir t.t.\n\nH – stovėjimo zona:\n\nG – geltonoji zona.\nA – oranžinė zona,\nR – raudonoji zona,\nM – mėlynoji zona,\nZ – žalioji zona;\n\nXXX000 – transporto priemonės valstybinis numeris (numeris rašomas be tarpo);</string>
 </resources>
