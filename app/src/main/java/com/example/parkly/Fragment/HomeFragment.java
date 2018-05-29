@@ -423,7 +423,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
                 return true;
             }
-            else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
+            else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) < 8) {
                 String toastNotification = getString(R.string.toastFreeTime);
                 Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
                 return true;
