@@ -1072,7 +1072,7 @@ public class HomeFragment extends Fragment {
         String smsNotifications =  !MainActivity.isSmsNotifiationsOn ? " NP" : "";
         String message = "PK " + parkingTime + " " + zone + " " + currentDefaultNumber + smsNotifications;
 
-        sms.sendTextMessage("+37064033407", null, message, null, null);
+        sms.sendTextMessage("1332", null, message, null, null);
 
         String confirmedSuccesfully = getString(R.string.confirmed_successfully);
 
