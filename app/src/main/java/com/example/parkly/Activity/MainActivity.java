@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.parkly.Fragment.AboutFragment;
 import com.example.parkly.Fragment.CarsFragment;
 import com.example.parkly.Fragment.HomeFragment;
 import com.example.parkly.Fragment.ParkingFragment;
@@ -205,7 +206,7 @@ public class MainActivity extends AppCompatActivity
 
             String closeAppAlertText = getString(R.string.close_app_alert);
 
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this, R.style.AlertDialog)
                     .setMessage(closeAppAlertText)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
@@ -257,7 +258,9 @@ public class MainActivity extends AppCompatActivity
             hideKeyboard();
             fragmentTag = "SETTINGS_FRAGMENT";
         } else if (id == R.id.nav_aboutUs) {
-
+            selectedFragment = new AboutFragment();
+            hideKeyboard();
+            fragmentTag = "ABOUT_FRAGMENT";
         }
 
         Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
@@ -268,6 +271,7 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 

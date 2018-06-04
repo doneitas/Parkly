@@ -101,6 +101,7 @@ public class HomeFragment extends Fragment {
     private int parkingEndsMinutes = -1;
     private boolean needAlert = false;
     private String confirmButtonLabel;
+    private int choosingZoneAndTimeClockInMinutes = -1;
 
     private String Green;
     private String Blue;
@@ -294,6 +295,8 @@ public class HomeFragment extends Fragment {
                 finalPrice = "-";
                 parkingEnds = "-";
 
+                rememberTime();
+
                 String tempChosenMinutes = ((TextView) view).getText().toString();
 
                 Scanner scan = new Scanner(tempChosenMinutes).useDelimiter("\\s+");
@@ -308,6 +311,7 @@ public class HomeFragment extends Fragment {
                 if (previousMinutes == chosenMinutes){
                     listTime.setItemChecked(listTime.getCheckedItemPosition(), false);
                     chosenMinutes = -1;
+                    choosingZoneAndTimeClockInMinutes = -1;
                 }
                 else if (chosenZone != "") {
                     parkingEnds = estimatedTime(chosenMinutes / 60, chosenMinutes % 60);
@@ -322,6 +326,16 @@ public class HomeFragment extends Fragment {
         });
 
 
+    }
+
+    public void rememberTime(){
+        Calendar currentTime = GregorianCalendar.getInstance();
+        currentTime.setTime(new Date());
+
+        int hours = currentTime.get(Calendar.HOUR_OF_DAY);
+        int minutes = currentTime.get(Calendar.MINUTE);
+
+        choosingZoneAndTimeClockInMinutes = (hours * 60) + minutes;
     }
 
     public String estimatedPrice(String color, int chosenHour, int chosenMinute)
@@ -409,7 +423,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
                 return true;
             }
-            else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) <= 8) {
+            else if (currentTime.get(Calendar.HOUR_OF_DAY) >= 18 || currentTime.get(Calendar.HOUR_OF_DAY) < 8) {
                 String toastNotification = getString(R.string.toastFreeTime);
                 Toast.makeText(getActivity(), toastNotification, Toast.LENGTH_LONG).show();
                 return true;
@@ -681,61 +695,106 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
+
                 Calendar currentTime = GregorianCalendar.getInstance();
                 if(!needsPopUp(chosenZone, currentTime)) {
                     if(isDefaultSelected) {
-                        new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                .setMessage(confirmParkingMessage)
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        checkSMSPermissions();
-                                        if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
-                                                == PackageManager.PERMISSION_GRANTED) {
-                                            if (needAlert) {
+                        currentTime = GregorianCalendar.getInstance();
+                        currentTime.setTime(new Date());
 
-                                                //Padaryti ATTENTION raudoną, nes neveikia dabar dar
-                                                String attentionConfirmMessage = getResources().getString(R.string.attention_confirm_message);
+                        int currentTimeInMinutes = currentTime.get(Calendar.HOUR_OF_DAY) * 60 + currentTime.get(Calendar.MINUTE);
 
-                                                new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
-                                                        .setMessage(Html.fromHtml(attentionConfirmMessage))
-                                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
+                        if(currentTimeInMinutes != choosingZoneAndTimeClockInMinutes && tempTime.getText().toString() != "0:00" && tempTime.getText().toString() != "18:00" && !(chosenZone.compareTo(currentZone) == 0 && chosenDefaultNumber.compareTo(currentDefaultNumber) == 0)){
 
-                                                                confirmAndSend();
-                                                                setNotifications();
-                                                                confirmButtonSound();
 
-                                                            }
-                                                        }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        dialog.dismiss();
-                                                    }
-                                                }).create().show();
-                                            }
-                                            else {
-                                                confirmAndSend();
-                                                setNotifications();
-                                                confirmButtonSound();
-                                            }
+                            String unfortunatelyMessage = getResources().getString(R.string.unfortunately_message);
+
+                            new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
+                                    .setMessage(unfortunatelyMessage)
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            //continue
+
+                                            confirmButtonAction(confirmParkingMessage);
+
                                         }
-                                    }
-                                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).create().show();
+                                    }).create().show();
+
+                        }
+                        else confirmButtonAction(confirmParkingMessage);
                     }
                     else {
                         String pleaseSelectDefault = getString(R.string.please_select_default);
                         Toast.makeText(getActivity(), pleaseSelectDefault, Toast.LENGTH_LONG).show();
                     }
                 }
+
             }
         });
+    }
+
+    public void confirmButtonAction(String confirmParkingMessage) {
+
+        new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
+                .setMessage(confirmParkingMessage)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        checkSMSPermissions();
+                        if (checkSelfPermission(getActivity(), Manifest.permission.SEND_SMS)
+                                == PackageManager.PERMISSION_GRANTED) {
+
+                            if (needAlert) {
+
+                                String attentionConfirmMessage = getResources().getString(R.string.attention_confirm_message);
+
+                                new AlertDialog.Builder(getActivity(), R.style.AlertDialog)
+                                        .setMessage(Html.fromHtml(attentionConfirmMessage))
+                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                confirmAndSend();
+                                                setNotifications();
+                                                confirmButtonSound();
+
+                                                Calendar currentTime = GregorianCalendar.getInstance();
+                                                currentTime.setTime(new Date());
+
+                                                int hours = currentTime.get(Calendar.HOUR_OF_DAY);
+                                                int minutes = currentTime.get(Calendar.MINUTE);
+
+                                                choosingZoneAndTimeClockInMinutes = (hours * 60) + minutes;
+
+                                            }
+                                        }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).create().show();
+                            } else {
+                                confirmAndSend();
+                                setNotifications();
+                                confirmButtonSound();
+
+                                Calendar currentTime = GregorianCalendar.getInstance();
+                                currentTime.setTime(new Date());
+
+                                int hours = currentTime.get(Calendar.HOUR_OF_DAY);
+                                int minutes = currentTime.get(Calendar.MINUTE);
+
+                                choosingZoneAndTimeClockInMinutes = (hours * 60) + minutes;
+                            }
+                        }
+                    }
+                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
     }
 
     public void confirmButtonSound()
@@ -868,7 +927,19 @@ public class HomeFragment extends Fragment {
 
         Scanner scan = new Scanner(tempTime.getText().toString()).useDelimiter(":");
 
-        parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
+        Calendar currentTime = GregorianCalendar.getInstance();
+        currentTime.setTime(new Date());
+
+        int currentTimeInMinutes = currentTime.get(Calendar.HOUR_OF_DAY) * 60 + currentTime.get(Calendar.MINUTE);
+
+        if(currentTimeInMinutes != choosingZoneAndTimeClockInMinutes && tempTime.getText().toString() != "0:00" && tempTime.getText().toString() != "18:00" && !(chosenZone.compareTo(currentZone) == 0 && chosenDefaultNumber.compareTo(currentDefaultNumber) == 0)){
+            parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60 + (currentTimeInMinutes - choosingZoneAndTimeClockInMinutes);
+
+            currentTime.add(Calendar.HOUR_OF_DAY, chosenMinutes / 60);
+            currentTime.add(Calendar.MINUTE, chosenMinutes % 60);
+
+            tempTime.setText((currentTime.get(Calendar.HOUR_OF_DAY) < 10? ("0"+currentTime.get(Calendar.HOUR_OF_DAY)) : currentTime.get(Calendar.HOUR_OF_DAY)) + ":" + (currentTime.get(Calendar.MINUTE) < 10? ("0"+currentTime.get(Calendar.MINUTE)) : currentTime.get(Calendar.MINUTE)));
+        } else parkingEndsMinutes = scan.nextInt() * 60 + scan.nextInt() % 60;
 
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -1001,7 +1072,7 @@ public class HomeFragment extends Fragment {
         String smsNotifications =  !MainActivity.isSmsNotifiationsOn ? " NP" : "";
         String message = "PK " + parkingTime + " " + zone + " " + currentDefaultNumber + smsNotifications;
 
-        sms.sendTextMessage("+37063694869", null, message, null, null);
+        sms.sendTextMessage("1332", null, message, null, null);
 
         String confirmedSuccesfully = getString(R.string.confirmed_successfully);
 

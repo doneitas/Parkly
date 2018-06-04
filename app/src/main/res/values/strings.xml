@@ -13,7 +13,7 @@
     <string name="nav_parking_areas">Parking Areas</string>
     <string name="nav_settings">Settings</string>
 
-    <string name="nav_about_us">About</string>
+    <string name="nav_about_us">FAQ</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
@@ -23,7 +23,7 @@
         <item>Settings</item>
     </string-array>
 
-    <string name="activity_title_about_us">About</string>
+    <string name="activity_title_about_us">FAQ</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
@@ -45,7 +45,7 @@
     <string name="toastFreeTime">Parking in chosen zone is FREE at this time of the day</string>
     <string name="toastFreeDay">Parking in chosen zone is FREE today</string>
     <string name="confirm_parking_message">Do you really want to confirm this parking?</string>
-    <string name="attention_confirm_message"><![CDATA[<b><font color=#FF0000>!!! ATTENTION !!!</font></b>]]> Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). You will pay for duration you have chosen even if charged parking time ends earlier. Do you really want to keep chosen parking duration?</string>
+    <string name="attention_confirm_message"><![CDATA[<b><font color=#FF0000>!!! ATTENTION !!!</font></b>]]> Free parking time is going to start at 18:00 (or 00:00 if you chose Orange zone). The real price may be lower than it is shown. Do you really want to keep chosen parking duration?</string>
     <string name="please_select_default">Please select a default car</string>
     <string name="permission_not_granted">Permission was not granted</string>
     <string name="confirmed_successfully">Parking confirmed successfully</string>
@@ -55,13 +55,14 @@
     <string name="yellow_zone_home">Yellow\n2€/h</string>
     <string name="orange_zone_home">Orange\n2€/h</string>
     <string name="close_app_alert">Do you really want to close the application?</string>
+    <string name="unfortunately_message">Unfortunately, due to a late CONFIRM button action currently shown parking time may be incorrect, if you want to get the right parking time just cancel current confirmation and select parking time again.</string>
     <!-- Navigation drawer -->
     <string name="home">Home</string>
     <string name="cars">Cars</string>
     <string name="parking_areas">Parking areas</string>
     <string name="settings">Settings</string>
     <string name="information">Information</string>
-    <string name="about_us">About</string>
+    <string name="about_us">FAQ</string>
     <!-- Cars Tab -->
     <string name="add_car">Add Car</string>
     <string name="remove">Remove</string>
@@ -80,7 +81,7 @@
     <!-- Settings Tab -->
     <string name="select_your_language">Language</string>
     <string name="sound">Sound effects</string>
-    <string name="send_notifications">Parking time notifications</string>
+    <string name="send_notifications">All parking time notifications</string>
     <string name="accept_sms_notifications">SMS parking time notifications</string>
     <string name="sms_notification_alert">If SMS notifications is enabled, app push notifications turns off.</string>
     <!-- Parking areas Tab -->
@@ -91,4 +92,23 @@
     <string name="orange_zone_areas">Orange (2€/h)</string>
     <string name="get_location_alert">Do you really want to get the location of</string>
     <string name="search_text">Search</string>
+    <!-- FAQ Tab -->
+    <string name="Question1">What PARKLY app is used for?</string>
+    <string name="Question2">How is the payment made for parking?</string>
+    <string name="Question3">In which cities can I use this app?</string>
+    <string name="Question4">How to select a default car?</string>
+    <string name="Question5">How can I see the actual location of the street in the map gadget?</string>
+    <string name="Question6">How can I remove license plates from the list?</string>
+    <string name="Question7">How can I check free hours of specific parking zone?</string>
+    <string name="Question8">How to adjust notifications of the upcoming end of the parking?</string>
+    <string name="Question9">What is the format of automatically generated message?</string>
+    <string name="Answer1">PARKLY is used for easier parking payments. This app automatically generates text message and sends it to make parking confirmation.</string>
+    <string name="Answer2">Payment is made right after you press CONFIRM button. After that the message is generated automatically and sent via SMS to the number 1332, where the payment is paid from users mobile account.</string>
+    <string name="Answer3">At the moment you can only use it in Kaunas city.</string>
+    <string name="Answer4">There are two ways to select which car you want to use:\n\n1. Open CARS tab, click and hold on the plate which you want to select and click MARK AS DEFAULT.\n\n2. Open home tab and select your default car in dropdown menu.</string>
+    <string name="Answer5">In order to see the actual location of the street on the map, you will need to open section called PARKING ZONES, click and hold on the desired street name and choose the map application, which you want to use (you can choose only when you have multiple map applications).</string>
+    <string name="Answer6">There are two ways to remove license plates:\n\n1. Open a tab called CARS, click and hold on the desired license plate and select REMOVE in the options menu.\n\n2. Open a tab called CARS, click the REMOVE button and select the license plates that you want to remove.</string>
+    <string name="Answer7">All you have to do is just to open a tab named PARKING ZONES - there you can check week days and hours when parking is free.</string>
+    <string name="Answer8">You can adjust notifications in SETTINGS tab, there are 2 different switches, one (first switch) turns off all the notifications about the end of parking time, the second one is to turn off text messages or push notifications coming from the application. Text messages and application push notifications cannot be turned on both at the same time, if one is turned on the other one turns off.</string>
+    <string name="Answer9">PK L H XXX000\n\nPK – parking payments in Kaunas city;\n\nL – parking duration in hours and minutes:\n0.15 – 15 min; 0.3 – 30 min;\n0.45 – 45 min; 1 – 1 h;\n1.15 – 1 h 15 min etc.\n\nH – parking zone:\n\nG – yellow zone.\nA – orange zone,\nR – red zone,\nM – blue zone,\nZ – green zone;\n\nXXX000 – license plate number (it is written without spaces).</string>
 </resources>
